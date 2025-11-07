@@ -1,0 +1,309 @@
+
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* same height */
+    gap: 40px;
+    margin: 120px auto;
+    flex-wrap: wrap;
+  }
+  
+  /* Common Card Style */
+  .hero-card {
+    background-color: #ADCBBA;
+    
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Text Card (Bigger Width) */
+  .hero-text {
+    width: 750px;  /* Bigger width */
+    text-align: left;
+  }
+  
+  .hero-text h1 {
+    font-size: 26px;
+    color:#596E65;
+    margin-bottom: 15px;
+  }
+  
+  .hero-text p {
+    color: #333;
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .hero-text button {
+    background-color: #FDB581;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    width: 200px;
+  }
+  
+  .hero-text button:hover {
+    background-color: #d6336c;
+  }
+  
+  /* Image Card (Smaller Width) */
+  .hero-image {
+    width: 320px; /* Smaller width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+  
+ /* Sale Section Overall */
+.sale-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 120px 0;
+  }
+  
+  /* Big Card (Container Box) */
+  .sale-box {
+    background-color:#FAE7CB;
+    border-radius: 25px;
+    padding: 40px;
+    width: 80%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  /* Title */
+  .sale-box h2 {
+    font-size: 28px;
+    color:  #596E65;
+    margin-bottom: 30px;
+    text-align: left;
+  }
+  
+  /* Inside small image cards */
+  .sale-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+  }
+  
+  /* Each small image card */
+  .sale-card {
+    background-color: #D4DEC5;
+    width: 140px;
+    height: 140px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+  
+  .sale-card:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Image inside card */
+  .sale-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+
+
+  /* Sale Section Overall */
+.categories-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 120px 0;
+  }
+  
+  /* Big Card (Container Box) */
+  .categories-box {
+    background-color: #FAE7CB;
+    border-radius: 25px;
+    padding: 40px;
+    width: 80%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  /* Title */
+  .categories-box h2 {
+    font-size: 28px;
+    color: #596E65;
+    margin-bottom: 30px;
+    text-align: left;
+  }
+  
+  /* Inside small image cards */
+  .categories-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+  }
+  
+  /* Each small image card */
+  .categories-card {
+    background-color: #D4DEC5;
+    width: 140px;
+    height: 140px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+  
+  .categories-card:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Image inside card */
+  .categories-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+
+ /* Just For You Section */
+.justforyou-section {
+  text-align: center;
+  margin: 80px 0;
+}
+
+.justforyou-section h2 {
+  font-size: 28px;
+  color: #596E65;
+  margin-bottom: 30px;
+}
+
+/* Small Cards */
+.justforyou-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* .card1 {
+  background-color: #EECEB3;
+  border-radius: 15px;
+  width: 80px;
+  padding: 100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+
+.card2 {
+  background-color: #EECEB3;
+  border-radius: 15px;
+  width: 50px;
+  padding: 100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card3 {
+  background-color: #EECEB3;
+  border-radius: 15px;
+  width: 50px;
+  padding: 100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card1 img {
+  width: 50%;
+  border-radius: 10px;
+} */
+
+
+.card1, .card2, .card3 {
+  background-color: #FAE7CB;
+  border-radius: 15px;
+  width: 250px;
+  padding: 50px;
+  box-shadow: 0 4px 10px #ADCBBA;
+  transition: transform 0.3s ease;
+  text-align: center;
+  overflow: hidden; /* image box la irukka control pannum */
+}
+
+.card1 img,
+.card2 img,
+.card3 img {
+  width: 100%;            /* box full width la irukkum */
+  height: 200px;          /* same height for all images */
+  object-fit: cover;      /* image crop pannum but shape maintain pannum */
+  border-radius: 10px;    
+  display: block;
+  margin: 0 auto;
+  background-color: #c2d3cb;
+  box-shadow: 0 4px 10px rgba(150, 25, 25, 0.3); 
+}
+
+
+.card1 img:hover,
+.card2 img:hover,
+.card3 img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+.card p {
+  margin-top: 10px;
+  color: #8B1854;
+  font-weight: bold;
+}
+
+.add {
+  background-color: #FDB581;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  width: 100px;
+}
+
+
+
+

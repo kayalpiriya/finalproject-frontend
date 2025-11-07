@@ -1,0 +1,125 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+
+body {
+background-color:#FAF7E4 ; /* your favorite color */
+  margin: 0;
+  padding-top: 70px; 
+  overflow-x: hidden; 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1
+}
+
+
+
+/* Footer styling */
+footer {
+  background-color: #596E65; /* deep magenta */
+  color: white;
+  padding: 40px 20px 20px 20px;
+  font-size: 14px;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #ff3366; /* hover effect */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Footer sections */
+.footer-about, .footer-links, .footer-contact {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-about h3,
+.footer-links h4,
+.footer-contact h4 {
+  margin-bottom: 10px;
+  color: #ffd6e0;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 5px;
+}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  border-top: 1px solid #ff3366;
+  padding-top: 10px;
+  font-size: 13px;
+  color: #ffd6e0;
+}
+
+.footer-social {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+
+.footer-social h4 {
+  margin-bottom: 10px;
+  color: #ffd6e0;
+  font-size: 18px;
+}
+
+.footer-social .social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;  /* spacing between icons */
+}
+
+.footer-social .social-icons a img {
+  width: 35px;     /* icon size */
+  height: 35px;
+  border-radius: 50%; /* make circular */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.footer-social .social-icons a img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #ffd6e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 15px;
+  }
+
+  .footer-about, .footer-links, .footer-contact {
+      min-width: auto;
+  }
+}

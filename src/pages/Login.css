@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FAF7E4 ;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* vertical stacking */
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;                  /* takes remaining space */
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    padding-top: 200px;    /* center horizontally + vertically */
+  }
+  
+  
+  
+    
+    .container {
+      background-color: white;
+      width: 800px;
+      height: 450px;
+      display: flex;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 35px rgba(172, 24, 24, 0.1);
+    }
+    
+    
+    .login-section {
+      width: 60%;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-section h2 {
+      color: #000;
+      margin-bottom: 15px;
+    }
+    
+    .social-login {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .social-login button {
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 22px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .google {
+      background-color: #fff;
+      color: #DB4437;
+      border: 2px solid #ccc;
+    }
+    
+    .facebook {
+      background-color: #3b5998;
+    }
+    
+    .login-section p {
+      font-size: 14px;
+      color: #555;
+      margin: 10px 0;
+    }
+    
+    .login-section input {
+      width: 70%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+    }
+    
+    .forget {
+      font-size: 13px;
+      color: #555;
+      margin-top: 5px;
+      text-decoration: none;
+    }
+    
+    .login-btn {
+      background-color: #596E65;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 40px;
+      font-size: 16px;
+      margin-top: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(233, 72, 144, 0.4);
+    }
+    
+    .login-btn:hover {
+      background-color: #c33473;
+    }
+    
+    
+    .sign-section {
+      width: 50%;
+      background-color: #ADCBBA;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-top-left-radius: 150px;
+      border-bottom-left-radius: 150px;
+    }
+    
+    .sign-section h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .sign-section p {
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .sign-btn {
+      background-color: #fff;
+      color: #596E65;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 35px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .sign-btn:hover {
+      background-color: #f8d0e2;
+    }
