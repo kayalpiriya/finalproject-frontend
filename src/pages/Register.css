@@ -40,7 +40,7 @@ body {
     color: #000;
     margin-bottom: 15px;
   }
-  
+/*   
   .social-login {
     display: flex;
     gap: 15px;
@@ -66,7 +66,7 @@ body {
   
   .facebook {
     background-color: #3b5998;
-  }
+  } */
   
   .signup-section p {
     font-size: 14px;
@@ -145,3 +145,24 @@ body {
     background-color: #f8d0e2;
   }
   
+
+
+ .social-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;  /* spacing between icons */
+}
+
+.social-login a img {
+  width: 35px;     /* icon size */
+  height: 35px;
+  border-radius: 50%; /* make circular */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.social-login a img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #ffd6e0;
+}

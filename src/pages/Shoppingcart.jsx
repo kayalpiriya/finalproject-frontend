@@ -354,13 +354,14 @@ function ShoppingCart() {
               className="continue-btn"
               onClick={() => navigate("/")}
               style={{
-                marginTop: "20px",
+                marginTop: "10px",
                 padding: "10px 20px",
-                backgroundColor: "#4CAF50",
+                backgroundColor: "#FDB581",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer",
+                width:"250px"
               }}
             >
               Continue Shopping

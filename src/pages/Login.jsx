@@ -215,6 +215,15 @@ function Login() {
           <div className="login-section">
             <h2>{forgotPasswordMode ? "Reset Password" : "Sign In"}</h2>
 
+
+            <div className="social-login">
+              {/* <button className="google">G</button>
+              <button className="facebook">f</button> */}
+              <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
+              <a href="#"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google" /></a>
+
+            </div>
+
             {!forgotPasswordMode ? (
               <form onSubmit={handleLogin}>
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -223,6 +232,7 @@ function Login() {
                   Forget Your Password? Reset here
                 </p>
                 <button type="submit" className="login-btn">Sign In</button>
+
               </form>
             ) : !otpSent ? (
               <form onSubmit={handleSendOTP}>

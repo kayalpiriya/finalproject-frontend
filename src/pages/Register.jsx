@@ -102,8 +102,14 @@ function Register() {
             <h2>Create Account</h2>
 
             <div className="social-login">
-              <button className="google">G</button>
-              <button className="facebook">f</button>
+              {/* <button className="google">G</button>
+              <button className="facebook">f</button> */}
+              <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
+              {/* <a href="#"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google" /></a> */}
+ {/* Google Login Button */}
+ <a href="http://localhost:5000/auth/google">
+                <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" />
+              </a>
             </div>
 
             <p>Or use your email for registration</p>
