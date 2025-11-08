@@ -5,7 +5,7 @@ import Orders from "./pages/Orders";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import ShoppingCart from "./pages/Shoppingcart"; // ✅ Added
-
+import StripeCheckout from "./pages/StripeCheckout";
 
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/product" element={<Product />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} /> {/* ✅ New Route */}
+        <Route path="/checkout" element={<StripeCheckout />} />
 
       </Routes>
      
