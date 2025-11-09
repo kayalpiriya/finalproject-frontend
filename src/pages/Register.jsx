@@ -136,7 +136,7 @@ function Register() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <button type="submit" className="signin-btn">
+              <button type="submit" className="signup-btn">
                 Sign up
               </button>
             </form>

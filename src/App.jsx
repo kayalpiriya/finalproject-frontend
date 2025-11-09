@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Product from "./pages/Product";
 import ShoppingCart from "./pages/Shoppingcart"; // ✅ Added
 import StripeCheckout from "./pages/StripeCheckout";
-
+import ChatBox from "./pages/ChatBox";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} /> {/* ✅ New Route */}
         <Route path="/checkout" element={<StripeCheckout />} />
+        <Route path="/chat" element={<ChatBox />} />
 
       </Routes>
      

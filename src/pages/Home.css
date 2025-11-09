@@ -212,42 +212,6 @@
   flex-wrap: wrap;
 }
 
-/* .card1 {
-  background-color: #EECEB3;
-  border-radius: 15px;
-  width: 80px;
-  padding: 100px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-
-.card2 {
-  background-color: #EECEB3;
-  border-radius: 15px;
-  width: 50px;
-  padding: 100px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.card3 {
-  background-color: #EECEB3;
-  border-radius: 15px;
-  width: 50px;
-  padding: 100px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-.card1 img {
-  width: 50%;
-  border-radius: 10px;
-} */
 
 
 .card1, .card2, .card3 {

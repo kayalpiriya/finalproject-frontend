@@ -100,10 +100,26 @@ body {
     margin-top: 15px;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(233, 72, 144, 0.4);
+    width: 150px;
   }
   
   .signin-btn:hover {
     background-color: #c33473;
+  }
+
+
+   
+  .signup-btn {
+    background-color: #596E65;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 40px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(233, 72, 144, 0.4);
+    width: 150px;
   }
   
   /* Optional: Left side welcome section (if needed) */
@@ -131,7 +147,7 @@ body {
   }
   
   .signin-btn {
-    background-color: #fff;
+    background-color:  #FDB581;
     color: #596E65;
     border: none;
     border-radius: 20px;

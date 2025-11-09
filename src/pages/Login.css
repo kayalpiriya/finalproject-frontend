@@ -103,12 +103,13 @@ body {
       margin-top: 15px;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(233, 72, 144, 0.4);
+      width: 150px;
     }
     
-    .login-btn:hover {
+    /* .login-btn:hover {
       background-color: #c33473;
     }
-    
+     */
     
     .sign-section {
       width: 50%;
@@ -134,7 +135,7 @@ body {
     }
     
     .sign-btn {
-      background-color: #fff;
+      background-color:  #FDB581;
       color: #596E65;
       border: none;
       border-radius: 20px;
@@ -142,8 +143,9 @@ body {
       font-size: 16px;
       cursor: pointer;
       font-weight: bold;
+      width: 150px;
     }
     
-    .sign-btn:hover {
+    /* .sign-btn:hover {
       background-color: #f8d0e2;
-    }
+    } */

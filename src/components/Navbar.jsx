@@ -23,7 +23,11 @@ function Navbar() {
       <div className="nav-links">
         <a href="/">Home</a>
         <a href="#">Detail</a>
-        <a href="#">Contact</a>
+       
+<div className="contact">
+<a onClick={() => navigate("/chat")}>Contact</a>
+</div>
+
         <div className="signin">
           <button onClick={() => navigate("/login")}>Sign In</button>
         </div>
