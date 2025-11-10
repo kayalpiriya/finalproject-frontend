@@ -147,6 +147,9 @@ function CheckoutForm({ orderData }) {
 
       const clientSecret = res.data.clientSecret;
 
+       // ✅ Add console log here
+    console.log("clientSecret:", clientSecret);
+
       // Use CardNumberElement for confirming payment
       const cardNumberElement = elements.getElement(CardNumberElement);
       if (!stripe || !cardNumberElement) {
@@ -173,6 +176,18 @@ function CheckoutForm({ orderData }) {
       if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
         setSuccess(true);
         setLoading(false);
+
+        try{
+          const token = localStorage.getItem("token");
+          await axios.post(
+            "http://localhost:5000/payments/confirm",
+            { paymentId: orderData.paymentId }, // make sure you have paymentId from createPayment response
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+        } catch (err) {
+          console.error("Error confirming payment:", err);
+        }
+        
         // optionally create order here (if you didn't before)
         alert("Payment successful!");
         navigate("/");

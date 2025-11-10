@@ -7,15 +7,11 @@ import Product from "./pages/Product.jsx";
 import ShoppingCart from "./pages/Shoppingcart"; // ✅ Added
 import StripeCheckout from "./pages/StripeCheckout";
 import ChatBox from "./pages/ChatBox";
+import AdminAddProduct from "./pages/AdminAddProduct.jsx";  // 🔹 Admin import pannuthu
 
 
 
-// ✅ Import admin pages (create them next)
-// import AdminDashboard from "./pages/Admin/Dashboard.jsx";
-// import AdminProducts from "./pages/Admin/Products.jsx";
-// import AdminOrders from "./pages/Admin/ Orders.jsx"; // ✅ Case match & no space
-// import AdminUsers from "./pages/Admin/Users.jsx";
-// import AdminReviews from "./pages/Admin/Reviews.jsx";
+
 function App() {
   return (
     <BrowserRouter>
@@ -31,14 +27,9 @@ function App() {
         <Route path="/shoppingcart" element={<ShoppingCart />} /> {/* ✅ New Route */}
         <Route path="/checkout" element={<StripeCheckout />} />
         <Route path="/chat" element={<ChatBox />} />
+        <Route path="/admin" element={<AdminAddProduct />} />  {/* 🔹 Admin route */}
 
 
- {/* Admin Routes */}
- {/* <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/reviews" element={<AdminReviews />} /> */}
 
       </Routes>
      

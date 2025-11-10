@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { CartContext } from "../pages/CartContext";
+import { CartContext } from "../pages/CartContext.jsx";
 import "./Shoppingcart.css";
 
 function ShoppingCart() {
@@ -15,63 +14,33 @@ function ShoppingCart() {
     clearCart,
     totalItems,
     totalPrice,
+    placeOrder,
   } = useContext(CartContext);
 
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Online Payment");
   const [shippingFee, setShippingFee] = useState(0);
 
-  // ✅ Proceed to Stripe checkout
-  const handleProceedToPay = () => {
-    if (cartItems.length === 0) return alert("🛒 Your cart is empty!");
-    if (!address) return alert("⚠️ Enter delivery address!");
+  // const handleProceedToPay = () => {
+  //   if (cartItems.length === 0) return alert("Cart is empty!");
+  //   if (!address) return alert("Enter delivery address!");
 
-    const orderData = {
-      products: cartItems.map((p) => ({
-        productId: p._id,
-        title: p.title,
-        quantity: p.quantity,
-        price: p.price,
-      })),
-      total: totalPrice + shippingFee,
-      address,
-    };
+  //   // You can pass address/payment method to backend if needed
+  //   placeOrder(paymentMethod);
+  // };
 
+  const handleProceedToPay = async () => {
+    if (!address) return alert("Enter delivery address!");
+  
+    // ✅ Await the order creation
+    const orderData = await placeOrder(paymentMethod, address);
+  
+    if (!orderData) return; // stop if order creation failed
+  
+    // ✅ Navigate to Stripe checkout with orderData
     navigate("/checkout", { state: { orderData } });
   };
-
-  // 🧾 Cash on Delivery order
-  const handleOrder = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return alert("⚠️ Please login first!");
-      if (cartItems.length === 0) return alert("🛒 Cart is empty!");
-
-      const orderData = {
-        products: cartItems.map((p) => ({
-          productId: p._id,
-          quantity: p.quantity,
-        })),
-        total: totalPrice + shippingFee,
-        address,
-        paymentMethod,
-      };
-
-      const res = await axios.post("http://localhost:5000/orders", orderData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.status === 201) {
-        alert("✅ Order placed successfully!");
-        clearCart();
-      } else {
-        alert("⚠️ Something went wrong!");
-      }
-    } catch (err) {
-      console.error("❌ Order error:", err);
-      alert("Failed to place order. Try again.");
-    }
-  };
+  
 
   return (
     <>
@@ -85,7 +54,9 @@ function ShoppingCart() {
               cartItems.map((p) => (
                 <div key={p._id} className="cart-item">
                   <div className="item-info">
-                    <img src={p.img} alt={p.title} />
+                    {/* <img src={p.img} alt={p.title} /> */}
+                    <img src={p.img || "/assets/default.jpg"} alt={p.name} />
+
                     <div>
                       <p className="item-title">{p.title}</p>
                       <p className="item-price">₹{p.price}</p>
@@ -95,12 +66,30 @@ function ShoppingCart() {
 
                   {/* Quantity Controls */}
                   <div className="qty-controls">
-                    <button onClick={() => updateQuantity(p._id, -1)}>-</button>
+                    <button
+                      onClick={() =>
+                        updateQuantity(p._id, Math.max(p.quantity - 1, 1))
+                      }
+                    >
+                      -
+                    </button>
                     <span>{p.quantity}</span>
-                    <button onClick={() => updateQuantity(p._id, 1)}>+</button>
+                    <button
+                      onClick={() =>
+                        updateQuantity(
+                          p._id,
+                          Math.min(p.quantity + 1, p.stock)
+                        )
+                      }
+                    >
+                      +
+                    </button>
                   </div>
 
-                  <button className="delete-btn" onClick={() => removeFromCart(p._id)}>
+                  <button
+                    className="delete-btn"
+                    onClick={() => removeFromCart(p._id)}
+                  >
                     ❌
                   </button>
                 </div>
@@ -131,7 +120,9 @@ function ShoppingCart() {
           <div className="cart-right">
             <h3>Order Summary</h3>
             <div className="order-box">
-              <p><strong>Delivery Address</strong></p>
+              <p>
+                <strong>Delivery Address</strong>
+              </p>
               <input
                 type="text"
                 placeholder="Enter delivery address"
@@ -139,7 +130,9 @@ function ShoppingCart() {
                 onChange={(e) => setAddress(e.target.value)}
               />
 
-              <p><strong>Payment Method</strong></p>
+              <p>
+                <strong>Payment Method</strong>
+              </p>
               <div className="payment-methods">
                 <label>
                   <input
@@ -184,10 +177,7 @@ function ShoppingCart() {
                 </div>
               </div>
 
-              <button
-                className="pay-btn"
-                onClick={paymentMethod === "Online Payment" ? handleProceedToPay : handleOrder}
-              >
+              <button className="pay-btn" onClick={handleProceedToPay}>
                 Proceed to Pay
               </button>
             </div>

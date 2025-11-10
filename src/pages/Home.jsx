@@ -94,7 +94,7 @@ function Home() {
             {products.length > 0 ? (
               products.map((p) => (
                 <div key={p._id} className="product-card">
-                  <img src={p.img || "src/assets/default.jpg"} alt={p.title} />
+                  <img src={p.img || "src/assets/default.jpg"} alt={p.name} />
                   <p>{p.name}</p>
                   <p>₹{p.price}</p>
                   <p>Stock: {p.stock}</p>

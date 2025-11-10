@@ -293,10 +293,10 @@ function Product() {
       <Navbar />
       <div className="product-page">
         <div className="product-card">
-          <img src={product.img || "src/assets/default.jpg"} alt={product.title} />
+          <img src={product.img || "src/assets/default.jpg"} alt={product.name} />
         </div>
         <div className="list">
-          <h3>{product.title}</h3>
+          <h3>{product.name}</h3>
           <p>₹{product.price}</p>
           <p>Stock: {product.stock}</p>
           <div className="buttons">
