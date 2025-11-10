@@ -290,7 +290,7 @@ function Product() {
 
   return (
     <>
-      <Navbar />
+     <Navbar />
       <div className="product-page">
         <div className="product-card">
           <img src={product.img || "src/assets/default.jpg"} alt={product.name} />
@@ -299,6 +299,7 @@ function Product() {
           <h3>{product.name}</h3>
           <p>₹{product.price}</p>
           <p>Stock: {product.stock}</p>
+          <p>{product.description}</p>
           <div className="buttons">
             <button className="buy-btn" onClick={handleBuyNow}>Buy Now</button>
             <button className="cart-btn" onClick={handleAddToCart}>Add to Cart</button>
