@@ -1,24 +1,44 @@
-
-
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import "./Home.css"
-
-
+import { CartContext } from "../pages/CartContext.jsx";
+import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
+  const [products, setProducts] = useState([]);
 
+  // 🔹 Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/products");
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
-  // ✅ Check user login before going to Product page
+  // ✅ Add to cart and navigate to product page
   const handleAddClick = (product) => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/product" ,{ state: product });; // user logged in
+      addToCart({
+        ...product,
+        price:
+          typeof product.price === "string"
+            ? Number(product.price.replace(/[Rs,]/g, ""))
+            : product.price,
+      });
+      navigate(`/product/${product._id}`, { state: product });
+      console.log("Navigated to single product page");
     } else {
-      navigate("/login"); // not logged in
+      navigate("/login");
     }
   };
 
@@ -27,24 +47,19 @@ function Home() {
       <Navbar />
 
       <main>
-        {/* Hero Section */}
+        {/* --- Hero Section --- */}
         <section className="hero">
           <div className="hero-card hero-text">
-            <h1>
-              Freshly Baked Goodness <br />Every Day
-            </h1>
-            <p>
-              Discover our delicious range of cakes,<br /> pastries, and cookies made with love.
-            </p>
-            <button>Shop Now</button>
+            <h1>Freshly Baked Goodness <br />Every Day</h1>
+            <p>Discover our delicious range of cakes,<br /> pastries, and cookies made with love.</p>
+            <button onClick={() => navigate("/shoppingcart")}>Shop Now</button>
           </div>
-
           <div className="hero-card hero-image">
             <img src="src/assets/download.png" alt="Bakery Product" />
           </div>
         </section>
 
-        {/* Sale Section */}
+        {/* --- Sale Section --- */}
         <section className="sale-section">
           <div className="sale-box">
             <h2>Sale</h2>
@@ -58,7 +73,7 @@ function Home() {
           </div>
         </section>
 
-        {/* Categories Section */}
+        {/* --- Categories Section --- */}
         <section className="categories-section">
           <div className="categories-box">
             <h2>Categories</h2>
@@ -72,64 +87,25 @@ function Home() {
           </div>
         </section>
 
-        {/* Just For You Section */}
+        {/* --- Just For You Section --- */}
         <section className="justforyou-section">
           <h2>Just For You</h2>
           <div className="justforyou-cards">
-            <div className="card1">
-            <img src="src/assets/cakee1.jpg" alt=" Cake 1" />
-            <br></br>
-              <p>Chocolate Cake</p>
-              <br></br>
-              <button
-                className="add"
-                onClick={() =>
-                  handleAddClick({
-                    img: "src/assets/cakee1.jpg",
-                    title: "Chocolate Cake",
-                    price: "₹499",
-                  })
-                }
-              >
-                Add
-              </button>
-            </div>
-            <div className="card2">
-              <img src="src/assets/breadd.jpg" alt="Cake 2" />
-              <br></br>
-              <p>Freshly bread</p>
-              <br></br>
-              <button
-                className="add"
-                onClick={() =>
-                  handleAddClick({
-                    img: "src/assets/breadd.jpg",
-                    title: "Fresh Bread",
-                    price: "₹199",
-                  })
-                }
-              >
-                Add
-              </button>
-            </div>
-            <div className="card3">
-              <img src="src/assets/bun1.jpg" alt="Cake 3" />
-              <br></br>
-              <p>Curry bun</p>
-              <br></br>
-              <button
-                className="add"
-                onClick={() =>
-                  handleAddClick({
-                    img: "src/assets/bun1.jpg",
-                    title: "Curry Bun",
-                    price: "₹299",
-                  })
-                }
-              >
-                Add
-              </button>
-            </div>
+            {products.length > 0 ? (
+              products.map((p) => (
+                <div key={p._id} className="product-card">
+                  <img src={p.img || "src/assets/default.jpg"} alt={p.title} />
+                  <p>{p.name}</p>
+                  <p>₹{p.price}</p>
+                  <p>Stock: {p.stock}</p>
+                  <button className="add" onClick={() => handleAddClick(p)}>
+                    Add
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>Loading products...</p>
+            )}
           </div>
         </section>
       </main>
@@ -140,6 +116,3 @@ function Home() {
 }
 
 export default Home;
-
-
-
