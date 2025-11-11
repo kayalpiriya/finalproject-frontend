@@ -7,9 +7,11 @@ import Product from "./pages/Product.jsx";
 import ShoppingCart from "./pages/Shoppingcart"; // ✅ Added
 import StripeCheckout from "./pages/StripeCheckout";
 import ChatBox from "./pages/ChatBox";
-import AdminAddProduct from "./pages/AdminAddProduct.jsx";  // 🔹 Admin import pannuthu
-
-
+// import AdminAddProduct from "./pages/AdminAddProduct.jsx";  // 🔹 Admin import pannuthu
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import PaymentSuccess from "./pages/ PaymentSuccess.jsx";
+import PaymentCancel from "./pages/PaymentCancel.jsx";
+import Profile from "./pages/Profile.jsx";
 
 
 function App() {
@@ -27,8 +29,11 @@ function App() {
         <Route path="/shoppingcart" element={<ShoppingCart />} /> {/* ✅ New Route */}
         <Route path="/checkout" element={<StripeCheckout />} />
         <Route path="/chat" element={<ChatBox />} />
-        <Route path="/admin" element={<AdminAddProduct />} />  {/* 🔹 Admin route */}
-
+        {/* <Route path="/addproduct" element={<AdminAddProduct />} />  🔹 Admin route */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-cancel" element={<PaymentCancel />} />
+        <Route path="/profile" element={<Profile />} />  {/* ✅ Profile route */}
 
 
       </Routes>

@@ -9,12 +9,15 @@ nav {
   left: 0;
   width: 100%;
   z-index: 1000;
+  overflow-x: auto; /* 🆕 allow horizontal scroll if needed */
+  white-space: nowrap; /* 🆕 keep items in one line */
 }
 
 /* Logo left */
 nav .logo {
   display: flex;
   align-items: center;
+  flex-shrink: 0; /* prevent logo from shrinking */
 }
 
 nav .logo img {
@@ -65,6 +68,7 @@ nav .search-buy button:hover {
 .nav-links {
   display: flex;
   gap: 15px;
+  flex-shrink: 0; /* prevent links from shrinking */
 }
 
 .nav-links a,
@@ -96,4 +100,25 @@ nav .search-buy button:hover {
 
 .signin button:hover {
   background-color: #FDB581;
+}
+
+
+/* Combine logo + profile */
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Profile icon near logo */
+.profile-icon {
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+  color: #FDB581;
 }

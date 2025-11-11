@@ -29,17 +29,44 @@ function ShoppingCart() {
   //   placeOrder(paymentMethod);
   // };
 
+  // const handleProceedToPay = async () => {
+  //   if (!address) return alert("Enter delivery address!");
+  
+  //   // ✅ Await the order creation
+  //   const orderData = await placeOrder(paymentMethod, address);
+  
+  //   if (!orderData) return; // stop if order creation failed
+  
+  //   // ✅ Navigate to Stripe checkout with orderData
+  //   navigate("/checkout", { state: { orderData } });
+  // };
+
   const handleProceedToPay = async () => {
     if (!address) return alert("Enter delivery address!");
   
-    // ✅ Await the order creation
-    const orderData = await placeOrder(paymentMethod, address);
+    const token = localStorage.getItem("token");
   
-    if (!orderData) return; // stop if order creation failed
+    try {
+      // 1️⃣ Create order in backend
+      const orderData = await placeOrder(paymentMethod, address);
+      if (!orderData) return; // stop if order creation failed
   
-    // ✅ Navigate to Stripe checkout with orderData
-    navigate("/checkout", { state: { orderData } });
+      // 2️⃣ Call /payments to create Stripe session
+      const resPayment = await axios.post(
+        "http://localhost:5000/payments",
+        { orderId: orderData._id, amount: orderData.total },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      // 3️⃣ Redirect user to Stripe checkout page
+      window.location.href = resPayment.data.url;
+  
+    } catch (err) {
+      console.error("Payment initiation error:", err);
+      alert("Payment initiation failed!");
+    }
   };
+  
   
 
   return (

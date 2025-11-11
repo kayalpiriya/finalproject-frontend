@@ -248,6 +248,20 @@ export const CartProvider = ({ children }) => {
   
       // Clear cart after creating order
       await clearCart();
+
+      // 2️⃣ Call backend payment endpoint to create Stripe session
+    const resPayment = await axios.post(
+      "http://localhost:5000/payments",
+      {
+        orderId: order._id,
+        amount: totalPrice
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // 3️⃣ Redirect to Stripe-hosted payment page
+    window.location.href = resPayment.data.url;
+
   
       return order; // ✅ important: return order data
     } catch (err) {

@@ -139,16 +139,32 @@ function CheckoutForm({ orderData }) {
     try {
       // create payment intent on backend
       const token = localStorage.getItem("token");
-      const res = await axios.post(
-        "http://localhost:5000/payments",
-        { amount: orderData.total, method: "card", orderId: orderData.orderId || null },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    //   const res = await axios.post(
+    //     "http://localhost:5000/payments",
+    //     { amount: orderData.total, method: "card", orderId: orderData.orderId || null },
+    //     { headers: { Authorization: `Bearer ${token}` } }
+    //   );
 
-      const clientSecret = res.data.clientSecret;
+    //   // const clientSecret = res.data.clientSecret;
+    //   const stripeUrl = res.data.url;
 
-       // ✅ Add console log here
-    console.log("clientSecret:", clientSecret);
+
+    //    // ✅ Add console log here
+    // // console.log("clientSecret:", clientSecret);
+    // window.location.href = stripeUrl;
+
+    const res = await axios.post(
+      "http://localhost:5000/payments",
+      {
+        orderId: orderData._id || orderData.orderId,
+        amount: orderData.total,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    
+    // Redirect to Stripe checkout
+    window.location.href = res.data.url;
+    
 
       // Use CardNumberElement for confirming payment
       const cardNumberElement = elements.getElement(CardNumberElement);
