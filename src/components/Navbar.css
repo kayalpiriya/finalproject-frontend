@@ -1,94 +1,39 @@
-nav {
+/* nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  
   background-color: #596E65;
-  padding: 10px 20px;
+  
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  z-index: 1000;
-  overflow-x: auto; /* 🆕 allow horizontal scroll if needed */
-  white-space: nowrap; /* 🆕 keep items in one line */
-}
+ 
+  
+  
+} */
 
 /* Logo left */
-nav .logo {
+/* nav .logo {
   display: flex;
   align-items: center;
-  flex-shrink: 0; /* prevent logo from shrinking */
-}
 
-nav .logo img {
+} */
+
+/* nav .logo img {
   width: 70px;
   height: 70px;
   margin-right: 10px;
   border-radius: 50%;
-}
+} */
 
-nav .logo span {
+/* nav .logo span {
   font-size: 24px;
   font-weight: bold;
   color: white;
-}
-
-/* Center search + buy */
-nav .search-buy {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  justify-content: center;
-  min-width: 0;
-}
-
-nav .search-buy input {
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  max-width: 300px;
-  width: 100%;
-}
-
-nav .search-buy button {
-  padding: 6px 12px;
-  background-color: #d6336c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-nav .search-buy button:hover {
-  background-color: #ff3366;
-}
-
-/* Links right */
-.nav-links {
-  display: flex;
-  gap: 15px;
-  flex-shrink: 0; /* prevent links from shrinking */
-}
-
-.nav-links a,
-.nav-links button {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.nav-links a:hover,
-.nav-links button:hover {
-  color: #FDB581;
-}
+} */
 
 /* Sign in button */
-.signin button {
+/* .signin button {
   background-color: #F7D6E0;
   color: black;
   border: none;
@@ -96,29 +41,74 @@ nav .search-buy button:hover {
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
-}
-
-.signin button:hover {
-  background-color: #FDB581;
-}
+} */
 
 
-/* Combine logo + profile */
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-/* Profile icon near logo */
-.profile-icon {
-  font-size: 28px;
-  cursor: pointer;
+
+
+
+
+
+
+
+
+
+
+
+/* 
+.home a{
+  text-decoration:none;
   color: white;
-  transition: transform 0.2s, color 0.2s;
+  font-weight: 500;
+  background: none;
+  border: none;
+  margin-left: 300px;
 }
 
-.profile-icon:hover {
-  transform: scale(1.1);
-  color: #FDB581;
+.detail a{
+  text-decoration:none;
+  color: white;
+  font-weight: 500;
+  background: none;
+  border: none;
+  margin-left: 40px;
 }
+
+.contact a{
+  text-decoration:none;
+  color: white;
+  font-weight: 500;
+  background: none;
+  border: none;
+  margin-left: 40px;
+}
+
+.admin button{
+  text-decoration:none;
+  color: white;
+  font-weight: 500;
+  background: none;
+  border: none;
+  margin-left: 40px;
+  align-items: center;
+}
+
+.search-buy{
+  margin-left: 170px;
+ 
+  border: none;
+  
+  padding:40px;
+  align-items: center;
+  
+   
+}
+
+.profile button{
+  margin-left: 100px;
+  text-decoration:none;
+  font-weight: 500;
+  background: none;
+  border: none;
+} */
