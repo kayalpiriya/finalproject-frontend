@@ -1,13 +1,27 @@
-.profile-container {
+/* .profile-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
     background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
     padding: 20px;
+  } */
+
+  
+
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: linear-gradient(135deg, #fdfbfb 0%, #FAF7E4  100%);
+    padding: 20px;
+  
+    flex-direction: column; /* center content vertically too */
   }
   
-  .profile-card {
+  
+  /* .profile-card {
     background: #fff;
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -15,7 +29,22 @@
     text-align: center;
     padding: 30px 20px;
     transition: all 0.3s ease-in-out;
+  } */
+
+  .profile-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center; /* already center text */
+    padding: 30px 20px;
+    transition: all 0.3s ease-in-out;
+  
+    display: flex;        /* add flex */
+    flex-direction: column; /* stack children vertically */
+    align-items: center;  /* center horizontally */
   }
+  
   
   .profile-card:hover {
     transform: translateY(-5px);

@@ -49,7 +49,6 @@
 //     </nav>
 
 
-
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ShoppingCart, User, Search } from "lucide-react";
@@ -58,8 +57,11 @@ function Navbar() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
+  // ✅ get role from localStorage (login ஆகும்போது save பண்ணிக்கோங்க)
+  const role = localStorage.getItem("role"); // "admin" or "customer"
+
   return (
-    <nav className="fixed w-full z-20 top-0 border-b border-gray-200  shadow-md" style={{backgroundColor:"#596E65"}}>
+    <nav className="fixed w-full z-20 top-0 border-b border-gray-200 shadow-md" style={{backgroundColor:"#596E65"}}>
       <div className="max-w-screen-xl flex items-center justify-between mx-auto px-6 py-3">
         {/* ✅ Logo */}
         <Link to="/" className="flex items-center space-x-3">
@@ -84,9 +86,13 @@ function Navbar() {
           <li>
             <Link to="/chat" className="hover:text-yellow-300 transition">Contact</Link>
           </li>
-          <li>
-            <Link to="/admin" className="hover:text-yellow-300 transition">Admin</Link>
-          </li>
+
+          {/* ✅ Show Admin link only if role is admin */}
+          {role === "admin" && (
+            <li>
+              <Link to="/admin" className="hover:text-yellow-300 transition">Admin</Link>
+            </li>
+          )}
         </ul>
 
         {/* ✅ Search Bar */}
@@ -127,13 +133,8 @@ function Navbar() {
           </button>
         </div>
       </div>
-
-      {/* ✅ Mobile Menu (optional future update) */}
     </nav>
   );
 }
 
 export default Navbar;
-
-
-

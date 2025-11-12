@@ -2,7 +2,9 @@
 
 
 body {
-background-color:#FAF7E4 ; /* your favorite color */
+/* background-color:#FAF7E4 ; your favorite color */
+background: linear-gradient(135deg, #fdfbfb 0%, #FAF7E4  100%);
+
   margin: 0;
   padding-top: 70px; 
   overflow-x: hidden; 

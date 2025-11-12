@@ -12,7 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import PaymentSuccess from "./pages/ PaymentSuccess.jsx";
 import PaymentCancel from "./pages/PaymentCancel.jsx";
 import Profile from "./pages/Profile.jsx";
-
+import Detail from "./pages/Detail.jsx";
 
 function App() {
   return (
@@ -34,6 +34,7 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
         <Route path="/profile" element={<Profile />} />  {/* ✅ Profile route */}
+        <Route path="/details" element={<Detail />} />
 
 
       </Routes>

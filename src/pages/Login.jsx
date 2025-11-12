@@ -162,6 +162,8 @@ function Login() {
       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
       alert("Login successful!");
+      localStorage.setItem("role", res.data.role); // 👈 இங்க role save பண்ணுறோம்
+
       navigate("/");
     } catch (err) {
       console.error(err.response?.data || err.message);
@@ -260,3 +262,57 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import "./Login.css";
+
+// function SignInSignUp() {
+//   const [isSignUp, setIsSignUp] = useState(false);
+
+//   const toggleForm = () => setIsSignUp(!isSignUp);
+
+//   return (
+//     <div className="container">
+//       <div className={`form-container ${isSignUp ? "sign-up-mode" : ""}`}>
+//         {/* Sign In Form */}
+//         <form className="form sign-in-form">
+//           <h2>Sign In</h2>
+//           <input type="email" placeholder="Email" required />
+//           <input type="password" placeholder="Password" required />
+//           <button type="submit">Sign In</button>
+//           <p>
+//             Don't have an account?{" "}
+//             <span onClick={toggleForm}>Create Account</span>
+//           </p>
+//         </form>
+
+//         {/* Sign Up Form */}
+//         <form className="form sign-up-form">
+//           <h2>Create Account</h2>
+//           <input type="text" placeholder="Full Name" required />
+//           <input type="email" placeholder="Email" required />
+//           <input type="password" placeholder="Password" required />
+//           <button type="submit">Sign Up</button>
+//           <p>
+//             Already have an account?{" "}
+//             <span onClick={toggleForm}>Sign In</span>
+//           </p>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default SignInSignUp;
