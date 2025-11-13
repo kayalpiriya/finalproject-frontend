@@ -1,47 +1,40 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-// import Orders from "./pages/Order.jsx";
 import Home from "./pages/Home";
-import Product from "./pages/Product.jsx";
-import ShoppingCart from "./pages/Shoppingcart"; // ✅ Added
+import Product from "./pages/Product";
+import ShoppingCart from "./pages/Shoppingcart";
 import StripeCheckout from "./pages/StripeCheckout";
 import ChatBox from "./pages/ChatBox";
-// import AdminAddProduct from "./pages/AdminAddProduct.jsx";  // 🔹 Admin import pannuthu
-import AdminDashboard from "./pages/AdminDashboard.jsx";
-import PaymentSuccess from "./pages/ PaymentSuccess.jsx";
-import PaymentCancel from "./pages/PaymentCancel.jsx";
-import Profile from "./pages/Profile.jsx";
-import Detail from "./pages/Detail.jsx";
+import AdminDashboard from "./pages/AdminDashboard";
+import PaymentSuccess from "./pages/ PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
+import Profile from "./pages/Profile";
+import Detail from "./pages/Detail";
 
 function App() {
   return (
-    <BrowserRouter>
-  
+    <Router>
+      <ToastContainer position="top-center" autoClose={2000} theme="colored" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/orders" element={<Orders />} /> */}
-        {/* <Route path="/product" element={<Product />} /> */}
         <Route path="/product/:id" element={<Product />} />
-
-        <Route path="/shoppingcart" element={<ShoppingCart />} /> {/* ✅ New Route */}
+        <Route path="/shoppingcart" element={<ShoppingCart />} />
         <Route path="/checkout" element={<StripeCheckout />} />
         <Route path="/chat" element={<ChatBox />} />
-        {/* <Route path="/addproduct" element={<AdminAddProduct />} />  🔹 Admin route */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
-        <Route path="/profile" element={<Profile />} />  {/* ✅ Profile route */}
+        <Route path="/profile" element={<Profile />} />
         <Route path="/details" element={<Detail />} />
-
-
       </Routes>
-     
-    </BrowserRouter>
+    </Router>
   );
 }
 
 export default App;
-
