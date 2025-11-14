@@ -62,7 +62,7 @@ function Navbar() {
 
   return (
     <nav className="fixed w-full z-20 top-0 border-b border-gray-200 shadow-md" style={{backgroundColor:"#596E65"}}>
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto px-6 py-3">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto px-6 ">
         {/* ✅ Logo */}
         <Link to="/" className="flex items-center space-x-3">
           <img
@@ -103,12 +103,12 @@ function Navbar() {
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="ml-2 w-full outline-none text-gray-700 text-sm bg-transparent"
+            className="ml-2 w-full  text-gray-700 text-sm  "
           />
         </div>
 
         {/* ✅ Icons + Login */}
-        <div className="flex items-center space-x-5">
+        <div className="flex items-baseline space-x-5">
           <Link
             to="/cart"
             className="text-white hover:text-yellow-300 transition"
@@ -127,7 +127,7 @@ function Navbar() {
 
           <button
             onClick={() => navigate("/login")}
-            className="text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-full text-sm px-4 py-1 transition"
+            className="text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-full text-sm px-4  transition"
           >
             Sign in
           </button>
