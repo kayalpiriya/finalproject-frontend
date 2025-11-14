@@ -316,8 +316,6 @@
 // }
 
 // export default SignInSignUp;
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -387,6 +385,14 @@ function Login() {
   return (
     <>
       <Navbar />
+
+      {/* Floating Background Shapes */}
+      <div className="background-shapes">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+        <div className="shape shape3"></div>
+      </div>
+
       <div className="main-content">
         <div className="container">
           <div className="login-section">

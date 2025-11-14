@@ -7,7 +7,7 @@ export default function PaymentCancel() {
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Payment Cancelled ❌</h2>
-      <button onClick={() => navigate("/cart")}>Back to Cart</button>
+      <button onClick={() => navigate("/ShoppingCart")}>Back to Cart</button>
     </div>
   );
 }

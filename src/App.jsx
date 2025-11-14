@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Login from "./pages/Login";
+import Login from "./pages/Login.jsx";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
@@ -14,6 +14,7 @@ import PaymentSuccess from "./pages/ PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import Profile from "./pages/Profile";
 import Detail from "./pages/Detail";
+
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/payment-cancel" element={<PaymentCancel />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/details" element={<Detail />} />
+
       </Routes>
     </Router>
   );
