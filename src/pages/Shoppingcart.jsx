@@ -127,7 +127,7 @@ function ShoppingCart() {
 
             <button
               className="continue-btn"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/AllProduct")}
               style={{
                 marginTop: "10px",
                 padding: "10px 20px",

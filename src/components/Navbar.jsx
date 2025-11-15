@@ -83,6 +83,10 @@ function Navbar() {
           <li>
             <Link to="/details" className="hover:text-yellow-300 transition">Detail</Link>
           </li>
+            {/* ⭐ NEW - ALL PRODUCTS */}
+  <li>
+    <Link to="/allproduct" className="hover:text-yellow-300 transition">All Products</Link>
+  </li>
           <li>
             <Link to="/chat" className="hover:text-yellow-300 transition">Contact</Link>
           </li>

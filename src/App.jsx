@@ -14,6 +14,8 @@ import PaymentSuccess from "./pages/ PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import Profile from "./pages/Profile";
 import Detail from "./pages/Detail";
+import AllProduct from "./pages/AllProduct";   // ⭐ NEW IMPORT
+
 
 
 function App() {
@@ -33,6 +35,9 @@ function App() {
         <Route path="/payment-cancel" element={<PaymentCancel />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/details" element={<Detail />} />
+
+        {/* ⭐ NEW ROUTE FOR ALL PRODUCTS */}
+        <Route path="/allproduct" element={<AllProduct />} />
 
       </Routes>
     </Router>

@@ -1,0 +1,134 @@
+ 
+
+.products-page {
+    padding: 60px 20px;
+    text-align: center;
+    background: #FAF7E4; /* subtle light background */
+  }
+  
+  .products-page h2 {
+    font-size: 36px;
+    color: #596E65;
+    font-weight: 700;
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+  }
+  
+  /* Grid Layout */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px;
+    justify-content: center;
+  }
+  
+  /* Glassmorphic Card */
+  .product-card-new {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+  }
+  
+  .product-card-new:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Product Image */
+  .product-card-new img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.4s ease;
+  }
+  
+  .product-card-new img:hover {
+    transform: scale(1.07);
+  }
+  
+  /* Product Title */
+  .product-card-new h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #596E65;
+    margin: 12px 0 6px 0;
+  }
+  
+  /* Price */
+  .product-card-new .price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #8B1854;
+    margin-bottom: 6px;
+  }
+  
+  /* Stock */
+  .product-card-new .stock {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 12px;
+  }
+  
+  /* Button */
+  .product-card-new button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 15px;
+    background: linear-gradient(135deg, #FDB581, #FDA66B);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .product-card-new button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .products-page h2 {
+      font-size: 28px;
+    }
+    .product-card-new img {
+      height: 180px;
+    }
+  }
+  
+  /* Add this to your existing AllProduct.css */
+
+/* Floating Cart Animation */
+@keyframes floatCart {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-40px) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  .float-cart {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 20px;
+    color: #FDB581;
+    animation: floatCart 0.8s ease forwards;
+    pointer-events: none;
+  }
+  
