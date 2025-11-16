@@ -139,6 +139,7 @@ function Home() {
             </div>
           </div>
         </section>
+        <br></br><br></br>
 
         {/* --- Categories Section --- */}
         <section className="categories-section">
@@ -155,7 +156,7 @@ function Home() {
           </div>
         </section>
       </main>
-
+<br></br><br></br><br></br>
       <Footer />
     </>
   );

@@ -1,104 +1,176 @@
-/* .profile-container {
+/* ===========================
+   Modern Bakery Profile Page 
+   =========================== */
+
+   .profile-container {
+    min-height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    padding: 20px;
-  } */
-
-  
-
-  .profile-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    background: linear-gradient(135deg, #fdfbfb 0%, #FAF7E4  100%);
-    padding: 20px;
-  
-    flex-direction: column; /* center content vertically too */
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #fff6e9, #f7e7ce);
   }
   
-  
-  /* .profile-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    text-align: center;
-    padding: 30px 20px;
-    transition: all 0.3s ease-in-out;
-  } */
-
+  /* MAIN CARD */
   .profile-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    text-align: center; /* already center text */
-    padding: 30px 20px;
-    transition: all 0.3s ease-in-out;
+    width: 380px;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 34px;
+    border-radius: 25px;
+    text-align: center;
+    backdrop-filter: blur(18px);
   
-    display: flex;        /* add flex */
-    flex-direction: column; /* stack children vertically */
-    align-items: center;  /* center horizontally */
+    border: 1px solid rgba(255, 255, 255, 0.45);
+  
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15),
+                0 0 30px rgba(255, 210, 160, 0.45);
+  
+    animation: floatUp 1.2s ease;
+    transition: 0.3s ease;
   }
-  
   
   .profile-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
   }
   
+  /* FLOAT ANIMATION */
+  @keyframes floatUp {
+    from {
+      opacity: 0;
+      transform: translateY(25px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* PROFILE IMAGE */
   .profile-img {
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 15px;
-    border: 4px solid #ff7b54;
+    margin-bottom: 18px;
+  
+    border: 4px solid rgba(255, 255, 255, 0.8);
+  
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25),
+                0 0 40px rgba(255, 200, 150, 0.6);
+  
+    transition: 0.3s ease;
   }
   
+  .profile-img:hover {
+    transform: scale(1.08);
+  }
+  
+  /* NAME + EMAIL */
   .profile-card h2 {
-    font-size: 22px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 8px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #4d3c2f;
+    margin: 10px 0 5px;
   }
   
   .profile-card p {
-    font-size: 15px;
-    color: #777;
-    margin-bottom: 20px;
+    font-size: 17px;
+    color: #6d5a4d;
+    margin-bottom: 25px;
   }
   
-  .edit-btn {
-    background: linear-gradient(135deg, #ff7b54, #ffb26b);
-    color: white;
+  /* INPUT FIELDS WITH MODERN LOOK */
+  .edit-form input[type="text"],
+  .edit-form input[type="email"],
+  .edit-form input[type="file"] {
+    width: 100%;
+    padding: 15px;
+    margin: 14px 0;
+    border-radius: 15px;
     border: none;
-    padding: 10px 22px;
-    border-radius: 25px;
+  
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(10px);
+  
+    font-size: 16px;
+    color: #4d3c2f;
+  
+    transition: 0.25s ease;
+    outline: none;
+  }
+  
+  .edit-form input:focus {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 12px rgba(255, 195, 145, 0.65);
+  }
+  
+  /* BUTTON BASE */
+  .edit-btn,
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
     cursor: pointer;
-    font-size: 15px;
-    transition: all 0.3s ease-in-out;
+    font-weight: 700;
+    margin-top: 14px;
+    transition: 0.25s ease;
+  }
+  
+  /* EDIT BUTTON */
+  .edit-btn {
+    background: linear-gradient(135deg, #ff9447, #ff7d1f);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(255, 130, 55, 0.45);
   }
   
   .edit-btn:hover {
-    background: linear-gradient(135deg, #ffb26b, #ff7b54);
-    transform: scale(1.05);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(255, 130, 55, 0.55);
   }
   
-  /* Responsive */
-  @media (max-width: 500px) {
+  /* SAVE BUTTON */
+  .save-btn {
+    background: linear-gradient(135deg, #2dd784, #1fba65);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(40, 199, 111, 0.35);
+  }
+  
+  .save-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(40, 199, 111, 0.45);
+  }
+  
+  /* CANCEL BUTTON */
+  .cancel-btn {
+    background: rgba(255, 255, 255, 0.55);
+    color: #4d3c2f;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.75);
+    transform: translateY(-3px);
+  }
+  
+  /* BUTTON CONTAINER */
+  .edit-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
     .profile-card {
-      width: 90%;
-      padding: 25px 15px;
+      width: 95%;
+      padding: 28px;
     }
   
     .profile-img {
-      width: 110px;
-      height: 110px;
+      width: 115px;
+      height: 115px;
     }
   }
   

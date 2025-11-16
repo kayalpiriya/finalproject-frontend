@@ -13,14 +13,25 @@ background: linear-gradient(135deg, #fdfbfb 0%, #FAF7E4  100%);
   min-height: 100vh;
 }
 main {
-  flex: 1
+  /* flex: 1 */
+  flex: 1 0 auto; /* grow and push footer down */
+  display: flex;
+  flex-direction: column;
 }
 
 
 
 /* Footer styling */
+/* footer {
+  background-color: #596E65; 
+  color: white;
+  padding: 40px 20px 20px 20px;
+  font-size: 14px;
+} */
+
 footer {
-  background-color: #596E65; /* deep magenta */
+  flex-shrink: 0; /* don’t let footer shrink */
+  background-color: #596E65;
   color: white;
   padding: 40px 20px 20px 20px;
   font-size: 14px;

@@ -73,7 +73,6 @@
 // export default ProductList;
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ProductList.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);

@@ -316,6 +316,7 @@
 // }
 
 // export default SignInSignUp;
+// 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -327,6 +328,7 @@ import "./Login.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({}); // 🔥 Validation
 
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
@@ -336,13 +338,35 @@ function Login() {
 
   const navigate = useNavigate();
 
-  // Login
+  // 🔥 LOGIN VALIDATION
+  const validateLogin = () => {
+    let temp = {};
+
+    if (!email.trim()) temp.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email))
+      temp.email = "Invalid email format";
+
+    if (!password.trim()) temp.password = "Password is required";
+
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
+  };
+
+  // LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!validateLogin()) return;
+
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+      const res = await axios.post(
+        "http://localhost:5000/auth/login",
+        { email, password }
+      );
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
+
       toast.success("✅ Login successful!");
       setTimeout(() => navigate("/"), 1500);
     } catch (err) {
@@ -350,11 +374,14 @@ function Login() {
     }
   };
 
-  // Send OTP
+  // SEND OTP
   const handleSendOTP = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+      const res = await axios.post(
+        "http://localhost:5000/auth/forgot-password",
+        { email: forgotEmail }
+      );
       toast.success(res.data.message);
       setOtpSent(true);
     } catch (err) {
@@ -362,15 +389,19 @@ function Login() {
     }
   };
 
-  // Reset Password
+  // RESET PASSWORD
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/auth/reset-password", {
-        email: forgotEmail,
-        otp,
-        password: newPassword,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/auth/reset-password",
+        {
+          email: forgotEmail,
+          otp,
+          password: newPassword,
+        }
+      );
+
       toast.success(res.data.message);
       setOtpSent(false);
       setForgotPasswordMode(false);
@@ -378,7 +409,9 @@ function Login() {
       setOtp("");
       setNewPassword("");
     } catch (err) {
-      toast.error(err.response?.data?.message || "❌ Failed to reset password");
+      toast.error(
+        err.response?.data?.message || "❌ Failed to reset password"
+      );
     }
   };
 
@@ -386,7 +419,6 @@ function Login() {
     <>
       <Navbar />
 
-      {/* Floating Background Shapes */}
       <div className="background-shapes">
         <div className="shape shape1"></div>
         <div className="shape shape2"></div>
@@ -399,45 +431,106 @@ function Login() {
             <h2>{forgotPasswordMode ? "Reset Password" : "Sign In"}</h2>
 
             <div className="social-login">
-              <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
-              <a href="#"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google" /></a>
+              <a href="#">
+                <img
+                  src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
+                  alt="Facebook"
+                />
+              </a>
+              <a href="#">
+                <img
+                  src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
+                  alt="Google"
+                />
+              </a>
             </div>
 
             {!forgotPasswordMode ? (
               <form onSubmit={handleLogin}>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <p style={{ cursor: "pointer", color: "blue" }} onClick={() => setForgotPasswordMode(true)}>
+                {/* EMAIL */}
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {errors.email && <p className="error">{errors.email}</p>}
+
+                {/* PASSWORD */}
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {errors.password && (
+                  <p className="error">{errors.password}</p>
+                )}
+
+                <p
+                  style={{ cursor: "pointer", color: "blue" }}
+                  onClick={() => setForgotPasswordMode(true)}
+                >
                   Forget Your Password? Reset here
                 </p>
-                <button type="submit" className="login-btn">Sign In</button>
+
+                <button type="submit" className="login-btn">
+                  Sign In
+                </button>
               </form>
             ) : !otpSent ? (
               <form onSubmit={handleSendOTP}>
-                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required />
-                <button type="submit" className="login-btn">Send OTP</button>
-                <p style={{ cursor: "pointer", color: "blue" }} onClick={() => setForgotPasswordMode(false)}>Back to Login</p>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                />
+                <button type="submit" className="login-btn">
+                  Send OTP
+                </button>
+
+                <p
+                  style={{ cursor: "pointer", color: "blue" }}
+                  onClick={() => setForgotPasswordMode(false)}
+                >
+                  Back to Login
+                </p>
               </form>
             ) : (
               <form onSubmit={handleResetPassword}>
-                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
-                <input type="password" placeholder="Enter New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                <button type="submit" className="login-btn">Reset Password</button>
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button type="submit" className="login-btn">
+                  Reset Password
+                </button>
               </form>
             )}
           </div>
 
           <div className="sign-section">
             <h2>Hello, Friend!</h2>
-            <p>Register with your personal details to use all of site features</p>
-            <button className="sign-btn" onClick={() => navigate("/register")}>Sign up</button>
+            <p>Register with your personal details to use all site features</p>
+            <button className="sign-btn" onClick={() => navigate("/register")}>
+              Sign up
+            </button>
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );
 }
 
 export default Login;
-

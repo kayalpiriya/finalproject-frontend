@@ -214,6 +214,9 @@
 // }
 
 // export default Register;
+// 
+
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
@@ -226,10 +229,30 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({}); // 🔥 Validation errors
   const navigate = useNavigate();
+
+  // 🔥 VALIDATION FUNCTION
+  const validateForm = () => {
+    let temp = {};
+
+    if (!name.trim()) temp.name = "Name is required";
+    if (!email.trim()) temp.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+
+    if (!password.trim()) temp.password = "Password is required";
+    else if (password.length < 6)
+      temp.password = "Password must be at least 6 characters";
+
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return; // ❌ Stop if errors
+
     try {
       await registerUser({ name, email, password });
       toast.success("🎉 Registration successful!");
@@ -243,7 +266,6 @@ function Register() {
     <>
       <Navbar />
 
-      {/* Floating Background Shapes */}
       <div className="background-shapes">
         <div className="shape shape1"></div>
         <div className="shape shape2"></div>
@@ -254,7 +276,7 @@ function Register() {
         <div className="container">
           <div className="signin-section">
             <h2>Welcome Back</h2>
-            <p>Enter your personal details to use all of site features</p>
+            <p>Enter your personal details to use all site features</p>
             <button className="signin-btn" onClick={() => navigate("/login")}>
               Sign in
             </button>
@@ -264,23 +286,56 @@ function Register() {
             <h2>Create Account</h2>
 
             <div className="social-login">
-              <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
+              <a href="#">
+                <img
+                  src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
+                  alt="Facebook"
+                />
+              </a>
+
               <a href="http://localhost:5000/auth/google">
-                <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" />
+                <img
+                  src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
+                  alt="Google Login"
+                />
               </a>
             </div>
 
             <p>Or use your email for registration</p>
 
             <form onSubmit={handleRegister}>
-              <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-              <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <button type="submit" className="signup-btn">Sign up</button>
+              <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              {errors.name && <p className="error">{errors.name}</p>}
+
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <p className="error">{errors.email}</p>}
+
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && <p className="error">{errors.password}</p>}
+
+              <button type="submit" className="signup-btn">
+                Sign up
+              </button>
             </form>
           </div>
         </div>
       </main>
+
       <Footer />
     </>
   );
