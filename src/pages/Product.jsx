@@ -243,22 +243,90 @@
 // export default Product;
 
 
+// import { useParams, useNavigate } from "react-router-dom";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { useContext, useEffect, useState } from "react";
+// import { CartContext } from "../pages/CartContext.jsx";
+// import axios from "axios";
+
+// function Product() {
+//   const { id } = useParams(); // get product ID from URL
+//   const navigate = useNavigate();
+//   const { addToCart } = useContext(CartContext);
+//   const [product, setProduct] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   // 🔹 Fetch single product from backend
+//   useEffect(() => {
+//     const getSingleProduct = async () => {
+//       try {
+//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         setProduct(res.data);
+//         setLoading(false);
+//       } catch (err) {
+//         console.error("Error fetching product:", err);
+//         setLoading(false);
+//       }
+//     };
+//     getSingleProduct();
+//   }, [id]);
+
+//   const handleAddToCart = () => {
+//     if (!product) return;
+//     addToCart(product);
+//     navigate("/shoppingcart");
+//   };
+
+//   const handleBuyNow = () => {
+//     if (!product) return;
+//     addToCart(product);
+//     navigate("/shoppingcart");
+//   };
+
+//   if (loading) return <p>Loading product...</p>;
+//   if (!product) return <p>Product not found!</p>;
+
+//   return (
+//     <>
+//      <Navbar />
+//       <div className="product-page">
+//         <div className="product-card">
+//           <img src={product.img || "src/assets/default.jpg"} alt={product.name} />
+//         </div>
+//         <div className="list">
+//           <h3>{product.name}</h3>
+//           <p>₹{product.price}</p>
+//           <p>Stock: {product.stock}</p>
+//           <p>{product.description}</p>
+//           <div className="buttons">
+//             <button className="buy-btn" onClick={handleBuyNow}>Buy Now</button>
+//             <button className="cart-btn" onClick={handleAddToCart}>Add to Cart</button>
+//           </div>
+//         </div>
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// }
+
+// export default Product;
+
+
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../pages/CartContext.jsx";
 import axios from "axios";
-import "./Product.css";
 
 function Product() {
-  const { id } = useParams(); // get product ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Fetch single product from backend
   useEffect(() => {
     const getSingleProduct = async () => {
       try {
@@ -266,7 +334,7 @@ function Product() {
         setProduct(res.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching product:", err);
+        console.error(err);
         setLoading(false);
       }
     };
@@ -279,30 +347,45 @@ function Product() {
     navigate("/shoppingcart");
   };
 
-  const handleBuyNow = () => {
-    if (!product) return;
-    addToCart(product);
-    navigate("/shoppingcart");
-  };
-
-  if (loading) return <p>Loading product...</p>;
-  if (!product) return <p>Product not found!</p>;
+  if (loading) return <p className="text-center mt-20 text-xl">Loading product...</p>;
+  if (!product) return <p className="text-center mt-20 text-xl">Product not found!</p>;
 
   return (
     <>
-     <Navbar />
-      <div className="product-page">
-        <div className="product-card">
-          <img src={product.img || "src/assets/default.jpg"} alt={product.name} />
+      <Navbar />
+      <br></br><br></br><br></br>
+      <div className="max-w-6xl mx-auto my-12 p-4 grid md:grid-cols-2 gap-10">
+        {/* Image */}
+        <div className="flex justify-center items-center bg-white shadow-lg rounded-xl p-6">
+          <img
+            src={product.img || "/assets/default.jpg"}
+            alt={product.name}
+            className="rounded-xl max-h-96 object-cover"
+          />
         </div>
-        <div className="list">
-          <h3>{product.name}</h3>
-          <p>₹{product.price}</p>
-          <p>Stock: {product.stock}</p>
-          <p>{product.description}</p>
-          <div className="buttons">
-            <button className="buy-btn" onClick={handleBuyNow}>Buy Now</button>
-            <button className="cart-btn" onClick={handleAddToCart}>Add to Cart</button>
+
+        {/* Product Info */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-yellow-700 mb-4">{product.name}</h1>
+            <p className="text-xl font-semibold text-gray-800 mb-2">₹{product.price}</p>
+            <p className="text-gray-600 mb-2">Stock: {product.stock}</p>
+            <p className="text-gray-700 mb-6">{product.description}</p>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleAddToCart}
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition"
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+ 
         <Route path="/product/:id" element={<Product />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
         <Route path="/checkout" element={<StripeCheckout />} />
@@ -34,7 +35,7 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/details" element={<Detail />} />
+        <Route path="/detail" element={<Detail />} />
 
         {/* ⭐ NEW ROUTE FOR ALL PRODUCTS */}
         <Route path="/allproduct" element={<AllProduct />} />
