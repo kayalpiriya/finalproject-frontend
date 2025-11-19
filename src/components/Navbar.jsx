@@ -527,6 +527,11 @@
 // export default Navbar;
 
 
+
+
+
+
+///imoprtant///
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import { CartContext } from "../pages/CartContext.jsx";
@@ -695,6 +700,202 @@ function Navbar() {
 
 export default Navbar;
 
+
+
+
+
+
+// import { Link, useNavigate } from "react-router-dom";
+// import React, { useState, useEffect, useContext } from "react";
+// import { CartContext } from "../pages/CartContext.jsx";
+// import { Menu, X, ShoppingCart, User } from "lucide-react";
+
+// function Navbar() {
+//   const navigate = useNavigate();
+//   const { totalItems } = useContext(CCartContext);
+
+//   const [role, setRole] = useState(null);
+//   const [token, setToken] = useState(null);
+//   const [mobileOpen, setMobileOpen] = useState(false);
+
+//   useEffect(() => {
+//     setRole(localStorage.getItem("role"));
+//     setToken(localStorage.getItem("token"));
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("role");
+//     localStorage.removeItem("token");
+//     setRole(null);
+//     setToken(null);
+//     navigate("/login");
+//   };
+
+//   return (
+//     <nav className="fixed w-full bg-yellow-50/80 backdrop-blur-lg shadow-lg z-50 
+//     transition-all duration-500 border-b border-yellow-200">
+//       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+
+//         {/* Logo */}
+//         <Link to="/" className="flex items-center space-x-3 group">
+//           <img
+//             src="src/assets/my logo.png"
+//             alt="Bakery Logo"
+//             className="h-10 w-10 rounded-full shadow-md group-hover:scale-110 
+//             transition-all duration-300"
+//           />
+//           <span className="text-yellow-800 hover:text-yellow-600 transition 
+//           font-semibold text-xl tracking-wide group-hover:tracking-wider duration-300">
+//             Mufflix Bakery
+//           </span>
+//         </Link>
+
+//         {/* Desktop Menu */}
+//         <div className="hidden md:flex items-center space-x-6 font-medium text-yellow-800">
+//           {["Home", "All Products", "Detail", "Contact"].map((item, i) => (
+//             <Link
+//               key={i}
+//               to={item === "Home" ? "/" : item.toLowerCase().replace(" ", "")}
+//               className="relative hover:text-yellow-600 transition group"
+//             >
+//               {item}
+//               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-600 
+//               group-hover:w-full transition-all duration-300"></span>
+//             </Link>
+//           ))}
+//           {role === "admin" && (
+//             <Link
+//               to="/admin"
+//               className="relative hover:text-yellow-600 transition group"
+//             >
+//               Admin
+//               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-600 
+//               group-hover:w-full transition-all duration-300"></span>
+//             </Link>
+//           )}
+//         </div>
+
+//         {/* Right Section */}
+//         <div className="flex items-center space-x-4">
+
+//           {/* Search Box */}
+//           <input
+//             type="text"
+//             placeholder="Search..."
+//             className="px-3 py-1 rounded-md border border-yellow-300 
+//             hidden md:block bg-white/70 focus:ring-2 focus:ring-yellow-400
+//             shadow-inner transition-all"
+//           />
+
+//           {/* Icons & Buttons */}
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => navigate("/profile")}
+//                 className="relative text-yellow-800 hover:text-yellow-600 transition"
+//               >
+//                 <User size={24} className="hover:scale-110 transition" />
+//               </button>
+
+//               <button
+//                 onClick={() => navigate("/shoppingcart")}
+//                 className="relative text-yellow-800 hover:text-yellow-600 transition"
+//               >
+//                 <ShoppingCart size={24} className="hover:scale-110 transition" />
+//                 {totalItems > 0 && (
+//                   <span className="absolute -top-2 -right-2 bg-red-500 shadow 
+//                   text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+//                     {totalItems}
+//                   </span>
+//                 )}
+//               </button>
+
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white 
+//                 px-3 py-1 rounded-md shadow-md hover:shadow-lg hover:scale-105 
+//                 transition-all duration-300"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => navigate("/login")}
+//               className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white 
+//               px-3 py-1 rounded-md shadow-md hover:shadow-lg hover:scale-105 
+//               transition-all duration-300"
+//             >
+//               Sign In
+//             </button>
+//           )}
+
+//           {/* Mobile Menu */}
+//           <button
+//             className="md:hidden"
+//             onClick={() => setMobileOpen(!mobileOpen)}
+//           >
+//             {mobileOpen ? (
+//               <X size={24} className="text-yellow-800" />
+//             ) : (
+//               <Menu size={24} className="text-yellow-800" />
+//             )}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Mobile Drop Menu */}
+//       {mobileOpen && (
+//         <div className="md:hidden bg-yellow-50/95 shadow-lg px-6 py-4 space-y-3 animate-slideDown">
+//           <Link to="/" className="block hover:text-yellow-600 transition">Home</Link>
+//           <Link to="/allproduct" className="block hover:text-yellow-600 transition">All Products</Link>
+//           <Link to="/detail" className="block hover:text-yellow-600 transition">Detail</Link>
+//           <Link to="/chat" className="block hover:text-yellow-600 transition">Contact</Link>
+
+//           {role === "admin" && (
+//             <Link to="/admin" className="block hover:text-yellow-600 transition">Admin</Link>
+//           )}
+
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => navigate("/profile")}
+//                 className="flex items-center gap-3"
+//               >
+//                 <User size={20} /> Profile
+//               </button>
+
+//               <button
+//                 onClick={() => navigate("/shoppingcart")}
+//                 className="flex items-center gap-3"
+//               >
+//                 <ShoppingCart size={20} /> Cart
+//               </button>
+
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-yellow-500 w-full text-white px-3 py-2 rounded-md 
+//                 shadow hover:bg-yellow-600 transition"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => navigate("/login")}
+//               className="bg-yellow-500 w-full text-white px-3 py-2 rounded-md 
+//               shadow hover:bg-yellow-600 transition"
+//             >
+//               Sign In
+//             </button>
+//           )}
+//         </div>
+//       )}
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
 
 
 

@@ -151,3 +151,89 @@ export default function Footer() {
     </footer>
   );
 }
+
+
+
+
+
+// import React from "react";
+// import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+
+// export default function Footer() {
+//   return (
+//     <footer className="bg-pink-600 text-white mt-20 pt-14 pb-6 rounded-t-3xl shadow-2xl">
+      
+//       {/* Main Footer Grid */}
+//       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+        
+//         {/* 1. Brand */}
+//         <div>
+//           <h2 className="text-3xl font-extrabold tracking-wide mb-3">🍰 SweetBite</h2>
+//           <p className="text-white/90">
+//             Freshly baked cakes, pastries, and desserts made with love.  
+//             Bringing sweetness to your special moments! 💖
+//           </p>
+//         </div>
+
+//         {/* 2. Quick Links */}
+//         <div>
+//           <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+//           <ul className="space-y-2 text-white/90">
+//             <li className="hover:text-white cursor-pointer">Home</li>
+//             <li className="hover:text-white cursor-pointer">All Products</li>
+//             <li className="hover:text-white cursor-pointer">Categories</li>
+//             <li className="hover:text-white cursor-pointer">Contact Us</li>
+//           </ul>
+//         </div>
+
+//         {/* 3. Support */}
+//         <div>
+//           <h3 className="text-xl font-bold mb-4">Support</h3>
+//           <ul className="space-y-2 text-white/90">
+//             <li className="hover:text-white cursor-pointer">FAQs</li>
+//             <li className="hover:text-white cursor-pointer">Order Tracking</li>
+//             <li className="hover:text-white cursor-pointer">Privacy Policy</li>
+//             <li className="hover:text-white cursor-pointer">Refund Policy</li>
+//           </ul>
+//         </div>
+
+//         {/* 4. Contact */}
+//         <div>
+//           <h3 className="text-xl font-bold mb-4">Contact</h3>
+
+//           <p className="flex items-center gap-2 mb-2">
+//             <MapPin size={18} /> Jaffna, Sri Lanka
+//           </p>
+
+//           <p className="flex items-center gap-2 mb-2">
+//             <Phone size={18} /> +94 77 123 4567
+//           </p>
+
+//           <p className="flex items-center gap-2 mb-4">
+//             <Mail size={18} /> support@sweetbite.com
+//           </p>
+
+//           {/* Social Icons */}
+//           <div className="flex gap-4 mt-4">
+//             <div className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition cursor-pointer">
+//               <Facebook size={20} />
+//             </div>
+//             <div className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition cursor-pointer">
+//               <Instagram size={20} />
+//             </div>
+//             <div className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition cursor-pointer">
+//               <Twitter size={20} />
+//             </div>
+//           </div>
+//         </div>
+
+//       </div>
+
+//       {/* Bottom Line */}
+//       <div className="text-center mt-10 border-t border-white/30 pt-4 text-white/90">
+//         © {new Date().getFullYear()} SweetBite. All Rights Reserved.
+//       </div>
+
+//     </footer>
+//   );
+// }
