@@ -1,22 +1,92 @@
+// // PaymentSuccess.jsx
+// import { useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
+
+// export default function PaymentSuccess() {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     // 3 seconds wait, then redirect to home
+//     const timer = setTimeout(() => {
+//       navigate("/"); // home page
+//     }, 3000);
+//     return () => clearTimeout(timer);
+//   }, [navigate]);
+
+//   return (
+//     <div style={{ textAlign: "center", marginTop: "50px" }}>
+//       <h2>Payment Successful ✅</h2>
+//       <p>Redirecting to Home...</p>
+//     </div>
+//   );
+// }
+
+
 // PaymentSuccess.jsx
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function PaymentSuccess() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [orderData, setOrderData] = useState(null);
+  const [redirectTimer, setRedirectTimer] = useState(10); // 10 seconds countdown
 
+  // Get Stripe session ID from URL
+  const queryParams = new URLSearchParams(location.search);
+  const sessionId = queryParams.get("session_id");
+
+  // Fetch order/payment info from backend
   useEffect(() => {
-    // 3 seconds wait, then redirect to home
-    const timer = setTimeout(() => {
-      navigate("/"); // home page
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [navigate]);
+    if (!sessionId) return;
+
+    const fetchOrder = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `http://localhost:5000/payments/session/${sessionId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setOrderData(res.data);
+
+        // ✅ Automatically download invoice after fetching order
+        if (res.data?._id) {
+          const invoiceRes = await axios.get(
+            `http://localhost:5000/payments/invoice/${res.data._id}`,
+            { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          const file = new Blob([invoiceRes.data], { type: "application/pdf" });
+          const fileURL = URL.createObjectURL(file);
+          // Trigger download
+          const link = document.createElement("a");
+          link.href = fileURL;
+          link.download = `invoice-${res.data._id}.pdf`;
+          link.click();
+        }
+      } catch (err) {
+        console.error("Failed to fetch order or download invoice:", err);
+      }
+    };
+
+    fetchOrder();
+  }, [sessionId]);
+
+  // Redirect countdown
+  useEffect(() => {
+    if (redirectTimer <= 0) {
+      navigate("/"); // redirect to home
+    } else {
+      const timer = setTimeout(() => setRedirectTimer(redirectTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [redirectTimer, navigate]);
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Payment Successful ✅</h2>
-      <p>Redirecting to Home...</p>
+      <p>You will be redirected to Home in {redirectTimer} seconds...</p>
     </div>
   );
 }

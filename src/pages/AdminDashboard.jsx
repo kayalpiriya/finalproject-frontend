@@ -414,48 +414,215 @@
 // export default AdminDashboard;
 
 
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import AdminAddProduct from "./AdminAddProduct";
-import ProductList from "./ProductList";
-import OrdersListWithBoundary from "./OrdersList";
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import AdminAddProduct from "./AdminAddProduct";
+// import ProductList from "./ProductList";
+// import OrdersListWithBoundary from "./OrdersList";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { ShoppingCart, Box, List, Settings, Menu } from "lucide-react";
+
+// function AdminDashboard() {
+//   const [activePage, setActivePage] = useState("add");
+//   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+//   const [productsCount, setProductsCount] = useState(0);
+//   const [ordersCount, setOrdersCount] = useState(0);
+
+//   const navigate = useNavigate();
+//   const role = localStorage.getItem("role");
+
+//   // Admin guard
+//   useEffect(() => {
+//     if (role !== "admin") {
+//       alert("Admins only!");
+//       navigate("/login");
+//     }
+//   }, [role, navigate]);
+
+//   // Fetch badges counts
+//   useEffect(() => {
+//     const fetchCounts = async () => {
+//       try {
+//         const productsRes = await fetch("http://localhost:5000/products");
+//         const ordersRes = await fetch("http://localhost:5000/orders");
+//         const productsData = await productsRes.json();
+//         const ordersData = await ordersRes.json();
+//         setProductsCount(productsData.length);
+//         setOrdersCount(ordersData.length);
+//       } catch (err) {
+//         console.error("Failed to fetch counts:", err);
+//       }
+//     };
+//     fetchCounts();
+//   }, []);
+
+//   return (
+//     <>
+//       <Navbar />
+//       <div className="flex min-h-screen bg-gray-100 pt-16">
+//         {/* Sidebar */}
+//         <aside
+//           className={`bg-gradient-to-b from-yellow-400 to-yellow-600 text-black transition-all duration-300 ${
+//             sidebarCollapsed ? "w-20" : "w-64"
+//           } shadow-lg min-h-screen`}
+//         >
+//           <div className="flex items-center justify-between p-4 border-b border-yellow-300">
+//             {!sidebarCollapsed && (
+//               <h2 className="text-xl font-bold text-black">🍰 Admin Panel</h2>
+//             )}
+//             <Menu
+//               size={24}
+//               className="cursor-pointer hover:text-gray-200"
+//               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+//             />
+//           </div>
+
+//           <ul className="mt-4">
+//             <li
+//               className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
+//                 activePage === "add" ? "bg-yellow-500 font-semibold" : ""
+//               }`}
+//               onClick={() => setActivePage("add")}
+//             >
+//               <Box size={20} />
+//               {!sidebarCollapsed && <span>Add Product</span>}
+//             </li>
+
+//             <li
+//               className={`flex items-center justify-between p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
+//                 activePage === "list" ? "bg-yellow-500 font-semibold" : ""
+//               }`}
+//               onClick={() => setActivePage("list")}
+//             >
+//               <div className="flex items-center gap-3">
+//                 <List size={20} />
+//                 {!sidebarCollapsed && <span>Product List</span>}
+//               </div>
+//               {!sidebarCollapsed && productsCount > 0 && (
+//                 <span className="bg-black text-yellow-300 px-2 py-0.5 rounded-full text-xs font-bold">
+//                   {productsCount}
+//                 </span>
+//               )}
+//             </li>
+
+//             <li
+//               className={`flex items-center justify-between p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
+//                 activePage === "orders" ? "bg-yellow-500 font-semibold" : ""
+//               }`}
+//               onClick={() => setActivePage("orders")}
+//             >
+//               <div className="flex items-center gap-3">
+//                 <ShoppingCart size={20} />
+//                 {!sidebarCollapsed && <span>Orders List</span>}
+//               </div>
+//               {!sidebarCollapsed && ordersCount > 0 && (
+//                 <span className="bg-white text-yellow-600 px-2 py-0.5 rounded-full text-xs font-bold">
+//                   {ordersCount}
+//                 </span>
+//               )}
+//             </li>
+
+//             <li
+//               className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
+//                 activePage === "settings" ? "bg-yellow-500 font-semibold" : ""
+//               }`}
+//               onClick={() => setActivePage("settings")}
+//             >
+//               <Settings size={20} />
+//               {!sidebarCollapsed && <span>Settings</span>}
+//             </li>
+//           </ul>
+//         </aside>
+
+//         {/* Content */}
+//         <main className="flex-1 p-6">
+//           {activePage === "add" && <AdminAddProduct />}
+//           {activePage === "list" && <ProductList />}
+//           {activePage === "orders" && <OrdersListWithBoundary />}
+//           {activePage === "settings" && (
+//             <div className="bg-white shadow-lg p-6 rounded-lg">
+//               <h2 className="text-2xl font-bold text-yellow-700 mb-4">Settings</h2>
+//               <p className="text-gray-600">Admin settings will go here.</p>
+//             </div>
+//           )}
+//         </main>
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// }
+
+// export default AdminDashboard;
+
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { ShoppingCart, Box, List, Settings, Menu } from "lucide-react";
+import ProductList from "../pages/ProductList.jsx";
+import OrdersListWithBoundary from "../pages/OrdersList.jsx"
+import {
+  ShoppingCart,
+  List,
+  Settings,
+  Menu,
+  DollarSign,
+  Eye,
+  BarChart2,
+} from "lucide-react";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 function AdminDashboard() {
-  const [activePage, setActivePage] = useState("add");
+  const [activePage, setActivePage] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
   const [productsCount, setProductsCount] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
 
-  const navigate = useNavigate();
   const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
   // Admin guard
   useEffect(() => {
     if (role !== "admin") {
       alert("Admins only!");
-      navigate("/login");
+      window.location.href = "/login";
     }
-  }, [role, navigate]);
+  }, [role]);
 
-  // Fetch badges counts
+  // Fetch dashboard + counts
   useEffect(() => {
-    const fetchCounts = async () => {
+    const fetchData = async () => {
       try {
-        const productsRes = await fetch("http://localhost:5000/products");
-        const ordersRes = await fetch("http://localhost:5000/orders");
-        const productsData = await productsRes.json();
-        const ordersData = await ordersRes.json();
-        setProductsCount(productsData.length);
-        setOrdersCount(ordersData.length);
+        const dashRes = await axios.get("http://localhost:5000/admin/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDashboardData(dashRes.data);
+
+        const prodRes = await axios.get("http://localhost:5000/products", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProductsCount(prodRes.data.length);
+
+        const orderRes = await axios.get("http://localhost:5000/orders", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setOrdersCount(orderRes.data.length);
       } catch (err) {
-        console.error("Failed to fetch counts:", err);
+        console.error(err);
       }
     };
-    fetchCounts();
-  }, []);
+    fetchData();
+  }, [token]);
 
   return (
     <>
@@ -481,14 +648,13 @@ function AdminDashboard() {
           <ul className="mt-4">
             <li
               className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
-                activePage === "add" ? "bg-yellow-500 font-semibold" : ""
+                activePage === "dashboard" ? "bg-yellow-500 font-semibold" : ""
               }`}
-              onClick={() => setActivePage("add")}
+              onClick={() => setActivePage("dashboard")}
             >
-              <Box size={20} />
-              {!sidebarCollapsed && <span>Add Product</span>}
+              <BarChart2 size={20} />
+              {!sidebarCollapsed && <span>Dashboard</span>}
             </li>
-
             <li
               className={`flex items-center justify-between p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
                 activePage === "list" ? "bg-yellow-500 font-semibold" : ""
@@ -505,7 +671,6 @@ function AdminDashboard() {
                 </span>
               )}
             </li>
-
             <li
               className={`flex items-center justify-between p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
                 activePage === "orders" ? "bg-yellow-500 font-semibold" : ""
@@ -522,7 +687,6 @@ function AdminDashboard() {
                 </span>
               )}
             </li>
-
             <li
               className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-yellow-500 rounded-lg mx-2 my-1 ${
                 activePage === "settings" ? "bg-yellow-500 font-semibold" : ""
@@ -537,9 +701,58 @@ function AdminDashboard() {
 
         {/* Content */}
         <main className="flex-1 p-6">
-          {activePage === "add" && <AdminAddProduct />}
+          {/* ===== DASHBOARD PAGE ===== */}
+          {activePage === "dashboard" && dashboardData && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div className="bg-white p-4 shadow rounded-lg flex items-center gap-3">
+                  <DollarSign size={28} className="text-yellow-600" />
+                  <div>
+                    <p className="text-gray-500 text-sm">Total Sales</p>
+                    <p className="text-xl font-bold">{dashboardData.totalSales}</p>
+                  </div>
+                </div>
+                <div className="bg-white p-4 shadow rounded-lg flex items-center gap-3">
+                  <DollarSign size={28} className="text-green-600" />
+                  <div>
+                    <p className="text-gray-500 text-sm">Earnings</p>
+                    <p className="text-xl font-bold">₹{dashboardData.totalEarnings}</p>
+                  </div>
+                </div>
+                <div className="bg-white p-4 shadow rounded-lg flex items-center gap-3">
+                  <Eye size={28} className="text-blue-600" />
+                  <div>
+                    <p className="text-gray-500 text-sm">Page Views</p>
+                    <p className="text-xl font-bold">{dashboardData.totalViews}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Graph */}
+              <div className="bg-white p-4 shadow rounded-lg">
+                <h2 className="text-lg font-bold text-yellow-700 mb-4">Monthly Stats</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={dashboardData.monthlyData}>
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="sales" fill="#facc15" />
+                    <Bar dataKey="earnings" fill="#16a34a" />
+                    <Bar dataKey="views" fill="#3b82f6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </>
+          )}
+
+          {/* ===== PRODUCT LIST PAGE ===== */}
           {activePage === "list" && <ProductList />}
+
+          {/* ===== ORDERS LIST PAGE ===== */}
           {activePage === "orders" && <OrdersListWithBoundary />}
+
+          {/* ===== SETTINGS PAGE ===== */}
           {activePage === "settings" && (
             <div className="bg-white shadow-lg p-6 rounded-lg">
               <h2 className="text-2xl font-bold text-yellow-700 mb-4">Settings</h2>
@@ -553,4 +766,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboard;   

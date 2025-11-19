@@ -400,9 +400,159 @@
 // }
 
 
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+
+// // ===== ERROR BOUNDARY =====
+// class ErrorBoundary extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = { hasError: false };
+//   }
+
+//   static getDerivedStateFromError() {
+//     return { hasError: true };
+//   }
+
+//   render() {
+//     if (this.state.hasError)
+//       return (
+//         <h2 className="text-center mt-12 text-red-600 text-xl">
+//           Something went wrong in OrdersList.
+//         </h2>
+//       );
+//     return this.props.children;
+//   }
+// }
+
+// // ===== ORDERS LIST COMPONENT =====
+// function OrdersList() {
+//   const [orders, setOrders] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   const navigate = useNavigate();
+//   const role = localStorage.getItem("role"); // "admin" or "user"
+
+//   useEffect(() => {
+//     if (role !== "admin") {
+//       navigate("/"); // redirect non-admin users
+//       return;
+//     }
+
+//     const fetchOrders = async () => {
+//       try {
+//         const res = await axios.get("http://localhost:5000/orders", {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem("token")}`,
+//           },
+//         });
+//         setOrders(res.data);
+//         setLoading(false);
+//       } catch (err) {
+//         console.error("Failed to fetch orders:", err);
+//         setError("Failed to load orders");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchOrders();
+//   }, [role, navigate]);
+
+//   const handleDelete = async (orderId) => {
+//     if (!window.confirm("Are you sure you want to delete this order?")) return;
+
+//     try {
+//       await axios.delete(`http://localhost:5000/orders/${orderId}`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("token")}`,
+//         },
+//       });
+//       setOrders((prev) => prev.filter((o) => o._id !== orderId));
+//     } catch (err) {
+//       console.error("Failed to delete order:", err);
+//       alert("Failed to delete order. Please try again.");
+//     }
+//   };
+
+//   if (loading)
+//     return <p className="text-center mt-12 text-gray-500">Loading orders...</p>;
+//   if (error)
+//     return (
+//       <p className="text-center mt-12 text-red-600 font-semibold">{error}</p>
+//     );
+
+//   return (
+//     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+//       {orders.length === 0 ? (
+//         <p className="text-center col-span-full text-gray-500">No orders found.</p>
+//       ) : (
+//         orders.map((order) => (
+//           <div
+//             key={order._id}
+//             className="bg-white shadow-lg rounded-xl p-6 flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300"
+//           >
+//             <div>
+//               <h3 className="text-lg font-bold text-yellow-700 mb-2">
+//                 Order by: {order.user?.name || "Unknown User"}
+//               </h3>
+//               <p className="text-gray-600 mb-1">
+//                 Total: <span className="font-semibold">₹{order.total || 0}</span>
+//               </p>
+//               <p className="text-gray-600 mb-1">
+//                 Status:{" "}
+//                 <span
+//                   className={`px-2 py-1 rounded-full text-xs font-bold ${
+//                     order.status === "pending"
+//                       ? "bg-yellow-200 text-yellow-800"
+//                       : order.status === "completed"
+//                       ? "bg-green-200 text-green-800"
+//                       : "bg-gray-200 text-gray-700"
+//                   }`}
+//                 >
+//                   {order.status || "pending"}
+//                 </span>
+//               </p>
+//               <p className="text-gray-600 mb-2">Address: {order.address || "-"}</p>
+
+//               <div className="space-y-1">
+//                 {order.products?.map((p) => (
+//                   <p key={p.product?._id || Math.random()} className="text-gray-700">
+//                     {p.quantity} x {p.product?.name || "Unknown Product"} @ ₹{p.price} = ₹
+//                     {(p.quantity || 0) * (p.price || 0)}
+//                   </p>
+//                 ))}
+//               </div>
+//             </div>
+
+//             <div className="mt-4 text-right">
+//               <button
+//                 onClick={() => handleDelete(order._id)}
+//                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300"
+//               >
+//                 Delete
+//               </button>
+//             </div>
+//           </div>
+//         ))
+//       )}
+//     </div>
+//   );
+// }
+
+// // ===== WRAP ORDERS LIST WITH ERROR BOUNDARY =====
+// export default function OrdersListWithBoundary() {
+//   return (
+//     <ErrorBoundary>
+//       <OrdersList />
+//     </ErrorBoundary>
+//   );
+// }
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // ===== ERROR BOUNDARY =====
 class ErrorBoundary extends React.Component {
@@ -410,11 +560,9 @@ class ErrorBoundary extends React.Component {
     super(props);
     this.state = { hasError: false };
   }
-
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-
   render() {
     if (this.state.hasError)
       return (
@@ -426,53 +574,61 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-// ===== ORDERS LIST COMPONENT =====
+// ===== ORDERS LIST =====
 function OrdersList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingStatusId, setEditingStatusId] = useState(null);
+  const [statusValue, setStatusValue] = useState("");
 
-  const navigate = useNavigate();
-  const role = localStorage.getItem("role"); // "admin" or "user"
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (role !== "admin") {
-      navigate("/"); // redirect non-admin users
-      return;
-    }
-
     const fetchOrders = async () => {
       try {
         const res = await axios.get("http://localhost:5000/orders", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data);
         setLoading(false);
       } catch (err) {
-        console.error("Failed to fetch orders:", err);
+        console.error(err);
         setError("Failed to load orders");
         setLoading(false);
       }
     };
-
     fetchOrders();
-  }, [role, navigate]);
+  }, [token]);
 
   const handleDelete = async (orderId) => {
     if (!window.confirm("Are you sure you want to delete this order?")) return;
-
     try {
       await axios.delete(`http://localhost:5000/orders/${orderId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setOrders((prev) => prev.filter((o) => o._id !== orderId));
     } catch (err) {
-      console.error("Failed to delete order:", err);
+      console.error(err);
       alert("Failed to delete order. Please try again.");
+    }
+  };
+
+  const handleStatusSave = async (orderId) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/orders/${orderId}`,
+        { status: statusValue },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setOrders((prev) =>
+        prev.map((o) => (o._id === orderId ? res.data : o))
+      );
+      setEditingStatusId(null);
+      setStatusValue("");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status. Try again.");
     }
   };
 
@@ -486,7 +642,9 @@ function OrdersList() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {orders.length === 0 ? (
-        <p className="text-center col-span-full text-gray-500">No orders found.</p>
+        <p className="text-center col-span-full text-gray-500">
+          No orders found.
+        </p>
       ) : (
         orders.map((order) => (
           <div
@@ -500,27 +658,64 @@ function OrdersList() {
               <p className="text-gray-600 mb-1">
                 Total: <span className="font-semibold">₹{order.total || 0}</span>
               </p>
-              <p className="text-gray-600 mb-1">
+              <p className="text-gray-600 mb-1 flex items-center gap-2">
                 Status:{" "}
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-bold ${
-                    order.status === "pending"
-                      ? "bg-yellow-200 text-yellow-800"
-                      : order.status === "completed"
-                      ? "bg-green-200 text-green-800"
-                      : "bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  {order.status || "pending"}
-                </span>
+                {editingStatusId === order._id ? (
+                  <>
+                    <select
+                      className="border p-1 rounded text-sm"
+                      value={statusValue}
+                      onChange={(e) => setStatusValue(e.target.value)}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="completed">Completed</option>
+                      <option value="delivered">Delivered</option>
+                    </select>
+                    <button
+                      onClick={() => handleStatusSave(order._id)}
+                      className="bg-green-600 text-white px-2 py-1 rounded text-xs"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setEditingStatusId(null)}
+                      className="bg-gray-400 text-white px-2 py-1 rounded text-xs"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        order.status === "pending"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : order.status === "completed"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      {order.status || "pending"}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setEditingStatusId(order._id);
+                        setStatusValue(order.status || "pending");
+                      }}
+                      className="bg-blue-500 text-white px-2 py-1 rounded ml-2 text-xs"
+                    >
+                      Edit
+                    </button>
+                  </>
+                )}
               </p>
               <p className="text-gray-600 mb-2">Address: {order.address || "-"}</p>
 
               <div className="space-y-1">
                 {order.products?.map((p) => (
                   <p key={p.product?._id || Math.random()} className="text-gray-700">
-                    {p.quantity} x {p.product?.name || "Unknown Product"} @ ₹{p.price} = ₹
-                    {(p.quantity || 0) * (p.price || 0)}
+                    {p.quantity} x {p.product?.name || "Unknown Product"} @ ₹{p.price} =
+                    ₹{(p.quantity || 0) * (p.price || 0)}
                   </p>
                 ))}
               </div>
@@ -541,7 +736,7 @@ function OrdersList() {
   );
 }
 
-// ===== WRAP ORDERS LIST WITH ERROR BOUNDARY =====
+// ===== EXPORT WITH ERROR BOUNDARY =====
 export default function OrdersListWithBoundary() {
   return (
     <ErrorBoundary>
