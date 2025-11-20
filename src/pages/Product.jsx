@@ -313,480 +313,19 @@
 // export default Product;
 
 
-// import { useParams, useNavigate } from "react-router-dom";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import { useContext, useEffect, useState } from "react";
-// import { CartContext } from "../pages/CartContext.jsx";
-// import axios from "axios";
-
-// function Product() {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const { addToCart } = useContext(CartContext);
-//   const [product, setProduct] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const getSingleProduct = async () => {
-//       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
-//         setProduct(res.data);
-//         setLoading(false);
-//       } catch (err) {
-//         console.error(err);
-//         setLoading(false);
-//       }
-//     };
-//     getSingleProduct();
-//   }, [id]);
-
-//   const handleAddToCart = () => {
-//     if (!product) return;
-//     addToCart(product);
-//     navigate("/shoppingcart");
-//   };
-
-//   if (loading) return <p className="text-center mt-20 text-xl">Loading product...</p>;
-//   if (!product) return <p className="text-center mt-20 text-xl">Product not found!</p>;
-
-//   return (
-//     <>
-//       <Navbar />
-//       <br></br><br></br><br></br>
-//       <div className="max-w-6xl mx-auto my-12 p-4 grid md:grid-cols-2 gap-10">
-//         {/* Image */}
-//         <div className="flex justify-center items-center bg-white shadow-lg rounded-xl p-6">
-//           <img
-//             src={product.img || "/assets/default.jpg"}
-//             alt={product.name}
-//             className="rounded-xl max-h-96 object-cover"
-//           />
-//         </div>
-
-//         {/* Product Info */}
-//         <div className="flex flex-col justify-between">
-//           <div>
-//             <h1 className="text-4xl font-bold text-yellow-700 mb-4">{product.name}</h1>
-//             <p className="text-xl font-semibold text-gray-800 mb-2">₹{product.price}</p>
-//             <p className="text-gray-600 mb-2">Stock: {product.stock}</p>
-//             <p className="text-gray-700 mb-6">{product.description}</p>
-//           </div>
-
-//           <div className="flex flex-col md:flex-row gap-4">
-//             <button
-//               onClick={handleAddToCart}
-//               className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition"
-//             >
-//               Add to Cart
-//             </button>
-//             <button
-//               onClick={handleAddToCart}
-//               className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition"
-//             >
-//               Buy Now
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// }
-
-// export default Product;
-
-
-
-
-
-
-
-
-
-
-
-// import { useParams, useNavigate } from "react-router-dom";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import { useContext, useEffect, useState } from "react";
-// import { CartContext } from "../pages/CartContext.jsx";
-// import axios from "axios";
-
-// function Product() {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const { addToCart } = useContext(CartContext);
-//   const [product, setProduct] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const getSingleProduct = async () => {
-//       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
-//         setProduct(res.data);
-//         setLoading(false);
-//       } catch (err) {
-//         console.error(err);
-//         setLoading(false);
-//       }
-//     };
-//     getSingleProduct();
-//   }, [id]);
-
-//   const handleAddToCart = () => {
-//     if (!product) return;
-//     addToCart(product);
-//     navigate("/shoppingcart");
-//   };
-
-//   if (loading)
-//     return (
-//       <p className="text-center mt-20 text-xl text-yellow-700 animate-pulse">
-//         Loading product...
-//       </p>
-//     );
-
-//   if (!product)
-//     return (
-//       <p className="text-center mt-20 text-xl text-red-500">
-//         Product not found!
-//       </p>
-//     );
-
-//   return (
-//     <>
-//       <Navbar />
-//       <br /><br /><br />
-
-//                 {/* -------- MAIN PRODUCT SECTION -------- */}
-//       <div className="max-w-6xl mx-auto my-12 p-4 grid md:grid-cols-2 " style={{marginTop:"100px"}}>
-
-//                {/* ---------- IMAGE CARD (improved design) ----------- */}
-//         <div className="" style={{height: "350px",marginLeft:"250px"}}>
-//           {/* CARD inner */}
-//           <div className="rounded-2xl overflow-hidden bg-gray-100" style={{width:"350px",marginRight:"150px"}}>
-//             <img src={product.img} alt={product.name} className="object-cover  transition-all duration-500 hover:scale-105"/>
-//           </div>
-//         </div>
-
-//         {/* -------- PRODUCT DETAILS -------- */}
-//         <div className="flex flex-col justify-between bg-white p-8 rounded-3xl shadow-xl border border-yellow-200" style={{marginLeft:"0px"}}>
-
-//           <div>
-//             <h1 className="text-4xl font-bold text-yellow-700 mb-4 tracking-wide">
-//               {product.name}
-//             </h1>
-
-//             <p className="text-2xl font-bold text-green-600 mb-4">
-//               ₹{product.price}
-//             </p>
-
-//             <p className="text-gray-700 mb-2">
-//               <span className="font-semibold text-gray-900">Stock:</span> {product.stock}
-//             </p>
-
-//             <p className="text-gray-700 leading-relaxed mt-4">
-//               {product.description}
-//             </p>
-//           </div>
-
-//           <div className="flex flex-col md:flex-row gap-4 mt-8">
-//             <button
-//               onClick={handleAddToCart}
-//               className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold 
-//               py-3 px-6 rounded-lg transition shadow-lg hover:shadow-2xl 
-//               transform hover:-translate-y-1"
-//             >
-//               Add to Cart
-//             </button>
-
-//             <button
-//               onClick={handleAddToCart}
-//               className="bg-green-500 hover:bg-green-600 text-white font-semibold 
-//               py-3 px-6 rounded-lg transition shadow-lg hover:shadow-2xl
-//               transform hover:-translate-y-1"
-//             >
-//               Buy Now
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* ========== INGREDIENTS SECTION ========== */}
-//       <div className="max-w-4xl mx-auto mt-16 bg-white p-8 rounded-3xl shadow-xl border border-yellow-200">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-4">Ingredients</h2>
-//         <ul className="list-disc pl-6 text-gray-700 leading-relaxed">
-//           <li>Premium Fresh Flour</li>
-//           <li>Organic Sugar</li>
-//           <li>Pure Butter</li>
-//           <li>Fresh Cream</li>
-//           <li>Natural Flavors / Extracts</li>
-//         </ul>
-//       </div>
-
-//       {/* ========== CUSTOMER REVIEWS ========== */}
-//       <div className="max-w-4xl mx-auto mt-16 bg-white p-8 rounded-3xl shadow-xl border border-yellow-200">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-6">Customer Reviews ⭐</h2>
-
-//         <div className="space-y-6">
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Nisha</p>
-//             <p className="text-yellow-500 mb-2">★★★★★</p>
-//             <p className="text-gray-700">Super fresh and tasty! Looks exactly like the photo.</p>
-//           </div>
-
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Arun</p>
-//             <p className="text-yellow-500 mb-2">★★★★☆</p>
-//             <p className="text-gray-700">Very soft and delicious. Worth the price!</p>
-//           </div>
-
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Varsha</p>
-//             <p className="text-yellow-500 mb-2">★★★★★</p>
-//             <p className="text-gray-700">Amazing smell and texture. Highly recommended!</p>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* ========== RELATED PRODUCTS ========== */}
-//       <div className="max-w-6xl mx-auto mt-20 mb-20">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-6">Related Products</h2>
-
-//         <div className="grid md:grid-cols-3 gap-8">
-//           {[1, 2, 3].map((num) => (
-//             <div
-//               key={num}
-//               className="bg-white rounded-2xl shadow-xl p-4 border border-yellow-200 
-//               hover:scale-105 transition duration-300 cursor-pointer"
-//             >
-//               <div className="h-40 w-full bg-yellow-100 rounded-lg"></div>
-//               <h3 className="text-xl font-bold mt-4 text-gray-800">Sample Product {num}</h3>
-//               <p className="text-green-600 font-semibold mt-1">₹299</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       <Footer />
-//     </>
-//   );
-// }
-
-// export default Product;
-
-
-
-
-
-
-
-
-// import { useParams, useNavigate } from "react-router-dom";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import { useContext, useEffect, useState } from "react";
-// import { CartContext } from "../pages/CartContext.jsx";
-// import axios from "axios";
-
-// function Product() {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const { addToCart } = useContext(CartContext);
-//   const [product, setProduct] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const getSingleProduct = async () => {
-//       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
-//         setProduct(res.data);
-//         setLoading(false);
-//       } catch (err) {
-//         console.error(err);
-//         setLoading(false);
-//       }
-//     };
-//     getSingleProduct();
-//   }, [id]);
-
-//   const handleAddToCart = () => {
-//     if (!product) return;
-//     addToCart(product);
-//     navigate("/shoppingcart");
-//   };
-
-//   if (loading)
-//     return (
-//       <p className="text-center mt-20 text-xl text-yellow-700 animate-pulse">
-//         Loading product...
-//       </p>
-//     );
-
-//   if (!product)
-//     return (
-//       <p className="text-center mt-20 text-xl text-red-500">
-//         Product not found!
-//       </p>
-//     );
-
-//   return (
-//     <>
-//       <Navbar />
-//       <br /><br /><br />
-
-//       {/* === MAIN PRODUCT WRAPPER === */}
-//       <div className="max-w-6xl mx-auto my-12 p-6 bg-white rounded-3xl shadow-2xl border border-yellow-200"
-//         style={{ marginTop: "120px" }}>
-
-//         <div className="grid md:grid-cols-2 gap-12">
-
-//           {/* === IMAGE CARD – SAME SIZE AS ALLPRODUCT === */}
-//           <div className="flex justify-center">
-//             <div className="w-full max-w-md bg-gray-100 rounded-2xl overflow-hidden shadow-xl">
-//               <img
-//                 src={product.img}
-//                 alt={product.name}
-//                 className="w-full h-56 md:h-60 lg:h-64 object-cover transition-transform duration-500 hover:scale-110"
-//               />
-//             </div>
-//           </div>
-
-//           {/* === PRODUCT DETAILS === */}
-//           <div className="p-4 flex flex-col justify-between">
-
-//             <div>
-//               <h1 className="text-4xl font-bold text-yellow-700 mb-4 tracking-wide">
-//                 {product.name}
-//               </h1>
-
-//               <p className="text-3xl font-bold text-green-600 mb-4">
-//                 ₹{product.price}
-//               </p>
-
-//               <p className="text-gray-700 mb-2">
-//                 <span className="font-semibold text-gray-900">Stock:</span> {product.stock}
-//               </p>
-
-//               <p className="text-gray-700 leading-relaxed mt-4">
-//                 {product.description}
-//               </p>
-//             </div>
-
-//             {/* === BUTTONS === */}
-//             <div className="flex flex-col md:flex-row gap-4 mt-8">
-//               <button
-//                 onClick={handleAddToCart}
-//                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold 
-//                   py-3 px-6 rounded-xl transition shadow-lg hover:shadow-2xl 
-//                   transform hover:-translate-y-1"
-//               >
-//                 Add to Cart
-//               </button>
-
-//               <button
-//                 onClick={handleAddToCart}
-//                 className="bg-green-500 hover:bg-green-600 text-white font-semibold 
-//                   py-3 px-6 rounded-xl transition shadow-lg hover:shadow-2xl
-//                   transform hover:-translate-y-1"
-//               >
-//                 Buy Now
-//               </button>
-//             </div>
-
-//           </div>
-
-//         </div>
-//       </div>
-
-//       {/* === INGREDIENTS === */}
-//       <div className="max-w-4xl mx-auto mt-16 bg-white p-8 rounded-3xl shadow-xl border border-yellow-200">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-4">Ingredients</h2>
-//         <ul className="list-disc pl-6 text-gray-700 leading-relaxed">
-//           <li>Premium Fresh Flour</li>
-//           <li>Organic Sugar</li>
-//           <li>Pure Butter</li>
-//           <li>Fresh Cream</li>
-//           <li>Natural Flavors / Extracts</li>
-//         </ul>
-//       </div>
-
-//       {/* === REVIEWS === */}
-//       <div className="max-w-4xl mx-auto mt-16 bg-white p-8 rounded-3xl shadow-xl border border-yellow-200">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-6">Customer Reviews ⭐</h2>
-
-//         <div className="space-y-6">
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Nisha</p>
-//             <p className="text-yellow-500 mb-2">★★★★★</p>
-//             <p className="text-gray-700">Super fresh and tasty! Looks exactly like the photo.</p>
-//           </div>
-
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Arun</p>
-//             <p className="text-yellow-500 mb-2">★★★★☆</p>
-//             <p className="text-gray-700">Very soft and delicious. Worth the price!</p>
-//           </div>
-
-//           <div className="p-4 bg-yellow-50 rounded-xl shadow">
-//             <p className="font-semibold">Varsha</p>
-//             <p className="text-yellow-500 mb-2">★★★★★</p>
-//             <p className="text-gray-700">Amazing smell and texture. Highly recommended!</p>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* === RELATED === */}
-//       <div className="max-w-6xl mx-auto mt-20 mb-20">
-//         <h2 className="text-3xl font-bold text-yellow-700 mb-6">Related Products</h2>
-
-//         <div className="grid md:grid-cols-3 gap-8">
-//           {[1, 2, 3].map((num) => (
-//             <div
-//               key={num}
-//               className="bg-white rounded-2xl shadow-xl p-4 border border-yellow-200 
-//               hover:scale-105 transition duration-300 cursor-pointer"
-//             >
-//               <div className="h-40 w-full bg-yellow-100 rounded-lg"></div>
-//               <h3 className="text-xl font-bold mt-4 text-gray-800">Sample Product {num}</h3>
-//               <p className="text-green-600 font-semibold mt-1">₹299</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       <Footer />
-//     </>
-//   );
-// }
-
-// export default Product;
-
-
-
-
-
-
-
-
-// src/pages/Product.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../pages/CartContext.jsx";
 import axios from "axios";
 
-export default function Product() {
+function Product() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
-
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showToast, setShowToast] = useState(false);
-  const imgRef = useRef(null);
 
   useEffect(() => {
     const getSingleProduct = async () => {
@@ -802,210 +341,313 @@ export default function Product() {
     getSingleProduct();
   }, [id]);
 
-  // Keep your function behavior unchanged (only UI triggers toast here)
   const handleAddToCart = () => {
     if (!product) return;
-    addToCart(product); // <-- unchanged logic
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 1600);
-    // navigate stays same (delayed slightly so toast is visible)
-    setTimeout(() => navigate("/shoppingcart"), 700);
+    addToCart(product);
+    navigate("/shoppingcart");
   };
 
-  if (loading)
-    return (
-      <p className="text-center mt-20 text-xl text-yellow-700 animate-pulse">
-        Loading product...
-      </p>
-    );
-
-  if (!product)
-    return (
-      <p className="text-center mt-20 text-xl text-red-500">Product not found!</p>
-    );
+  if (loading) return <p className="text-center mt-20 text-xl">Loading product...</p>;
+  if (!product) return <p className="text-center mt-20 text-xl">Product not found!</p>;
 
   return (
     <>
       <Navbar />
-
-      {/* Toast */}
-      <div className="fixed top-6 right-6 z-50 pointer-events-none">
-        {showToast && (
-          <div className="transform transition-all duration-300 ease-out pointer-events-auto">
-            <div className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
-              Added to cart!
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Floating bubbles (background) */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        {Array.from({ length: 12 }).map((_, i) => {
-          const size = 20 + Math.round(Math.random() * 40);
-          const left = Math.round(Math.random() * 100);
-          const delay = (Math.random() * 6).toFixed(2);
-          const dur = (6 + Math.random() * 8).toFixed(2);
-          const opacity = (0.15 + Math.random() * 0.35).toFixed(2);
-          return (
-            <span
-              key={i}
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                left: `${left}%`,
-                bottom: `-40px`,
-                opacity,
-                animationDelay: `${delay}s`,
-                animationDuration: `${dur}s`,
-              }}
-              className="absolute rounded-full bg-white/60 blur-sm animate-bubble"
-            />
-          );
-        })}
-      </div>
-
-      <main className="pt-28 pb-20">
-        <div className="max-w-6xl mx-auto px-6">
-
-          {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-yellow-700">
-              {product.name}
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">Premium bakery item — baked fresh daily</p>
-          </div>
-
-          {/* NEW LAYOUT: left image column, right info column */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            {/* IMAGE COLUMN */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-yellow-100 bg-white">
-                {/* IMAGE SIZE matches AllProduct: h-56 md:h-60 lg:h-64 */}
-                <img
-                  ref={imgRef}
-                  src={product.img || "src/assets/default.jpg"}
-                  alt={product.name}
-                  className="w-full h-56 md:h-60 lg:h-64 object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-
-              {/* small sticky quick-actions on left of image (mobile hidden) */}
-            </div>
-
-            {/* INFO COLUMN */}
-            <div className="space-y-6">
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="text-3xl md:text-4xl font-bold text-green-700">₹{product.price}</div>
-                  <div className="text-sm text-gray-600">Stock: <span className="font-semibold text-gray-800">{product.stock}</span></div>
-                </div>
-
-                <p className="mt-4 text-gray-700 leading-relaxed">{product.description}</p>
-
-                {/* small metadata */}
-                <div className="mt-4 flex gap-3 text-sm">
-                  <div className="px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200 text-yellow-700">Handmade</div>
-                  <div className="px-3 py-1 rounded-full bg-pink-50 border border-pink-100 text-pink-700">Fresh</div>
-                </div>
-              </div>
-
-              {/* Quantity + Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <div className="flex items-center bg-white border rounded-lg px-3 py-2 shadow-inner">
-                  <span className="text-gray-600 mr-3">Qty</span>
-                  {/* kept simple (you can expand to change qty later) */}
-                  <div className="w-16 text-center font-semibold">1</div>
-                </div>
-
-                <div className="flex gap-3 w-full sm:w-auto">
-                  <button
-                    onClick={handleAddToCart}
-                    className="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-yellow-500 hover:bg-yellow-600 text-white font-semibold transition shadow-lg transform hover:-translate-y-1"
-                  >
-                    Add to Cart
-                  </button>
-
-                  <button
-                    onClick={() => { addToCart(product); navigate("/checkout"); }}
-                    className="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition shadow"
-                  >
-                    Buy Now
-                  </button>
-                </div>
-              </div>
-
-              {/* Ingredients card */}
-              <div className="bg-white p-4 rounded-xl border border-yellow-100 shadow">
-                <h3 className="font-semibold text-yellow-700 mb-2">Ingredients</h3>
-                <ul className="list-disc pl-5 text-sm text-gray-700">
-                  <li>Premium Fresh Flour</li>
-                  <li>Organic Sugar</li>
-                  <li>Pure Butter</li>
-                  <li>Fresh Cream</li>
-                </ul>
-              </div>
-
-              {/* Reviews card */}
-              <div className="bg-white p-4 rounded-xl border border-yellow-100 shadow">
-                <h3 className="font-semibold text-yellow-700 mb-2">Customer Reviews</h3>
-                <div className="space-y-3">
-                  <div className="text-sm">
-                    <div className="font-semibold">Nisha <span className="text-yellow-400 ml-2">★★★★★</span></div>
-                    <div className="text-gray-600">Super fresh and tasty! Looks exactly like the photo.</div>
-                  </div>
-                  <div className="text-sm">
-                    <div className="font-semibold">Arun <span className="text-yellow-400 ml-2">★★★★☆</span></div>
-                    <div className="text-gray-600">Very soft and delicious. Worth the price!</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* RELATED PRODUCTS */}
-          <section className="mt-12">
-            <h3 className="text-2xl font-bold text-yellow-700 mb-4">Related Products</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((n) => (
-                <div key={n} className="bg-white rounded-2xl shadow p-4 border border-yellow-100 hover:shadow-lg transition transform hover:-translate-y-1">
-                  <div className="h-40 w-full bg-yellow-50 rounded-lg mb-3 flex items-center justify-center text-yellow-400">Image</div>
-                  <div className="font-semibold">Sample Product {n}</div>
-                  <div className="text-green-600 mt-1">₹299</div>
-                </div>
-              ))}
-            </div>
-          </section>
+      <br></br><br></br><br></br>
+      <div className="max-w-6xl mx-auto my-12 p-4 grid md:grid-cols-2 gap-10">
+        {/* Image */}
+        <div className="flex justify-center items-center bg-white shadow-lg rounded-xl p-6">
+          <img
+            src={product.img || "/assets/default.jpg"}
+            alt={product.name}
+            className="rounded-xl max-h-96 object-cover"
+          />
         </div>
-      </main>
 
+        {/* Product Info */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-yellow-700 mb-4">{product.name}</h1>
+            <p className="text-xl font-semibold text-gray-800 mb-2">₹{product.price}</p>
+            <p className="text-gray-600 mb-2">Stock: {product.stock}</p>
+            <p className="text-gray-700 mb-6">{product.description}</p>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleAddToCart}
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition"
+            >
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
       <Footer />
-
-      {/* Styles (pure CSS animations) */}
-      <style>{`
-        /* bubble animation */
-        @keyframes bubble-up {
-          0% { transform: translateY(0) scale(1); opacity: 0.6; }
-          50% { opacity: 0.9; }
-          100% { transform: translateY(-700px) scale(1.3); opacity: 0; }
-        }
-        .animate-bubble {
-          animation-name: bubble-up;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-        }
-
-        /* subtle float entrance for main card */
-        .main-card-enter {
-          transform: translateY(10px);
-          opacity: 0;
-        }
-        .main-card-enter-active {
-          transform: translateY(0);
-          opacity: 1;
-          transition: all 400ms ease;
-        }
-      `}</style>
     </>
   );
 }
+
+export default Product;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // src/pages/Product.jsx
+// import { useParams, useNavigate } from "react-router-dom";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { useContext, useEffect, useRef, useState } from "react";
+// import { CartContext } from "../pages/CartContext.jsx";
+// import axios from "axios";
+
+// export default function Product() {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const { addToCart } = useContext(CartContext);
+
+//   const [product, setProduct] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [showToast, setShowToast] = useState(false);
+//   const imgRef = useRef(null);
+
+//   useEffect(() => {
+//     const getSingleProduct = async () => {
+//       try {
+//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         setProduct(res.data);
+//         setLoading(false);
+//       } catch (err) {
+//         console.error(err);
+//         setLoading(false);
+//       }
+//     };
+//     getSingleProduct();
+//   }, [id]);
+
+//   // Keep your function behavior unchanged (only UI triggers toast here)
+//   const handleAddToCart = () => {
+//     if (!product) return;
+//     addToCart(product); // <-- unchanged logic
+//     setShowToast(true);
+//     setTimeout(() => setShowToast(false), 1600);
+//     // navigate stays same (delayed slightly so toast is visible)
+//     setTimeout(() => navigate("/shoppingcart"), 700);
+//   };
+
+//   if (loading)
+//     return (
+//       <p className="text-center mt-20 text-xl text-yellow-700 animate-pulse">
+//         Loading product...
+//       </p>
+//     );
+
+//   if (!product)
+//     return (
+//       <p className="text-center mt-20 text-xl text-red-500">Product not found!</p>
+//     );
+
+//   return (
+//     <>
+//       <Navbar />
+
+//       {/* Toast */}
+//       <div className="fixed top-6 right-6 z-50 pointer-events-none">
+//         {showToast && (
+//           <div className="transform transition-all duration-300 ease-out pointer-events-auto">
+//             <div className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
+//               Added to cart!
+//             </div>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Floating bubbles (background) */}
+//       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+//         {Array.from({ length: 12 }).map((_, i) => {
+//           const size = 20 + Math.round(Math.random() * 40);
+//           const left = Math.round(Math.random() * 100);
+//           const delay = (Math.random() * 6).toFixed(2);
+//           const dur = (6 + Math.random() * 8).toFixed(2);
+//           const opacity = (0.15 + Math.random() * 0.35).toFixed(2);
+//           return (
+//             <span
+//               key={i}
+//               style={{
+//                 width: `${size}px`,
+//                 height: `${size}px`,
+//                 left: `${left}%`,
+//                 bottom: `-40px`,
+//                 opacity,
+//                 animationDelay: `${delay}s`,
+//                 animationDuration: `${dur}s`,
+//               }}
+//               className="absolute rounded-full bg-white/60 blur-sm animate-bubble"
+//             />
+//           );
+//         })}
+//       </div>
+
+//       <main className="pt-28 pb-20">
+//         <div className="max-w-6xl mx-auto px-6">
+
+//           {/* Page Header */}
+//           <div className="mb-8">
+//             <h1 className="text-3xl md:text-4xl font-extrabold text-yellow-700">
+//               {product.name}
+//             </h1>
+//             <p className="text-sm text-gray-500 mt-1">Premium bakery item — baked fresh daily</p>
+//           </div>
+
+//           {/* NEW LAYOUT: left image column, right info column */}
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+//             {/* IMAGE COLUMN */}
+//             <div className="flex justify-center">
+//               <div className="w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-yellow-100 bg-white">
+//                 {/* IMAGE SIZE matches AllProduct: h-56 md:h-60 lg:h-64 */}
+//                 <img
+//                   ref={imgRef}
+//                   src={product.img || "src/assets/default.jpg"}
+//                   alt={product.name}
+//                   className="w-full h-56 md:h-60 lg:h-64 object-cover transition-transform duration-500 hover:scale-105"
+//                 />
+//               </div>
+
+//               {/* small sticky quick-actions on left of image (mobile hidden) */}
+//             </div>
+
+//             {/* INFO COLUMN */}
+//             <div className="space-y-6">
+//               <div>
+//                 <div className="flex items-center justify-between">
+//                   <div className="text-3xl md:text-4xl font-bold text-green-700">₹{product.price}</div>
+//                   <div className="text-sm text-gray-600">Stock: <span className="font-semibold text-gray-800">{product.stock}</span></div>
+//                 </div>
+
+//                 <p className="mt-4 text-gray-700 leading-relaxed">{product.description}</p>
+
+//                 {/* small metadata */}
+//                 <div className="mt-4 flex gap-3 text-sm">
+//                   <div className="px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200 text-yellow-700">Handmade</div>
+//                   <div className="px-3 py-1 rounded-full bg-pink-50 border border-pink-100 text-pink-700">Fresh</div>
+//                 </div>
+//               </div>
+
+//               {/* Quantity + Buttons */}
+//               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+//                 <div className="flex items-center bg-white border rounded-lg px-3 py-2 shadow-inner">
+//                   <span className="text-gray-600 mr-3">Qty</span>
+//                   {/* kept simple (you can expand to change qty later) */}
+//                   <div className="w-16 text-center font-semibold">1</div>
+//                 </div>
+
+//                 <div className="flex gap-3 w-full sm:w-auto">
+//                   <button
+//                     onClick={handleAddToCart}
+//                     className="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-yellow-500 hover:bg-yellow-600 text-white font-semibold transition shadow-lg transform hover:-translate-y-1"
+//                   >
+//                     Add to Cart
+//                   </button>
+
+//                   <button
+//                     onClick={() => { addToCart(product); navigate("/checkout"); }}
+//                     className="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition shadow"
+//                   >
+//                     Buy Now
+//                   </button>
+//                 </div>
+//               </div>
+
+//               {/* Ingredients card */}
+//               <div className="bg-white p-4 rounded-xl border border-yellow-100 shadow">
+//                 <h3 className="font-semibold text-yellow-700 mb-2">Ingredients</h3>
+//                 <ul className="list-disc pl-5 text-sm text-gray-700">
+//                   <li>Premium Fresh Flour</li>
+//                   <li>Organic Sugar</li>
+//                   <li>Pure Butter</li>
+//                   <li>Fresh Cream</li>
+//                 </ul>
+//               </div>
+
+//               {/* Reviews card */}
+//               <div className="bg-white p-4 rounded-xl border border-yellow-100 shadow">
+//                 <h3 className="font-semibold text-yellow-700 mb-2">Customer Reviews</h3>
+//                 <div className="space-y-3">
+//                   <div className="text-sm">
+//                     <div className="font-semibold">Nisha <span className="text-yellow-400 ml-2">★★★★★</span></div>
+//                     <div className="text-gray-600">Super fresh and tasty! Looks exactly like the photo.</div>
+//                   </div>
+//                   <div className="text-sm">
+//                     <div className="font-semibold">Arun <span className="text-yellow-400 ml-2">★★★★☆</span></div>
+//                     <div className="text-gray-600">Very soft and delicious. Worth the price!</div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* RELATED PRODUCTS */}
+//           <section className="mt-12">
+//             <h3 className="text-2xl font-bold text-yellow-700 mb-4">Related Products</h3>
+//             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+//               {[1, 2, 3].map((n) => (
+//                 <div key={n} className="bg-white rounded-2xl shadow p-4 border border-yellow-100 hover:shadow-lg transition transform hover:-translate-y-1">
+//                   <div className="h-40 w-full bg-yellow-50 rounded-lg mb-3 flex items-center justify-center text-yellow-400">Image</div>
+//                   <div className="font-semibold">Sample Product {n}</div>
+//                   <div className="text-green-600 mt-1">₹299</div>
+//                 </div>
+//               ))}
+//             </div>
+//           </section>
+//         </div>
+//       </main>
+
+//       <Footer />
+
+//       {/* Styles (pure CSS animations) */}
+//       <style>{`
+//         /* bubble animation */
+//         @keyframes bubble-up {
+//           0% { transform: translateY(0) scale(1); opacity: 0.6; }
+//           50% { opacity: 0.9; }
+//           100% { transform: translateY(-700px) scale(1.3); opacity: 0; }
+//         }
+//         .animate-bubble {
+//           animation-name: bubble-up;
+//           animation-timing-function: linear;
+//           animation-iteration-count: infinite;
+//         }
+
+//         /* subtle float entrance for main card */
+//         .main-card-enter {
+//           transform: translateY(10px);
+//           opacity: 0;
+//         }
+//         .main-card-enter-active {
+//           transform: translateY(0);
+//           opacity: 1;
+//           transition: all 400ms ease;
+//         }
+//       `}</style>
+//     </>
+//   );
+// }
