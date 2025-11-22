@@ -718,7 +718,7 @@ function AllProduct() {
   };
 
   const colors = {
-    background: "#FFF6F0",
+    background: "#FFFFF",
     card: "#FFFFFF",
     cardShadow: "0 4px 12px rgba(0,0,0,0.1)",
     cardShadowHover: "0 12px 24px rgba(0,0,0,0.2)", // 🎀 improved
@@ -818,7 +818,7 @@ function AllProduct() {
                       onMouseOver={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimaryHover)}
                       onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimary)}
                     >
-                      Add to Cart
+                      Add 
                     </button>
 
                     <button

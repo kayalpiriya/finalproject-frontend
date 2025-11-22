@@ -342,137 +342,140 @@
 
 // export default Register;
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerUser } from "../api/auth";
-import { toast } from "react-toastify";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
-function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+// my // 
 
-  const validateForm = () => {
-    let temp = {};
-    if (!name.trim()) temp.name = "Name is required";
-    if (!email.trim()) temp.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
-    if (!password.trim()) temp.password = "Password is required";
-    else if (password.length < 6) temp.password = "Password must be at least 6 characters";
-    setErrors(temp);
-    return Object.keys(temp).length === 0;
-  };
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { registerUser } from "../api/auth";
+// import { toast } from "react-toastify";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    try {
-      await registerUser({ name, email, password });
-      toast.success("🎉 Registration successful!");
-      setTimeout(() => navigate("/login"), 1500);
-    } catch (err) {
-      toast.error("❌ Registration failed! Try again.");
-    }
-  };
+// function Register() {
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [errors, setErrors] = useState({});
+//   const navigate = useNavigate();
 
-  return (
-    <>
-      <Navbar />
+//   const validateForm = () => {
+//     let temp = {};
+//     if (!name.trim()) temp.name = "Name is required";
+//     if (!email.trim()) temp.email = "Email is required";
+//     else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+//     if (!password.trim()) temp.password = "Password is required";
+//     else if (password.length < 6) temp.password = "Password must be at least 6 characters";
+//     setErrors(temp);
+//     return Object.keys(temp).length === 0;
+//   };
 
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4">
-        <div className="bg-white shadow-2xl rounded-3xl w-full max-w-4xl flex overflow-hidden">
+//   const handleRegister = async (e) => {
+//     e.preventDefault();
+//     if (!validateForm()) return;
+//     try {
+//       await registerUser({ name, email, password });
+//       toast.success("🎉 Registration successful!");
+//       setTimeout(() => navigate("/login"), 1500);
+//     } catch (err) {
+//       toast.error("❌ Registration failed! Try again.");
+//     }
+//   };
+
+//   return (
+//     <>
+//       <Navbar />
+
+//       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4">
+//         <div className="bg-white shadow-2xl rounded-3xl w-full max-w-4xl flex overflow-hidden">
           
-          {/* Left Side - Welcome Back */}
-          <div className="hidden md:flex flex-col justify-center items-center bg-purple-500 text-white w-1/2 p-10 space-y-6">
-            <h2 className="text-4xl font-bold">Welcome Back</h2>
-            <p className="text-lg text-purple-100">Enter your personal details to use all site features</p>
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-white text-purple-500 px-6 py-3 rounded-xl font-semibold hover:bg-purple-100 transition"
-            >
-              Sign In
-            </button>
-          </div>
+//           {/* Left Side - Welcome Back */}
+//           <div className="hidden md:flex flex-col justify-center items-center bg-purple-500 text-white w-1/2 p-10 space-y-6">
+//             <h2 className="text-4xl font-bold">Welcome Back</h2>
+//             <p className="text-lg text-purple-100">Enter your personal details to use all site features</p>
+//             <button
+//               onClick={() => navigate("/login")}
+//               className="bg-white text-purple-500 px-6 py-3 rounded-xl font-semibold hover:bg-purple-100 transition"
+//             >
+//               Sign In
+//             </button>
+//           </div>
 
-          {/* Right Side - Sign Up Form */}
-          <div className="w-full md:w-1/2 p-10">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Create Account</h2>
+//           {/* Right Side - Sign Up Form */}
+//           <div className="w-full md:w-1/2 p-10">
+//             <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Create Account</h2>
 
-            <div className="flex justify-center md:justify-start space-x-4 mb-4">
-              <a href="#">
-                <img
-                  src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
-                  alt="Facebook"
-                  className="w-10 h-10 rounded-full hover:scale-105 transition"
-                />
-              </a>
-              <a href="http://localhost:5000/auth/google">
-                <img
-                  src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
-                  alt="Google Login"
-                  className="w-10 h-10 rounded-full hover:scale-105 transition"
-                />
-              </a>
-            </div>
+//             <div className="flex justify-center md:justify-start space-x-4 mb-4">
+//               <a href="#">
+//                 <img
+//                   src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
+//                   alt="Facebook"
+//                   className="w-10 h-10 rounded-full hover:scale-105 transition"
+//                 />
+//               </a>
+//               <a href="http://localhost:5000/auth/google">
+//                 <img
+//                   src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
+//                   alt="Google Login"
+//                   className="w-10 h-10 rounded-full hover:scale-105 transition"
+//                 />
+//               </a>
+//             </div>
 
-            <p className="text-center md:text-left text-gray-500 mb-6">Or use your email for registration</p>
+//             <p className="text-center md:text-left text-gray-500 mb-6">Or use your email for registration</p>
 
-            <form className="space-y-4" onSubmit={handleRegister}>
-              <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-              />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+//             <form className="space-y-4" onSubmit={handleRegister}>
+//               <input
+//                 type="text"
+//                 placeholder="Name"
+//                 value={name}
+//                 onChange={(e) => setName(e.target.value)}
+//                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//               />
+//               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-              />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+//               <input
+//                 type="email"
+//                 placeholder="Email"
+//                 value={email}
+//                 onChange={(e) => setEmail(e.target.value)}
+//                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//               />
+//               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-              />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+//               <input
+//                 type="password"
+//                 placeholder="Password"
+//                 value={password}
+//                 onChange={(e) => setPassword(e.target.value)}
+//                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//               />
+//               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
 
-              <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
-                Sign Up
-              </button>
-            </form>
+//               <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
+//                 Sign Up
+//               </button>
+//             </form>
 
-            <p className="mt-4 text-center md:text-left text-gray-500">
-              Already have an account?{" "}
-              <span
-                onClick={() => navigate("/login")}
-                className="text-purple-500 font-semibold cursor-pointer hover:underline"
-              >
-                Sign In
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+//             <p className="mt-4 text-center md:text-left text-gray-500">
+//               Already have an account?{" "}
+//               <span
+//                 onClick={() => navigate("/login")}
+//                 className="text-purple-500 font-semibold cursor-pointer hover:underline"
+//               >
+//                 Sign In
+//               </span>
+//             </p>
+//           </div>
+//         </div>
+//       </div>
 
-      <Footer />
-    </>
-  );
-}
+//       <Footer />
+//     </>
+//   );
+// }
 
-export default Register;
+// export default Register;
 
 
 // import { useState } from "react";
@@ -584,3 +587,139 @@ export default Register;
 // }
 
 // export default Register;
+
+
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../api/auth";
+import { toast } from "react-toastify";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+    let temp = {};
+    if (!name.trim()) temp.name = "Name is required";
+    if (!email.trim()) temp.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+    if (!password.trim()) temp.password = "Password is required";
+    else if (password.length < 6) temp.password = "Password must be at least 6 characters";
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    try {
+      await registerUser({ name, email, password });
+      toast.success("🎉 Registration successful!");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      toast.error("❌ Registration failed! Try again.");
+    }
+  };
+
+  return (
+    <>
+      <Navbar />
+<br></br><br></br><br></br><br></br><br></br>
+      {/* NEW CLEAN BACKGROUND */}
+      <div className="min-h-screen flex items-center justify-center bg-minimal-bg p-4">
+        <div className="bg-white shadow-xl rounded-2xl w-full max-w-4xl flex overflow-hidden">
+          
+          {/* Left Side - Welcome Back (NEW STYLE) */}
+          <div className="hidden md:flex flex-col justify-center items-center bg-minimal-panel text-minimal-text w-1/2 p-10 space-y-6">
+            <h2 className="text-4xl font-bold" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Welcome Back
+            </h2>
+            <p className="text-lg text-minimal-muted text-center">
+              Enter your personal details to use all site features
+            </p>
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-minimal-accent text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition"
+            >
+              Sign In
+            </button>
+          </div>
+
+          {/* Right Side - Sign Up Form (NEW STYLE) */}
+          <div className="w-full md:w-1/2 p-10">
+            <h2 className="text-3xl font-bold text-minimal-text mb-6 text-center md:text-left" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Create Account
+            </h2>
+
+            <div className="flex justify-center md:justify-start space-x-4 mb-4">
+              <a href="#" className="p-2 border border-minimal-border rounded-lg hover:border-minimal-accent transition">
+                <img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" className="w-6 h-6" />
+              </a>
+              <a href="http://localhost:5000/auth/google" className="p-2 border border-minimal-border rounded-lg hover:border-minimal-accent transition">
+                <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" className="w-6 h-6" />
+              </a>
+            </div>
+
+            <p className="text-center md:text-left text-minimal-muted mb-6">Or use your email for registration</p>
+
+            <form className="space-y-4" onSubmit={handleRegister}>
+              <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 border border-minimal-border rounded-lg focus:ring-2 focus:ring-minimal-accent focus:border-minimal-accent outline-none transition"
+              />
+              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border border-minimal-border rounded-lg focus:ring-2 focus:ring-minimal-accent focus:border-minimal-accent outline-none transition"
+              />
+              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border border-minimal-border rounded-lg focus:ring-2 focus:ring-minimal-accent focus:border-minimal-accent outline-none transition"
+              />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+
+              <button 
+                type="submit"
+                className="w-full bg-minimal-accent text-white py-3 rounded-lg font-semibold hover:bg-teal-600 transition-all"
+              >
+                Sign Up
+              </button>
+            </form>
+
+            <p className="mt-4 text-center md:text-left text-minimal-muted">
+              Already have an account?{" "}
+              <span
+                onClick={() => navigate("/login")}
+                className="text-minimal-accent font-semibold cursor-pointer hover:underline"
+              >
+                Sign In
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </>
+  );
+}
+
+export default Register;

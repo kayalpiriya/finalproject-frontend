@@ -6,3 +6,32 @@
 .btn {
   @apply px-4 py-2 rounded-lg font-medium bg-muffin-500 text-white hover:bg-muffin-700 shadow-md transition;
 }
+
+
+/* Beautiful Bakery Theme */
+/* .bg-cream {
+  background: linear-gradient(135deg, #FFF8EC, #FDEEDC, #FFE7C9);
+}
+.bg-panel {
+  background: #FFF5E6;
+}
+.text-brown {
+  color: #5a4636;
+}
+.text-muted {
+  color: #8b6f59;
+}
+.border-brown {
+  border-color: #e9d6c3;
+}
+.bg-accent {
+  background: #4DB6AC;
+}
+.bg-accent:hover {
+  background: #3AA89D;
+} */
+
+.btn-add{
+background: #FDB581;
+}
+

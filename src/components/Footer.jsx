@@ -82,76 +82,179 @@
 
 // export default Footer;
 
+//my//
 
+// //important////
+// import React from "react";
+// import { Link } from "react-router-dom";
 
-import React from "react";
-import { Link } from "react-router-dom";
+// export default function Footer() {
+//   return (
+//     <footer className="bg-yellow-50 text-yellow-800 mt-10">
+//       {/* Main Footer */}
+//       <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
+//         {/* About Section */}
+//         <div>
+//           <h3 className="text-3xl font-bold mb-4">🍰 Mufflix Bakery</h3>
+//           <p className="text-yellow-700">
+//             Delicious cakes and pastries made with love. Visit us for fresh treats every day!
+//           </p>
+//         </div>
 
-export default function Footer() {
-  return (
-    <footer className="bg-yellow-50 text-yellow-800 mt-10">
-      {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
-        {/* About Section */}
-        <div>
-          <h3 className="text-3xl font-bold mb-4">🍰 Mufflix Bakery</h3>
-          <p className="text-yellow-700">
-            Delicious cakes and pastries made with love. Visit us for fresh treats every day!
-          </p>
-        </div>
+//         {/* Quick Links */}
+//         <div>
+//           <h4 className="text-2xl font-semibold mb-4">Quick Links</h4>
+//           <ul className="space-y-2">
+//             <li><Link to="/" className="hover:text-yellow-500 transition">Home</Link></li>
+//             <li><Link to="/detail" className="hover:text-yellow-500 transition">Detail</Link></li>
+//             <li><Link to="/chat" className="hover:text-yellow-500 transition">Contact</Link></li>
+//             <li><Link to="/login" className="hover:text-yellow-500 transition">Sign In</Link></li>
+//           </ul>
+//         </div>
 
-        {/* Quick Links */}
-        <div>
-          <h4 className="text-2xl font-semibold mb-4">Quick Links</h4>
-          <ul className="space-y-2">
-            <li><Link to="/" className="hover:text-yellow-500 transition">Home</Link></li>
-            <li><Link to="/detail" className="hover:text-yellow-500 transition">Detail</Link></li>
-            <li><Link to="/chat" className="hover:text-yellow-500 transition">Contact</Link></li>
-            <li><Link to="/login" className="hover:text-yellow-500 transition">Sign In</Link></li>
-          </ul>
-        </div>
+//         {/* Contact & Social */}
+//         <div>
+//           <h4 className="text-2xl font-semibold mb-4">Contact Us</h4>
+//           <p>Email: kayal@mufflixbakery.com</p>
+//           <p>Phone: +94 123 456 789</p>
+//           <p>Address: 154 Bakery Street, Vaddakkachchi</p>
 
-        {/* Contact & Social */}
-        <div>
-          <h4 className="text-2xl font-semibold mb-4">Contact Us</h4>
-          <p>Email: kayal@mufflixbakery.com</p>
-          <p>Phone: +94 123 456 789</p>
-          <p>Address: 154 Bakery Street, Vaddakkachchi</p>
+//           <div className="flex space-x-4 mt-4">
+//             <a href="#" target="_blank" rel="noreferrer">
+//               <img
+//                 src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png"
+//                 alt="Facebook"
+//                 className="h-8 w-8 hover:opacity-80 transition"
+//               />
+//             </a>
+//             <a href="#" target="_blank" rel="noreferrer">
+//               <img
+//                 src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+//                 alt="Instagram"
+//                 className="h-8 w-8 hover:opacity-80 transition"
+//               />
+//             </a>
+//             <a href="#" target="_blank" rel="noreferrer">
+//               <img
+//                 src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+//                 alt="WhatsApp"
+//                 className="h-8 w-8 hover:opacity-80 transition"
+//               />
+//             </a>
+//           </div>
+//         </div>
+//       </div>
 
-          <div className="flex space-x-4 mt-4">
-            <a href="#" target="_blank" rel="noreferrer">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png"
-                alt="Facebook"
-                className="h-8 w-8 hover:opacity-80 transition"
-              />
-            </a>
-            <a href="#" target="_blank" rel="noreferrer">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
-                alt="Instagram"
-                className="h-8 w-8 hover:opacity-80 transition"
-              />
-            </a>
-            <a href="#" target="_blank" rel="noreferrer">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                alt="WhatsApp"
-                className="h-8 w-8 hover:opacity-80 transition"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
+//       {/* Footer Bottom */}
+//       <div className="bg-yellow-100 text-center py-4 mt-6">
+//         <p className="text-yellow-700 text-sm">&copy; 2025 Mufflix Bakery. All Rights Reserved.</p>
+//       </div>
+//     </footer>
+//   );
+// }
 
-      {/* Footer Bottom */}
-      <div className="bg-yellow-100 text-center py-4 mt-6">
-        <p className="text-yellow-700 text-sm">&copy; 2025 Mufflix Bakery. All Rights Reserved.</p>
-      </div>
-    </footer>
-  );
-}
+// import React from "react";
+// import { Link } from "react-router-dom";
 
+// export default function Footer() {
+//   return (
+//     <footer className="bg-gradient-to-b from-yellow-100 to-yellow-200 text-yellow-900 mt-10 shadow-inner animate-fadeIn">
+//       {/* Main Footer */}
+//       <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-10">
+
+//         {/* About Section */}
+//         <div className="p-4 rounded-xl bg-white/40 backdrop-blur-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+//           <h3 className="text-3xl font-extrabold mb-4 flex items-center gap-2">
+//             🍰 Mufflix Bakery
+//           </h3>
+//           <p className="text-yellow-800 leading-relaxed">
+//             Delicious cakes and pastries made with love.  
+//             Visit us for fresh treats every day!
+//           </p>
+//         </div>
+
+//         {/* Quick Links */}
+//         <div className="p-4 rounded-xl bg-white/40 backdrop-blur-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+//           <h4 className="text-2xl font-bold mb-4">Quick Links</h4>
+//           <ul className="space-y-3">
+//             {[
+//               { to: "/", label: "Home" },
+//               { to: "/detail", label: "Detail" },
+//               { to: "/chat", label: "Contact" },
+//               { to: "/login", label: "Sign In" },
+//             ].map((item, index) => (
+//               <li key={index}>
+//                 <Link
+//                   to={item.to}
+//                   className="relative inline-block pb-1 hover:text-yellow-600 transition font-medium
+//                   after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-yellow-600
+//                   after:transition-all after:duration-300 hover:after:w-full"
+//                 >
+//                   {item.label}
+//                 </Link>
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+
+//         {/* Contact & Social */}
+//         <div className="p-4 rounded-xl bg-white/40 backdrop-blur-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+//           <h4 className="text-2xl font-bold mb-4">Contact Us</h4>
+
+//           <p className="mb-1">Email: kayal@mufflixbakery.com</p>
+//           <p className="mb-1">Phone: +94 123 456 789</p>
+//           <p className="mb-3">Address: 154 Bakery Street, Vaddakkachchi</p>
+
+//           {/* Social Icons */}
+//           <div className="flex space-x-5 mt-4">
+//             {[
+//               {
+//                 src: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png",
+//                 alt: "Facebook",
+//               },
+//               {
+//                 src: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg",
+//                 alt: "Instagram",
+//               },
+//               {
+//                 src: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+//                 alt: "WhatsApp",
+//               },
+//             ].map((icon, i) => (
+//               <a key={i} href="#" target="_blank" rel="noreferrer">
+//                 <img
+//                   src={icon.src}
+//                   alt={icon.alt}
+//                   className="h-9 w-9 transform transition-all duration-300 hover:scale-125 hover:-translate-y-1 hover:opacity-90"
+//                 />
+//               </a>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Footer Bottom */}
+//       <div className="bg-yellow-300/40 text-center py-4 mt-6 backdrop-blur-sm shadow-inner">
+//         <p className="text-yellow-800 text-sm tracking-wide">
+//           © 2025 Mufflix Bakery. All Rights Reserved.
+//         </p>
+//       </div>
+
+//       {/* Fade Animation */}
+//       <style>
+//         {`
+//         @keyframes fadeIn {
+//           from { opacity: 0; transform: translateY(20px); }
+//           to { opacity: 1; transform: translateY(0); }
+//         }
+//         .animate-fadeIn {
+//           animation: fadeIn 0.8s ease-in-out;
+//         }
+//       `}
+//       </style>
+//     </footer>
+//   );
+// }
 
 
 
@@ -237,3 +340,72 @@ export default function Footer() {
 //     </footer>
 //   );
 // }
+
+
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function Footer() {
+  return (
+    <footer className="text-white mt-10" style={{ backgroundColor: "#596E65" }}>
+      {/* Main Footer */}
+      <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
+        {/* About Section */}
+        <div>
+          <h3 className="text-3xl font-bold mb-4">🍰 Mufflix Bakery</h3>
+          <p className="text-gray-200">
+            Delicious cakes and pastries made with love. Visit us for fresh treats every day!
+          </p>
+        </div>
+
+        {/* Quick Links */}
+        <div>
+          <h4 className="text-2xl font-semibold mb-4">Quick Links</h4>
+          <ul className="space-y-2">
+            <li><Link to="/" className="hover:text-gray-400 transition">Home</Link></li>
+            <li><Link to="/detail" className="hover:text-gray-400 transition">Detail</Link></li>
+            <li><Link to="/chat" className="hover:text-gray-400 transition">Contact</Link></li>
+            <li><Link to="/login" className="hover:text-gray-400 transition">Sign In</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact & Social */}
+        <div>
+          <h4 className="text-2xl font-semibold mb-4">Contact Us</h4>
+          <p>Email: kayal@mufflixbakery.com</p>
+          <p>Phone: +94 123 456 789</p>
+          <p>Address: 154 Bakery Street, Vaddakkachchi</p>
+
+          <div className="flex space-x-4 mt-4">
+            <a href="#" target="_blank" rel="noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png"
+                alt="Facebook"
+                className="h-8 w-8 hover:opacity-80 transition"
+              />
+            </a>
+            <a href="#" target="_blank" rel="noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+                alt="Instagram"
+                className="h-8 w-8 hover:opacity-80 transition"
+              />
+            </a>
+            <a href="#" target="_blank" rel="noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                className="h-8 w-8 hover:opacity-80 transition"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Bottom */}
+      <div className="text-center py-4 mt-6 text-gray-200" style={{ borderTop: "1px solid #4e5d55" }}>
+        <p className="text-sm">&copy; 2025 Mufflix Bakery. All Rights Reserved.</p>
+      </div>
+    </footer>
+  );
+}

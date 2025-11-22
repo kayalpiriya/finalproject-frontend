@@ -535,201 +535,204 @@
 // export default Login;
 
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { toast } from "react-toastify";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+//my//
 
-  const navigate = useNavigate();
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { toast } from "react-toastify";
 
-  const validateLogin = () => {
-    let temp = {};
-    if (!email.trim()) temp.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
-    if (!password.trim()) temp.password = "Password is required";
-    setErrors(temp);
-    return Object.keys(temp).length === 0;
-  };
+// function Login() {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [errors, setErrors] = useState({});
+//   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
+//   const [forgotEmail, setForgotEmail] = useState("");
+//   const [otpSent, setOtpSent] = useState(false);
+//   const [otp, setOtp] = useState("");
+//   const [newPassword, setNewPassword] = useState("");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!validateLogin()) return;
-    try {
-      const res = await axios.post("http://localhost:5000/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-      toast.success("✅ Login successful!");
-      setTimeout(() => navigate("/"), 1500);
-    } catch (err) {
-      toast.error("❌ Login failed! Check your credentials.");
-    }
-  };
+//   const navigate = useNavigate();
 
-  const handleSendOTP = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
-      toast.success(res.data.message);
-      setOtpSent(true);
-    } catch (err) {
-      toast.error("❌ Failed to send OTP! Check your email.");
-    }
-  };
+//   const validateLogin = () => {
+//     let temp = {};
+//     if (!email.trim()) temp.email = "Email is required";
+//     else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+//     if (!password.trim()) temp.password = "Password is required";
+//     setErrors(temp);
+//     return Object.keys(temp).length === 0;
+//   };
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/auth/reset-password", {
-        email: forgotEmail,
-        otp,
-        password: newPassword,
-      });
-      toast.success(res.data.message);
-      setOtpSent(false);
-      setForgotPasswordMode(false);
-      setForgotEmail("");
-      setOtp("");
-      setNewPassword("");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "❌ Failed to reset password");
-    }
-  };
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     if (!validateLogin()) return;
+//     try {
+//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       localStorage.setItem("token", res.data.token);
+//       localStorage.setItem("role", res.data.role);
+//       toast.success("✅ Login successful!");
+//       setTimeout(() => navigate("/"), 1500);
+//     } catch (err) {
+//       toast.error("❌ Login failed! Check your credentials.");
+//     }
+//   };
 
-  return (
-    <>
-      <Navbar />
+//   const handleSendOTP = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+//       toast.success(res.data.message);
+//       setOtpSent(true);
+//     } catch (err) {
+//       toast.error("❌ Failed to send OTP! Check your email.");
+//     }
+//   };
 
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4">
-        <div className="bg-white shadow-2xl rounded-3xl w-full max-w-4xl flex overflow-hidden">
+//   const handleResetPassword = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const res = await axios.post("http://localhost:5000/auth/reset-password", {
+//         email: forgotEmail,
+//         otp,
+//         password: newPassword,
+//       });
+//       toast.success(res.data.message);
+//       setOtpSent(false);
+//       setForgotPasswordMode(false);
+//       setForgotEmail("");
+//       setOtp("");
+//       setNewPassword("");
+//     } catch (err) {
+//       toast.error(err.response?.data?.message || "❌ Failed to reset password");
+//     }
+//   };
 
-          {/* Left Side - Welcome/Register */}
-          <div className="hidden md:flex flex-col justify-center items-center bg-purple-500 text-white w-1/2 p-10 space-y-6">
-            <h2 className="text-4xl font-bold">Hello, Friend!</h2>
-            <p className="text-lg text-purple-100">Register with your personal details to use all site features</p>
-            <button
-              onClick={() => navigate("/register")}
-              className="bg-white text-purple-500 px-6 py-3 rounded-xl font-semibold hover:bg-purple-100 transition"
-            >
-              Sign Up
-            </button>
-          </div>
+//   return (
+//     <>
+//       <Navbar />
 
-          {/* Right Side - Login Form */}
-          <div className="w-full md:w-1/2 p-10">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">
-              {forgotPasswordMode ? "Reset Password" : "Sign In"}
-            </h2>
+//       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4">
+//         <div className="bg-white shadow-2xl rounded-3xl w-full max-w-4xl flex overflow-hidden">
 
-            <div className="flex justify-center md:justify-start space-x-4 mb-4">
-              <a href="#">
-                <img
-                  src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
-                  alt="Facebook"
-                  className="w-10 h-10 rounded-full hover:scale-105 transition"
-                />
-              </a>
-              <a href="#">
-                <img
-                  src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
-                  alt="Google Login"
-                  className="w-10 h-10 rounded-full hover:scale-105 transition"
-                />
-              </a>
-            </div>
+//           {/* Left Side - Welcome/Register */}
+//           <div className="hidden md:flex flex-col justify-center items-center bg-purple-500 text-white w-1/2 p-10 space-y-6">
+//             <h2 className="text-4xl font-bold">Hello, Friend!</h2>
+//             <p className="text-lg text-purple-100">Register with your personal details to use all site features</p>
+//             <button
+//               onClick={() => navigate("/register")}
+//               className="bg-white text-purple-500 px-6 py-3 rounded-xl font-semibold hover:bg-purple-100 transition"
+//             >
+//               Sign Up
+//             </button>
+//           </div>
 
-            {!forgotPasswordMode ? (
-              <form className="space-y-4" onSubmit={handleLogin}>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-                />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+//           {/* Right Side - Login Form */}
+//           <div className="w-full md:w-1/2 p-10">
+//             <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">
+//               {forgotPasswordMode ? "Reset Password" : "Sign In"}
+//             </h2>
 
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-                />
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+//             <div className="flex justify-center md:justify-start space-x-4 mb-4">
+//               <a href="#">
+//                 <img
+//                   src="src/assets/facebook-logo-blue-circle_705838-12823.jpg"
+//                   alt="Facebook"
+//                   className="w-10 h-10 rounded-full hover:scale-105 transition"
+//                 />
+//               </a>
+//               <a href="#">
+//                 <img
+//                   src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
+//                   alt="Google Login"
+//                   className="w-10 h-10 rounded-full hover:scale-105 transition"
+//                 />
+//               </a>
+//             </div>
 
-                <p
-                  className="text-blue-500 cursor-pointer hover:underline"
-                  onClick={() => setForgotPasswordMode(true)}
-                >
-                  Forget Your Password? Reset here
-                </p>
+//             {!forgotPasswordMode ? (
+//               <form className="space-y-4" onSubmit={handleLogin}>
+//                 <input
+//                   type="email"
+//                   placeholder="Email"
+//                   value={email}
+//                   onChange={(e) => setEmail(e.target.value)}
+//                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//                 />
+//                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
-                <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
-                  Sign In
-                </button>
-              </form>
-            ) : !otpSent ? (
-              <form className="space-y-4" onSubmit={handleSendOTP}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={forgotEmail}
-                  onChange={(e) => setForgotEmail(e.target.value)}
-                  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-                />
-                <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
-                  Send OTP
-                </button>
-                <p
-                  className="text-blue-500 cursor-pointer hover:underline"
-                  onClick={() => setForgotPasswordMode(false)}
-                >
-                  Back to Login
-                </p>
-              </form>
-            ) : (
-              <form className="space-y-4" onSubmit={handleResetPassword}>
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-                />
-                <input
-                  type="password"
-                  placeholder="Enter New Password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
-                />
-                <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
-                  Reset Password
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </div>
+//                 <input
+//                   type="password"
+//                   placeholder="Password"
+//                   value={password}
+//                   onChange={(e) => setPassword(e.target.value)}
+//                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//                 />
+//                 {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
 
-      <Footer />
-    </>
-  );
-}
+//                 <p
+//                   className="text-blue-500 cursor-pointer hover:underline"
+//                   onClick={() => setForgotPasswordMode(true)}
+//                 >
+//                   Forget Your Password? Reset here
+//                 </p>
 
-export default Login;
+//                 <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
+//                   Sign In
+//                 </button>
+//               </form>
+//             ) : !otpSent ? (
+//               <form className="space-y-4" onSubmit={handleSendOTP}>
+//                 <input
+//                   type="email"
+//                   placeholder="Enter your email"
+//                   value={forgotEmail}
+//                   onChange={(e) => setForgotEmail(e.target.value)}
+//                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//                 />
+//                 <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
+//                   Send OTP
+//                 </button>
+//                 <p
+//                   className="text-blue-500 cursor-pointer hover:underline"
+//                   onClick={() => setForgotPasswordMode(false)}
+//                 >
+//                   Back to Login
+//                 </p>
+//               </form>
+//             ) : (
+//               <form className="space-y-4" onSubmit={handleResetPassword}>
+//                 <input
+//                   type="text"
+//                   placeholder="Enter OTP"
+//                   value={otp}
+//                   onChange={(e) => setOtp(e.target.value)}
+//                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//                 />
+//                 <input
+//                   type="password"
+//                   placeholder="Enter New Password"
+//                   value={newPassword}
+//                   onChange={(e) => setNewPassword(e.target.value)}
+//                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition"
+//                 />
+//                 <button className="w-full bg-purple-500 text-white py-3 rounded-xl font-semibold hover:bg-purple-600 transition">
+//                   Reset Password
+//                 </button>
+//               </form>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+
+//       <Footer />
+//     </>
+//   );
+// }
+
+// export default Login;
 
 
 // import { useState } from "react";
@@ -853,3 +856,191 @@ export default Login;
 // }
 
 // export default Login;
+
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { toast } from "react-toastify";
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const validateLogin = () => {
+    let temp = {};
+    if (!email.trim()) temp.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+    if (!password.trim()) temp.password = "Password is required";
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!validateLogin()) return;
+    try {
+      const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+      toast.success("✅ Login successful!");
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err) {
+      toast.error("❌ Login failed! Check your credentials.");
+    }
+  };
+
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+      toast.success(res.data.message);
+      setOtpSent(true);
+    } catch (err) {
+      toast.error("❌ Failed to send OTP! Check your email.");
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/auth/reset-password", {
+        email: forgotEmail,
+        otp,
+        password: newPassword,
+      });
+      toast.success(res.data.message);
+      setOtpSent(false);
+      setForgotPasswordMode(false);
+      setForgotEmail("");
+      setOtp("");
+      setNewPassword("");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "❌ Failed to reset password");
+    }
+  };
+
+  return (
+    <>
+      <Navbar />
+      <br></br><br></br><br></br><br></br><br></br>
+      <div className="h-32"></div>
+
+      {/* Attractive Background */}
+      <div className="min-h-screen flex items-center justify-center bg-cream p-4">
+        <div className="bg-white shadow-2xl rounded-2xl w-full max-w-4xl flex overflow-hidden border border-brown">
+
+          {/* Left Side Panel */}
+          <div className="hidden md:flex flex-col justify-center items-center bg-panel text-brown w-1/2 p-10 space-y-6">
+            <h2 className="text-4xl font-bold">Hello, Friend! 👋</h2>
+            <p className="text-lg text-muted text-center">
+              Register with your personal details to access all features
+            </p>
+            <button
+              onClick={() => navigate("/register")}
+              className="bg-accent text-white px-6 py-3 rounded-lg font-semibold transition"
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {/* Right Side Login Form */}
+          <div className="w-full md:w-1/2 p-10">
+            <h2 className="text-3xl font-bold text-brown mb-6 text-center md:text-left">
+              {forgotPasswordMode ? "Reset Password" : "Sign In"}
+            </h2>
+
+            {!forgotPasswordMode ? (
+              <form className="space-y-4" onSubmit={handleLogin}>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 border border-brown rounded-lg bg-cream focus:ring-2 focus:ring-accent"
+                />
+                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 border border-brown rounded-lg bg-cream focus:ring-2 focus:ring-accent"
+                />
+                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+
+                <p
+                  className="text-accent cursor-pointer hover:underline"
+                  onClick={() => setForgotPasswordMode(true)}
+                >
+                  Forget your password?
+                </p>
+
+                <button className="w-full bg-accent text-white py-3 rounded-lg font-semibold transition">
+                  Sign In
+                </button>
+              </form>
+            ) : !otpSent ? (
+              <form className="space-y-4" onSubmit={handleSendOTP}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="w-full p-3 border border-brown rounded-lg bg-cream focus:ring-2 focus:ring-accent"
+                />
+                <button className="w-full bg-accent text-white py-3 rounded-lg font-semibold transition">
+                  Send OTP
+                </button>
+
+                <p
+                  className="text-accent cursor-pointer hover:underline"
+                  onClick={() => setForgotPasswordMode(false)}
+                >
+                  Back to Login
+                </p>
+              </form>
+            ) : (
+              <form className="space-y-4" onSubmit={handleResetPassword}>
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full p-3 border border-brown rounded-lg bg-cream focus:ring-2 focus:ring-accent"
+                />
+
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-3 border border-brown rounded-lg bg-cream focus:ring-2 focus:ring-accent"
+                />
+
+                <button className="w-full bg-accent text-white py-3 rounded-lg font-semibold transition">
+                  Reset Password
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+<br></br><br></br><br></br><br></br>
+      <Footer />
+    </>
+  );
+}
+
+export default Login;

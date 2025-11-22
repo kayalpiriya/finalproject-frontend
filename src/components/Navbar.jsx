@@ -531,7 +531,341 @@
 
 
 
-///imoprtant///
+// ///imoprtant///
+// import { Link, useNavigate } from "react-router-dom";
+// import React, { useState, useEffect, useContext } from "react";
+// import { CartContext } from "../pages/CartContext.jsx";
+// import { Menu, X, ShoppingCart, User } from "lucide-react";
+
+// function Navbar() {
+//   const navigate = useNavigate();
+//   const { totalItems } = useContext(CartContext);
+
+//   const [role, setRole] = useState(null);
+//   const [token, setToken] = useState(null);
+//   const [mobileOpen, setMobileOpen] = useState(false);
+
+//   useEffect(() => {
+//     setRole(localStorage.getItem("role"));
+//     setToken(localStorage.getItem("token"));
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("role");
+//     localStorage.removeItem("token");
+//     setRole(null);
+//     setToken(null);
+//     navigate("/login");
+//   };
+
+//   return (
+//     <nav className="bg-yellow-100 fixed w-full shadow z-50">
+//       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+//         {/* Logo */}
+//         {/* <div
+//           className="text-2xl font-bold text-yellow-700 cursor-pointer"
+//           onClick={() => navigate("/")}
+//         >
+//           🍰 Mufflix Bakery
+//         </div> */}
+//          {/* Logo */}
+//          <Link to="/" className="flex items-center space-x-3">
+//           <img
+//             src="src/assets/my logo.png"
+//             alt="Bakery Logo"
+//             className="h-10 w-10 rounded-full"
+//           />
+//           <span className=" text-yellow-800 hover:text-yellow-600 transition
+//           font-semibold text-xl tracking-wide">
+//             Mufflix Bakery
+//           </span>
+//         </Link>
+        
+
+//         {/* Desktop Menu */}
+//         <div className="hidden md:flex items-center space-x-6 font-medium text-yellow-800">
+//           <Link to="/" className="hover:text-yellow-600 transition">Home</Link>
+//           <Link to="/allproduct" className="hover:text-yellow-600 transition">All Products</Link>
+//           <Link to="/detail" className="hover:text-yellow-600 transition">Detail</Link>
+//           <Link to="/chat" className="hover:text-yellow-600 transition">Contact</Link>
+//           {role === "admin" && (
+//             <Link to="/admin" className="hover:text-yellow-600 transition">Admin</Link>
+//           )}
+//         </div>
+
+//         {/* Right icons */}
+//         <div className="flex items-center space-x-4">
+//           <input
+//             type="text"
+//             placeholder="Search..."
+//             className="px-2 py-1 rounded-md border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 hidden md:block"
+//           />
+
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => navigate("/profile")}
+//                 className="relative text-yellow-800 hover:text-yellow-600"
+//               >
+//                 <User size={24} />
+//               </button>
+
+//               <button
+//                 onClick={() => navigate("/shoppingcart")}
+//                 className="relative text-yellow-800 hover:text-yellow-600"
+//               >
+//                 <ShoppingCart size={24} />
+//                 {totalItems > 0 && (
+//                   <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+//                     {totalItems}
+//                   </span>
+//                 )}
+//               </button>
+
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => navigate("/login")}
+//               className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
+//             >
+//               Sign In
+//             </button>
+//           )}
+
+//           {/* Mobile Menu Button */}
+//           <button
+//             className="md:hidden"
+//             onClick={() => setMobileOpen(!mobileOpen)}
+//           >
+//             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Mobile Menu */}
+//       {mobileOpen && (
+//         <div className="md:hidden bg-yellow-100 px-6 py-4 space-y-3">
+//           <Link to="/" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Home</Link>
+//           <Link to="/allproduct" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>All Products</Link>
+//           <Link to="/detail" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Detail</Link>
+//           <Link to="/chat" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Contact</Link>
+//           {role === "admin" && (
+//             <Link to="/admin" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Admin</Link>
+//           )}
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => { navigate("/profile"); setMobileOpen(false); }}
+//                 className="flex items-center gap-2"
+//               >
+//                 <User size={20} /> Profile
+//               </button>
+//               <button
+//                 onClick={() => { navigate("/shoppingcart"); setMobileOpen(false); }}
+//                 className="flex items-center gap-2 relative"
+//               >
+//                 <ShoppingCart size={20} /> Cart
+//                 {totalItems > 0 && (
+//                   <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+//                     {totalItems}
+//                   </span>
+//                 )}
+//               </button>
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => { navigate("/login"); setMobileOpen(false); }}
+//               className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
+//             >
+//               Sign In
+//             </button>
+//           )}
+//         </div>
+//       )}
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+
+
+// /// Navbar.jsx
+// import { Link, useNavigate } from "react-router-dom";
+// import React, { useState, useEffect, useContext } from "react";
+// import { CartContext } from "../pages/CartContext.jsx";
+// import { Menu, X, ShoppingCart, User } from "lucide-react";
+
+// function Navbar() {
+//   const navigate = useNavigate();
+//   const { totalItems } = useContext(CartContext);
+
+//   const [role, setRole] = useState(null);
+//   const [token, setToken] = useState(null);
+//   const [mobileOpen, setMobileOpen] = useState(false);
+
+//   useEffect(() => {
+//     setRole(localStorage.getItem("role"));
+//     setToken(localStorage.getItem("token"));
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("role");
+//     localStorage.removeItem("token");
+//     setRole(null);
+//     setToken(null);
+//     navigate("/login");
+//   };
+
+//   return (
+//     <nav className="bg-yellow-100 fixed w-full shadow z-50">
+//       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+//         {/* Logo */}
+//         <Link to="/" className="flex items-center space-x-3">
+//           <img
+//             src="src/assets/my logo.png"
+//             alt="Bakery Logo"
+//             className="h-10 w-10 rounded-full"
+//           />
+//           <span className="text-yellow-800 hover:text-yellow-600 transition font-semibold text-xl tracking-wide">
+//             Mufflix Bakery
+//           </span>
+//         </Link>
+
+//         {/* Desktop Menu */}
+//         <div className="hidden md:flex items-center space-x-6 font-medium text-yellow-800">
+//           <Link to="/" className="hover:text-yellow-600 transition">Home</Link>
+//           <Link to="/allproduct" className="hover:text-yellow-600 transition">All Products</Link>
+//           <Link to="/detail" className="hover:text-yellow-600 transition">Detail</Link>
+//           <Link to="/chat" className="hover:text-yellow-600 transition">Contact</Link>
+//           <Link to="/reviews" className="hover:text-yellow-600 transition">Customer Reviews</Link> {/* Added */}
+//           {role === "admin" && (
+//             <Link to="/admin" className="hover:text-yellow-600 transition">Admin</Link>
+//           )}
+//         </div>
+
+//         {/* Right icons */}
+//         <div className="flex items-center space-x-4">
+//           <input
+//             type="text"
+//             placeholder="Search..."
+//             className="px-2 py-1 rounded-md border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 hidden md:block"
+//           />
+
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => navigate("/profile")}
+//                 className="relative text-yellow-800 hover:text-yellow-600"
+//               >
+//                 <User size={24} />
+//               </button>
+
+//               <button
+//                 onClick={() => navigate("/shoppingcart")}
+//                 className="relative text-yellow-800 hover:text-yellow-600"
+//               >
+//                 <ShoppingCart size={24} />
+//                 {totalItems > 0 && (
+//                   <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+//                     {totalItems}
+//                   </span>
+//                 )}
+//               </button>
+
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => navigate("/login")}
+//               className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
+//             >
+//               Sign In
+//             </button>
+//           )}
+
+//           {/* Mobile Menu Button */}
+//           <button
+//             className="md:hidden"
+//             onClick={() => setMobileOpen(!mobileOpen)}
+//           >
+//             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Mobile Menu */}
+//       {mobileOpen && (
+//         <div className="md:hidden bg-yellow-100 px-6 py-4 space-y-3">
+//           <Link to="/" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Home</Link>
+//           <Link to="/allproduct" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>All Products</Link>
+//           <Link to="/detail" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Detail</Link>
+//           <Link to="/chat" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Contact</Link>
+//           <Link to="/reviews" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Customer Reviews</Link> {/* Added */}
+//           {role === "admin" && (
+//             <Link to="/admin" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Admin</Link>
+//           )}
+//           {token ? (
+//             <>
+//               <button
+//                 onClick={() => { navigate("/profile"); setMobileOpen(false); }}
+//                 className="flex items-center gap-2"
+//               >
+//                 <User size={20} /> Profile
+//               </button>
+//               <button
+//                 onClick={() => { navigate("/shoppingcart"); setMobileOpen(false); }}
+//                 className="flex items-center gap-2 relative"
+//               >
+//                 <ShoppingCart size={20} /> Cart
+//                 {totalItems > 0 && (
+//                   <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+//                     {totalItems}
+//                   </span>
+//                 )}
+//               </button>
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           ) : (
+//             <button
+//               onClick={() => { navigate("/login"); setMobileOpen(false); }}
+//               className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
+//             >
+//               Sign In
+//             </button>
+//           )}
+//         </div>
+//       )}
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+
+/// Navbar.jsx
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import { CartContext } from "../pages/CartContext.jsx";
@@ -559,343 +893,142 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-yellow-100 fixed w-full shadow z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-        {/* Logo */}
-        {/* <div
-          className="text-2xl font-bold text-yellow-700 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          🍰 Mufflix Bakery
-        </div> */}
-         {/* Logo */}
-         <Link to="/" className="flex items-center space-x-3">
-          <img
-            src="src/assets/my logo.png"
-            alt="Bakery Logo"
-            className="h-10 w-10 rounded-full"
-          />
-          <span className=" text-yellow-800 hover:text-yellow-600 transition
-          font-semibold text-xl tracking-wide">
-            Mufflix Bakery
-          </span>
-        </Link>
-        
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6 font-medium text-yellow-800">
-          <Link to="/" className="hover:text-yellow-600 transition">Home</Link>
-          <Link to="/allproduct" className="hover:text-yellow-600 transition">All Products</Link>
-          <Link to="/detail" className="hover:text-yellow-600 transition">Detail</Link>
-          <Link to="/chat" className="hover:text-yellow-600 transition">Contact</Link>
-          {role === "admin" && (
-            <Link to="/admin" className="hover:text-yellow-600 transition">Admin</Link>
-          )}
-        </div>
-
-        {/* Right icons */}
-        <div className="flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="px-2 py-1 rounded-md border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 hidden md:block"
-          />
-
-          {token ? (
-            <>
-              <button
-                onClick={() => navigate("/profile")}
-                className="relative text-yellow-800 hover:text-yellow-600"
-              >
-                <User size={24} />
-              </button>
-
-              <button
-                onClick={() => navigate("/shoppingcart")}
-                className="relative text-yellow-800 hover:text-yellow-600"
-              >
-                <ShoppingCart size={24} />
-                {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {totalItems}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition"
-            >
-              Sign In
-            </button>
-          )}
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+    <nav
+    className="fixed w-full shadow z-50"
+    style={{
+      backgroundColor: "#596E65", // Updated navbar color
+    }}
+  >
+    <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+      {/* Logo */}
+      <Link to="/" className="flex items-center space-x-3">
+        <img
+          src="src/assets/my logo.png"
+          alt="Bakery Logo"
+          className="h-10 w-10 rounded-full"
+        />
+        <span className="text-white hover:text-gray-300 transition font-semibold text-xl tracking-wide">
+          Mufflix Bakery
+        </span>
+      </Link>
+  
+      {/* Desktop Menu */}
+      <div className="hidden md:flex items-center space-x-6 font-medium text-white">
+        <Link to="/" className="hover:text-gray-300 transition">Home</Link>
+        <Link to="/allproduct" className="hover:text-gray-300 transition">All Products</Link>
+        <Link to="/detail" className="hover:text-gray-300 transition">Detail</Link>
+        <Link to="/chat" className="hover:text-gray-300 transition">Contact</Link>
+        <Link to="/reviews" className="hover:text-gray-300 transition">Customer Reviews</Link>
+        {role === "admin" && (
+          <Link to="/admin" className="hover:text-gray-300 transition">Admin</Link>
+        )}
       </div>
-
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-yellow-100 px-6 py-4 space-y-3">
-          <Link to="/" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Home</Link>
-          <Link to="/allproduct" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>All Products</Link>
-          <Link to="/detail" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Detail</Link>
-          <Link to="/chat" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Contact</Link>
-          {role === "admin" && (
-            <Link to="/admin" className="block hover:text-yellow-600 transition" onClick={() => setMobileOpen(false)}>Admin</Link>
-          )}
-          {token ? (
-            <>
-              <button
-                onClick={() => { navigate("/profile"); setMobileOpen(false); }}
-                className="flex items-center gap-2"
-              >
-                <User size={20} /> Profile
-              </button>
-              <button
-                onClick={() => { navigate("/shoppingcart"); setMobileOpen(false); }}
-                className="flex items-center gap-2 relative"
-              >
-                <ShoppingCart size={20} /> Cart
-                {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {totalItems}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
+  
+      {/* Right icons */}
+      <div className="flex items-center space-x-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="px-2 py-1 rounded-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 hidden md:block"
+        />
+  
+        {token ? (
+          <>
             <button
-              onClick={() => { navigate("/login"); setMobileOpen(false); }}
-              className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition w-full text-left"
+              onClick={() => navigate("/profile")}
+              className="relative text-white hover:text-gray-300"
             >
-              Sign In
+              <User size={24} />
             </button>
-          )}
-        </div>
-      )}
-    </nav>
+  
+            <button
+              onClick={() => navigate("/shoppingcart")}
+              className="relative text-white hover:text-gray-300"
+            >
+              <ShoppingCart size={24} />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+  
+            <button
+              onClick={handleLogout}
+              className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition btn-add"
+          >
+            Sign In
+          </button>
+        )}
+  
+        {/* Mobile Menu Button */}
+        <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+    </div>
+  
+    {/* Mobile Menu */}
+    {mobileOpen && (
+      <div className="md:hidden px-6 py-4 space-y-3" style={{ backgroundColor: "#596E65" }}>
+        <Link to="/" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Home</Link>
+        <Link to="/allproduct" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">All Products</Link>
+        <Link to="/detail" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Detail</Link>
+        <Link to="/chat" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Contact</Link>
+        <Link to="/reviews" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Customer Reviews</Link>
+        {role === "admin" && (
+          <Link to="/admin" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Admin</Link>
+        )}
+  
+        {token ? (
+          <>
+            <button
+              onClick={() => { navigate("/profile"); setMobileOpen(false); }}
+              className="flex items-center gap-2 text-white hover:text-gray-300 w-full"
+            >
+              <User size={20} /> Profile
+            </button>
+  
+            <button
+              onClick={() => { navigate("/shoppingcart"); setMobileOpen(false); }}
+              className="flex items-center gap-2 relative text-white hover:text-gray-300 w-full"
+            >
+              <ShoppingCart size={20} /> Cart
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+  
+            <button
+              onClick={handleLogout}
+              className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => { navigate("/login"); setMobileOpen(false); }}
+            className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
+          >
+            Sign In
+          </button>
+        )}
+      </div>
+    )}
+  </nav>
+  
   );
 }
 
 export default Navbar;
-
-
-
-
-
-
-// import { Link, useNavigate } from "react-router-dom";
-// import React, { useState, useEffect, useContext } from "react";
-// import { CartContext } from "../pages/CartContext.jsx";
-// import { Menu, X, ShoppingCart, User } from "lucide-react";
-
-// function Navbar() {
-//   const navigate = useNavigate();
-//   const { totalItems } = useContext(CCartContext);
-
-//   const [role, setRole] = useState(null);
-//   const [token, setToken] = useState(null);
-//   const [mobileOpen, setMobileOpen] = useState(false);
-
-//   useEffect(() => {
-//     setRole(localStorage.getItem("role"));
-//     setToken(localStorage.getItem("token"));
-//   }, []);
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("role");
-//     localStorage.removeItem("token");
-//     setRole(null);
-//     setToken(null);
-//     navigate("/login");
-//   };
-
-//   return (
-//     <nav className="fixed w-full bg-yellow-50/80 backdrop-blur-lg shadow-lg z-50 
-//     transition-all duration-500 border-b border-yellow-200">
-//       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-
-//         {/* Logo */}
-//         <Link to="/" className="flex items-center space-x-3 group">
-//           <img
-//             src="src/assets/my logo.png"
-//             alt="Bakery Logo"
-//             className="h-10 w-10 rounded-full shadow-md group-hover:scale-110 
-//             transition-all duration-300"
-//           />
-//           <span className="text-yellow-800 hover:text-yellow-600 transition 
-//           font-semibold text-xl tracking-wide group-hover:tracking-wider duration-300">
-//             Mufflix Bakery
-//           </span>
-//         </Link>
-
-//         {/* Desktop Menu */}
-//         <div className="hidden md:flex items-center space-x-6 font-medium text-yellow-800">
-//           {["Home", "All Products", "Detail", "Contact"].map((item, i) => (
-//             <Link
-//               key={i}
-//               to={item === "Home" ? "/" : item.toLowerCase().replace(" ", "")}
-//               className="relative hover:text-yellow-600 transition group"
-//             >
-//               {item}
-//               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-600 
-//               group-hover:w-full transition-all duration-300"></span>
-//             </Link>
-//           ))}
-//           {role === "admin" && (
-//             <Link
-//               to="/admin"
-//               className="relative hover:text-yellow-600 transition group"
-//             >
-//               Admin
-//               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-600 
-//               group-hover:w-full transition-all duration-300"></span>
-//             </Link>
-//           )}
-//         </div>
-
-//         {/* Right Section */}
-//         <div className="flex items-center space-x-4">
-
-//           {/* Search Box */}
-//           <input
-//             type="text"
-//             placeholder="Search..."
-//             className="px-3 py-1 rounded-md border border-yellow-300 
-//             hidden md:block bg-white/70 focus:ring-2 focus:ring-yellow-400
-//             shadow-inner transition-all"
-//           />
-
-//           {/* Icons & Buttons */}
-//           {token ? (
-//             <>
-//               <button
-//                 onClick={() => navigate("/profile")}
-//                 className="relative text-yellow-800 hover:text-yellow-600 transition"
-//               >
-//                 <User size={24} className="hover:scale-110 transition" />
-//               </button>
-
-//               <button
-//                 onClick={() => navigate("/shoppingcart")}
-//                 className="relative text-yellow-800 hover:text-yellow-600 transition"
-//               >
-//                 <ShoppingCart size={24} className="hover:scale-110 transition" />
-//                 {totalItems > 0 && (
-//                   <span className="absolute -top-2 -right-2 bg-red-500 shadow 
-//                   text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-//                     {totalItems}
-//                   </span>
-//                 )}
-//               </button>
-
-//               <button
-//                 onClick={handleLogout}
-//                 className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white 
-//                 px-3 py-1 rounded-md shadow-md hover:shadow-lg hover:scale-105 
-//                 transition-all duration-300"
-//               >
-//                 Logout
-//               </button>
-//             </>
-//           ) : (
-//             <button
-//               onClick={() => navigate("/login")}
-//               className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white 
-//               px-3 py-1 rounded-md shadow-md hover:shadow-lg hover:scale-105 
-//               transition-all duration-300"
-//             >
-//               Sign In
-//             </button>
-//           )}
-
-//           {/* Mobile Menu */}
-//           <button
-//             className="md:hidden"
-//             onClick={() => setMobileOpen(!mobileOpen)}
-//           >
-//             {mobileOpen ? (
-//               <X size={24} className="text-yellow-800" />
-//             ) : (
-//               <Menu size={24} className="text-yellow-800" />
-//             )}
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Mobile Drop Menu */}
-//       {mobileOpen && (
-//         <div className="md:hidden bg-yellow-50/95 shadow-lg px-6 py-4 space-y-3 animate-slideDown">
-//           <Link to="/" className="block hover:text-yellow-600 transition">Home</Link>
-//           <Link to="/allproduct" className="block hover:text-yellow-600 transition">All Products</Link>
-//           <Link to="/detail" className="block hover:text-yellow-600 transition">Detail</Link>
-//           <Link to="/chat" className="block hover:text-yellow-600 transition">Contact</Link>
-
-//           {role === "admin" && (
-//             <Link to="/admin" className="block hover:text-yellow-600 transition">Admin</Link>
-//           )}
-
-//           {token ? (
-//             <>
-//               <button
-//                 onClick={() => navigate("/profile")}
-//                 className="flex items-center gap-3"
-//               >
-//                 <User size={20} /> Profile
-//               </button>
-
-//               <button
-//                 onClick={() => navigate("/shoppingcart")}
-//                 className="flex items-center gap-3"
-//               >
-//                 <ShoppingCart size={20} /> Cart
-//               </button>
-
-//               <button
-//                 onClick={handleLogout}
-//                 className="bg-yellow-500 w-full text-white px-3 py-2 rounded-md 
-//                 shadow hover:bg-yellow-600 transition"
-//               >
-//                 Logout
-//               </button>
-//             </>
-//           ) : (
-//             <button
-//               onClick={() => navigate("/login")}
-//               className="bg-yellow-500 w-full text-white px-3 py-2 rounded-md 
-//               shadow hover:bg-yellow-600 transition"
-//             >
-//               Sign In
-//             </button>
-//           )}
-//         </div>
-//       )}
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-
-
-
