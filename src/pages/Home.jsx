@@ -748,15 +748,265 @@
 //   );
 // }
 
+// import React, { useState, useEffect } from "react";
+// import { motion } from "framer-motion";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { useNavigate } from "react-router-dom";
+
+// export default function Home() {
+//   const navigate = useNavigate();
+
+//   const carouselItems = [
+//     {
+//       img: "/src/assets/cakee1.jpg",
+//       title: "Artisan Chocolate Cake",
+//       desc: "Handcrafted with Belgian chocolate and fresh cream, baked to perfection daily.",
+//       btnShop: "/allproduct",
+//       btnLearn: "/detail"
+//     },
+//     {
+//       img: "/src/assets/vanilla_cupcake_featured_blog.webp",
+//       title: "Vanilla Dream Cupcakes",
+//       desc: "Soft vanilla cupcakes with buttercream frosting - a classic favorite.",
+//       btnShop: "/allproduct",
+//       btnLearn: "/detail"
+//     },
+//     {
+//       img: "/src/assets/instagram-bakers-1.jpg",
+//       title: "French Pastries Collection",
+//       desc: "Authentic croissants, macarons, and éclairs made by our master bakers.",
+//       btnShop: "/allproduct",
+//       btnLearn: "/detail"
+//     }
+//   ];
+
+//   const [current, setCurrent] = useState(0);
+
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setCurrent((prev) => (prev + 1) % carouselItems.length);
+//     }, 6000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const sampleImgs = [
+//     { img: "/src/assets/bun1.jpg", name: "Cinnamon Roll", price: "$3.99" },
+//     { img: "/src/assets/cakee1.jpg", name: "Chocolate Cake", price: "$29.99" },
+//     { img: "/src/assets/breadd.jpg", name: "Sourdough Bread", price: "$5.99" },
+//     { img: "/src/assets/b3ad51c12c782d3998ea6979c4f7372a.jpg", name: "Strawberry Tart", price: "$6.99" },
+//     { img: "/src/assets/cream-drop-chocolate-cake-1-kg-eggless_1.webp", name: "Chocolate Mousse", price: "$8.99" }
+//   ];
+
+//   const categoryImgs = [
+//     { img: "/src/assets/3ade0a9606bdae637a44959ebc866635.jpg", name: "Cakes" },
+//     { img: "/src/assets/3f2f14e18d9a177618f503ec18673382.jpg", name: "Cookies" },
+//     { img: "/src/assets/7c6f3076e545a9cc8faa2123d8788001.jpg", name: "Breads" },
+//     { img: "/src/assets/9a7388e7ba8d216800a7abcc89ae5ff7.jpg", name: "Pastries" },
+//     { img: "/src/assets/81dfe1ad8f2767fe5b4d81652c7b1d15.jpg", name: "Desserts" }
+//   ];
+
+//   const fadeIn = {
+//     hidden: { opacity: 0, y: 20 },
+//     visible: { opacity: 1, y: 0 }
+//   };
+
+//   const hoverEffect = {
+//     scale: 1.03,
+//     transition: { duration: 0.3 }
+//   };
+
+//   return (
+//     <>
+//       <Navbar />
+//       <main className="pt-24 bg-gradient-to-b from-bakery-bg-light to-bakery-bg-warm min-h-screen">
+        
+//         {/* Hero Carousel */}
+//         <section className="max-w-7xl mx-auto px-4 py-12 md:py-20">
+//           <div className="relative w-full h-80 md:h-[36rem] rounded-[1.5rem] overflow-hidden shadow-2xl">
+//             {carouselItems.map((item, idx) => (
+//               <div
+//                 key={idx}
+//                 className={`absolute inset-0 transition-opacity duration-1000 ${
+//                   idx === current ? "opacity-100" : "opacity-0"
+//                 }`}
+//               >
+//                 <img
+//                   src={item.img}
+//                   alt={item.title}
+//                   className="w-full h-full object-cover"
+//                 />
+//                 <div className="absolute inset-0 bg-black/30" />
+//               </div>
+//             ))}
+
+//             {/* Carousel Overlay */}
+//             <motion.div
+//               className="absolute inset-0 flex flex-col justify-center px-6 md:px-12 lg:px-20 text-white z-10"
+//               initial="hidden"
+//               animate="visible"
+//               variants={fadeIn}
+//               transition={{ delay: 0.3 }}
+//             >
+//               <h1
+//                 className="text-4xl md:text-6xl xl:text-7xl font-extrabold mb-4 leading-snug" 
+//                 style={{ fontFamily: "'Playfair Display', serif" }}
+//               >
+//                 {carouselItems[current].title}
+//               </h1>
+//               <p
+//                 className="text-lg md:text-xl mb-8 max-w-xl opacity-95 leading-relaxed"
+//                 style={{ fontFamily: "'Inter', sans-serif" }}
+//               >
+//                 {carouselItems[current].desc}
+//               </p>
+//               <div className="flex flex-col sm:flex-row gap-4">
+//                 <motion.button
+//                   onClick={() => navigate(carouselItems[current].btnShop)}
+//                   className="bg-bakery-accent text-bakery-dark px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-amber-600 transition-all btn-add"
+//                   whileHover={hoverEffect}
+//                   whileTap={{ scale: 0.98 }}
+//                 >
+//                   Shop Now
+//                 </motion.button>
+//                 <motion.button
+//                   onClick={() => navigate(carouselItems[current].btnLearn)}
+//                   className="bg-transparent border-2 border-bakery-light-accent text-bakery-light-accent px-8 py-3 rounded-full font-semibold text-lg hover:bg-bakery-light-accent/20 transition-all"
+//                   whileHover={hoverEffect}
+//                   whileTap={{ scale: 0.98 }}
+//                 >
+//                   Learn More
+//                 </motion.button>
+//               </div>
+//             </motion.div>
+
+//             {/* Carousel Indicators */}
+//             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+//               {carouselItems.map((_, idx) => (
+//                 <button
+//                   key={idx}
+//                   className={`h-2 rounded-full transition-all ${
+//                     idx === current
+//                       ? "bg-bakery-light-accent w-8"
+//                       : "bg-white/50 w-2 hover:bg-white/80"
+//                   }`}
+//                   onClick={() => setCurrent(idx)}
+//                 />
+//               ))}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* Featured Products */}
+//         <section className="max-w-7xl mx-auto px-4 py-16">
+//           <motion.h2
+//             className="text-4xl font-bold text-bakery-medium mb-12 text-center"
+//             style={{ fontFamily: "'Playfair Display', serif" }}
+//             initial="hidden"
+//             whileInView="visible"
+//             variants={fadeIn}
+//             viewport={{ once: true }}
+//           >
+//             Today's Specials
+//           </motion.h2>
+// <br></br><br></br>
+//           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+//             {sampleImgs.map((item, i) => (
+//               <motion.div
+//                 key={i}
+//                 className="bg-white rounded-[1rem] shadow-lg overflow-hidden hover:shadow-xl transition-all "
+//                 whileHover={hoverEffect}
+//                 initial="hidden"
+//                 whileInView="visible"
+//                 variants={fadeIn}
+//                 viewport={{ once: true }}
+//                 transition={{ delay: i * 0.1 }}
+//               >
+//                 <div className="h-48 w-full flex items-center justify-center bg-bakery-bg-warm/70">
+//                   <img
+//                     src={item.img}
+//                     alt={item.name}
+//                     className="h-full w-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+//                   />
+//                 </div>
+//                 <div className="p-4 text-center">
+//                   <h3 className="font-bold text-lg text-bakery-dark mb-1 truncate">{item.name}</h3>
+//                   <p className="text-bakery-accent text-base font-semibold mb-4">{item.price}</p>
+//                   <button
+//                     onClick={() => navigate("/allproduct")}
+//                     className="w-full bg-bakery-light-accent text-bakery-medium py-2 rounded-lg font-medium hover:bg-amber-200 transition-colors shadow-sm btn-add"
+//                   >
+//                     View
+//                   </button>
+//                 </div>
+//               </motion.div>
+//             ))}
+//           </div>
+//         </section>
+
+//         {/* Categories */}
+//         <section className="max-w-7xl mx-auto px-4 py-16 bg-bakery-bg-warm/50">
+//           <motion.h2
+//             className="text-4xl font-bold text-bakery-medium mb-12 text-center"
+//             style={{ fontFamily: "'Playfair Display', serif" }}
+//             initial="hidden"
+//             whileInView="visible"
+//             variants={fadeIn}
+//             viewport={{ once: true }}
+//           >
+//             Browse Categories
+//           </motion.h2>
+// <br></br><br></br>
+//           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+//             {categoryImgs.map((item, i) => (
+//               <motion.div
+//                 key={i}
+//                 className="bg-white rounded-[1rem] shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer  "
+//                 whileHover={{ ...hoverEffect, boxShadow: '0 15px 30px rgba(0,0,0,0.1)' }}
+//                 onClick={() => navigate("/allproduct")}
+//                 initial="hidden"
+//                 whileInView="visible"
+//                 variants={fadeIn}
+//                 viewport={{ once: true }}
+//                 transition={{ delay: i * 0.1 }}
+//               >
+//                 <div className="h-48 w-full flex items-center justify-center bg-bakery-bg-light">
+//                   <img
+//                     src={item.img}
+//                     alt={item.name}
+//                     className="h-full w-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+//                   />
+//                 </div>
+//                 <div className="p-4 text-center">
+//                   <h3 className="font-semibold text-lg text-bakery-medium">{item.name}</h3>
+//                 </div>
+//               </motion.div>
+//             ))}
+//           </div>
+//         </section>
+
+//       </main>
+
+//       <br /><br /><br />
+//       <Footer />
+//     </>
+//   );
+// }
+
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { getBlogs } from "../api/blogApi";  // Blog API
 
 export default function Home() {
   const navigate = useNavigate();
 
+  // --------------------------------------------
+  // Carousel Items
+  // --------------------------------------------
   const carouselItems = [
     {
       img: "/src/assets/cakee1.jpg",
@@ -790,6 +1040,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // --------------------------------------------
+  // Featured Products
+  // --------------------------------------------
   const sampleImgs = [
     { img: "/src/assets/bun1.jpg", name: "Cinnamon Roll", price: "$3.99" },
     { img: "/src/assets/cakee1.jpg", name: "Chocolate Cake", price: "$29.99" },
@@ -798,6 +1051,9 @@ export default function Home() {
     { img: "/src/assets/cream-drop-chocolate-cake-1-kg-eggless_1.webp", name: "Chocolate Mousse", price: "$8.99" }
   ];
 
+  // --------------------------------------------
+  // Categories
+  // --------------------------------------------
   const categoryImgs = [
     { img: "/src/assets/3ade0a9606bdae637a44959ebc866635.jpg", name: "Cakes" },
     { img: "/src/assets/3f2f14e18d9a177618f503ec18673382.jpg", name: "Cookies" },
@@ -806,30 +1062,32 @@ export default function Home() {
     { img: "/src/assets/81dfe1ad8f2767fe5b4d81652c7b1d15.jpg", name: "Desserts" }
   ];
 
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+  // --------------------------------------------
+  // Blogs
+  // --------------------------------------------
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    getBlogs().then((data) => setBlogs(data.slice(0, 3))); // latest 3 blogs
+  }, []);
 
-  const hoverEffect = {
-    scale: 1.03,
-    transition: { duration: 0.3 }
-  };
+  // --------------------------------------------
+  // Animations
+  // --------------------------------------------
+  const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
+  const hoverEffect = { scale: 1.03, transition: { duration: 0.3 } };
 
   return (
     <>
       <Navbar />
       <main className="pt-24 bg-gradient-to-b from-bakery-bg-light to-bakery-bg-warm min-h-screen">
-        
+
         {/* Hero Carousel */}
         <section className="max-w-7xl mx-auto px-4 py-12 md:py-20">
           <div className="relative w-full h-80 md:h-[36rem] rounded-[1.5rem] overflow-hidden shadow-2xl">
             {carouselItems.map((item, idx) => (
               <div
                 key={idx}
-                className={`absolute inset-0 transition-opacity duration-1000 ${
-                  idx === current ? "opacity-100" : "opacity-0"
-                }`}
+                className={`absolute inset-0 transition-opacity duration-1000 ${idx === current ? "opacity-100" : "opacity-0"}`}
               >
                 <img
                   src={item.img}
@@ -885,11 +1143,7 @@ export default function Home() {
               {carouselItems.map((_, idx) => (
                 <button
                   key={idx}
-                  className={`h-2 rounded-full transition-all ${
-                    idx === current
-                      ? "bg-bakery-light-accent w-8"
-                      : "bg-white/50 w-2 hover:bg-white/80"
-                  }`}
+                  className={`h-2 rounded-full transition-all ${idx === current ? "bg-bakery-light-accent w-8" : "bg-white/50 w-2 hover:bg-white/80"}`}
                   onClick={() => setCurrent(idx)}
                 />
               ))}
@@ -909,7 +1163,7 @@ export default function Home() {
           >
             Today's Specials
           </motion.h2>
-<br></br><br></br>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
             {sampleImgs.map((item, i) => (
               <motion.div
@@ -956,12 +1210,12 @@ export default function Home() {
           >
             Browse Categories
           </motion.h2>
-<br></br><br></br>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {categoryImgs.map((item, i) => (
               <motion.div
                 key={i}
-                className="bg-white rounded-[1rem] shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer  "
+                className="bg-white rounded-[1rem] shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer"
                 whileHover={{ ...hoverEffect, boxShadow: '0 15px 30px rgba(0,0,0,0.1)' }}
                 onClick={() => navigate("/allproduct")}
                 initial="hidden"
@@ -985,9 +1239,58 @@ export default function Home() {
           </div>
         </section>
 
-      </main>
+        {/* Latest Blogs */}
+        <section className="max-w-7xl mx-auto px-4 py-16 bg-bakery-bg-warm/50">
+          <motion.h2
+            className="text-4xl font-bold text-bakery-medium mb-12 text-center"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            initial="hidden"
+            whileInView="visible"
+            variants={fadeIn}
+            viewport={{ once: true }}
+          >
+            Latest Blogs
+          </motion.h2>
 
-      <br /><br /><br />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {blogs.map((blog, i) => (
+              <motion.div
+                key={blog._id}
+                className="bg-white rounded-[1rem] shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer"
+                whileHover={hoverEffect}
+                onClick={() => navigate(`/blogs/${blog._id}`)}
+                initial="hidden"
+                whileInView="visible"
+                variants={fadeIn}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                {blog.image && (
+                  <div className="h-48 w-full flex items-center justify-center bg-bakery-bg-warm/70">
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="h-full w-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div className="p-4 text-center">
+                  <h3 className="font-bold text-lg text-bakery-dark mb-1 truncate">{blog.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4 truncate">{blog.summary}</p>
+                  <button
+                    onClick={() => navigate(`/blogs/${blog._id}`)}
+                    className="w-full bg-bakery-light-accent text-bakery-medium py-2 rounded-lg font-medium hover:bg-amber-200 transition-colors shadow-sm"
+                  >
+                    Read More
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+      </main>
+      <br></br><br></br><br></br>
       <Footer />
     </>
   );

@@ -1,471 +1,316 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import "./ChatBox.css"; // ✅ import CSS
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
+// import React, { useState } from "react";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// const ChatBox = () => {
-//   const [chats, setChats] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [sender, setSender] = useState("User"); // change dynamically if login exists
+// export default function Chatbot() {
+//   const [messages, setMessages] = useState([]);
+//   const [input, setInput] = useState("");
 
-//   // ✅ Fetch all chats
-//   const fetchChats = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/chats");
-//       setChats(res.data);
-//     } catch (err) {
-//       console.error("Error fetching chats:", err);
-//     }
-//   };
+//   // Put your Gemini API Key here
+//   const genAI = new GoogleGenerativeAI("AIzaSyAAgj8SzHk1QZkiMY0MCmn9w1DVnhntw3w");
+//   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-//   // ✅ Send a new chat message
-//   const sendMessage = async (e) => {
-//     e.preventDefault();
-//     if (!message.trim()) return;
+//   const sendMessage = async () => {
+//     if (!input.trim()) return;
+
+//     // Add user message
+//     const userMsg = { role: "user", text: input };
+//     setMessages((prev) => [...prev, userMsg]);
 
 //     try {
-//       const res = await axios.post("http://localhost:5000/chats", {
-//         sender,
-//         message,
-//       });
-//       setChats((prev) => [...prev, res.data]);
-//       setMessage("");
-//     } catch (err) {
-//       console.error("Error sending message:", err);
-//     }
-//   };
+//       const result = await model.generateContent(input);
+//       const reply = result.response.text();
 
-//   useEffect(() => {
-//     fetchChats();
-//   }, []);
+//       // Add AI reply
+//       const aiMsg = { role: "ai", text: reply };
+//       setMessages((prev) => [...prev, aiMsg]);
+
+//     } catch (error) {
+//       setMessages((prev) => [
+//         ...prev,
+//         { role: "ai", text: "⚠️ Error: " + error.message },
+//       ]);
+//     }
+
+//     setInput("");
+//   };
 
 //   return (
-//     <>
-//     <Navbar />
-//     <br></br><br></br><br></br><br></br>
 //     <div className="chat-container">
-//       <h2 className="chat-title">💬 Chat Room</h2>
+//       <h1 className="title">AI Chatbot</h1>
 
-//       <div className="chat-box">
-//         {chats.map((chat) => (
+//       <div className="messages-box">
+//         {messages.map((msg, index) => (
 //           <div
-//             key={chat._id}
-//             className={`chat-message ${
-//               chat.sender === sender ? "own-message" : "other-message"
-//             }`}
+//             key={index}
+//             className={`msg ${msg.role === "user" ? "user-msg" : "ai-msg"}`}
 //           >
-//             <strong>{chat.sender}: </strong>
-//             {chat.message}
+//             {msg.text}
 //           </div>
 //         ))}
 //       </div>
 
-//       <form onSubmit={sendMessage} className="chat-form">
+//       <div className="input-box">
 //         <input
 //           type="text"
-//           value={message}
-//           placeholder="Type a message..."
-//           onChange={(e) => setMessage(e.target.value)}
-//           className="chat-input"
+//           placeholder="Ask anything..."
+//           value={input}
+//           onChange={(e) => setInput(e.target.value)}
 //         />
-//         <button type="submit" className="chat-button">
-//           Send
-//         </button>
-//       </form>
-//     </div>
-//     <Footer />
-//     </>
-//   );
-// };
-
-// export default ChatBox;
-
-
-// import React, { useEffect, useState, useRef } from "react";
-// import axios from "axios";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-
-// const ChatBox = () => {
-//   const [chats, setChats] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [sender, setSender] = useState("User"); // logged-in user name dynamically
-//   const [isTyping, setIsTyping] = useState(false); // AI typing
-//   const chatEndRef = useRef(null); // scroll to latest
-
-//   // Fetch all chats
-//   const fetchChats = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/chats");
-//       setChats(res.data);
-//     } catch (err) {
-//       console.error("Error fetching chats:", err);
-//     }
-//   };
-
-//   // Scroll to bottom
-//   const scrollToBottom = () => {
-//     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   };
-
-//   // Send message + get AI response
-//   const sendMessage = async (e) => {
-//     e.preventDefault();
-//     if (!message.trim()) return;
-
-//     try {
-//       // 1️⃣ Save user message
-//       const userRes = await axios.post("http://localhost:5000/chats", {
-//         sender,
-//         message,
-//       });
-//       setChats((prev) => [...prev, userRes.data]);
-//       setMessage("");
-//       scrollToBottom();
-
-//       // 2️⃣ AI typing animation
-//       setIsTyping(true);
-
-//       // 3️⃣ Get AI response
-//       const aiRes = await axios.post("http://localhost:5000/ai", { message });
-//       setChats((prev) => [...prev, aiRes.data]);
-//       setIsTyping(false);
-//       scrollToBottom();
-//     } catch (err) {
-//       console.error("Error sending message:", err);
-//       setIsTyping(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchChats();
-//   }, []);
-
-//   useEffect(() => {
-//     scrollToBottom();
-//   }, [chats]);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <br /><br /><br /><br />
-//       <div className="chat-container">
-//         <h2 className="chat-title">💬 Chat Room</h2>
-
-//         <div className="chat-box">
-//           {chats.map((chat) => (
-//             <div
-//               key={chat._id}
-//               className={`chat-message ${
-//                 chat.sender === sender ? "own-message" : "other-message"
-//               }`}
-//             >
-//               <strong>{chat.sender}: </strong>
-//               {chat.message}
-//             </div>
-//           ))}
-
-//           {isTyping && (
-//             <div className="chat-message other-message">
-//               <strong>AI: </strong>
-//               <em>Typing...</em>
-//             </div>
-//           )}
-
-//           <div ref={chatEndRef} />
-//         </div>
-
-//         <form onSubmit={sendMessage} className="chat-form">
-//           <input
-//             type="text"
-//             value={message}
-//             placeholder="Type a message..."
-//             onChange={(e) => setMessage(e.target.value)}
-//             className="chat-input"
-//           />
-//           <button type="submit" className="chat-button">
-//             Send
-//           </button>
-//         </form>
+//         <button onClick={sendMessage}>Send</button>
 //       </div>
-//       <Footer />
-//     </>
+
+//       {/* Styling */}
+//       <style>{`
+//         .chat-container {
+//           width: 100%;
+//           max-width: 600px;
+//           margin: auto;
+//           padding: 20px;
+//           display: flex;
+//           flex-direction: column;
+//           height: 100vh;
+//         }
+//         .title {
+//           text-align: center;
+//           margin-bottom: 10px;
+//         }
+//         .messages-box {
+//           flex: 1;
+//           overflow-y: auto;
+//           border: 1px solid #ddd;
+//           padding: 10px;
+//           border-radius: 10px;
+//         }
+//         .msg {
+//           margin: 8px 0;
+//           padding: 10px;
+//           border-radius: 10px;
+//           max-width: 80%;
+//         }
+//         .user-msg {
+//           background: #d1e7ff;
+//           align-self: flex-end;
+//         }
+//         .ai-msg {
+//           background: #f3f3f3;
+//           align-self: flex-start;
+//         }
+//         .input-box {
+//           display: flex;
+//           margin-top: 10px;
+//         }
+//         input {
+//           flex: 1;
+//           padding: 10px;
+//           border-radius: 8px;
+//           border: 1px solid #ccc;
+//         }
+//         button {
+//           padding: 10px 20px;
+//           margin-left: 10px;
+//           border: none;
+//           background: black;
+//           color: white;
+//           border-radius: 8px;
+//         }
+//       `}</style>
+//     </div>
 //   );
-// };
-
-// export default ChatBox;
+// }
 
 
 
 
+// //important//
+// import React, { useState } from "react";
 
-// import React, { useEffect, useState, useRef } from "react";
-// import axios from "axios";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
+// export default function Chatbot() {
+//   const [messages, setMessages] = useState([]);
+//   const [input, setInput] = useState("");
+//   const [isOpen, setIsOpen] = useState(false);
 
-// // Bakery stickers
-// const stickers = [
-//   "https://images.unsplash.com/photo-1589307001572-6c55e568e2b6?auto=format&fit=crop&w=80&q=80",
-//   "https://images.unsplash.com/photo-1603072023087-1bde0b981e63?auto=format&fit=crop&w=80&q=80",
-//   "https://images.unsplash.com/photo-1612197520842-2c46f61f1b35?auto=format&fit=crop&w=80&q=80",
-//   "https://images.unsplash.com/photo-1599785209707-3c7a4f5df77d?auto=format&fit=crop&w=80&q=80",
-// ];
+//   // Your Gemini API Key
+//   const API_KEY = "AIzaSyAAgj8SzHk1QZkiMY0MCmn9w1DVnhntw3w";
 
-// const ChatBox = () => {
-//   const [chats, setChats] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [sender, setSender] = useState("You"); 
-//   const [isTyping, setIsTyping] = useState(false);
-//   const [showStickers, setShowStickers] = useState(false);
-//   const chatEndRef = useRef(null);
+//   const sendMessage = async () => {
+//     if (!input.trim()) return;
 
-//   const fetchChats = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/chats");
-//       setChats(res.data);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   const scrollToBottom = () => {
-//     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   };
-
-//   const sendMessage = async (e, sticker = null) => {
-//     e?.preventDefault();
-//     if (!message.trim() && !sticker) return;
-
-//     const msg = sticker ? sticker : message;
+//     const userMsg = { role: "user", text: input };
+//     setMessages((prev) => [...prev, userMsg]);
+//     setInput("");
 
 //     try {
-//       const userRes = await axios.post("http://localhost:5000/chats", {
-//         sender,
-//         message: msg,
-//       });
-//       setChats((prev) => [...prev, userRes.data]);
-//       setMessage("");
-//       setShowStickers(false);
-//       scrollToBottom();
+//       const response = await fetch(
+//         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+//         {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({
+//             contents: [
+//               {
+//                 parts: [
+//                   {
+//                     text: `Answer in max 2 short lines.\nUser: ${userMsg.text}`,
+//                   },
+//                 ],
+//               },
+//             ],
+//           }),
+//         }
+//       );
 
-//       setIsTyping(true);
-//       const aiRes = await axios.post("http://localhost:5000/ai", { message: msg });
-//       setChats((prev) => [...prev, aiRes.data]);
-//       setIsTyping(false);
-//       scrollToBottom();
-//     } catch (err) {
-//       console.error(err);
-//       setIsTyping(false);
+//       const data = await response.json();
+
+//       let reply =
+//         data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+//         "⚠️ AI did not send a message";
+
+//       const aiMsg = { role: "ai", text: reply };
+//       setMessages((prev) => [...prev, aiMsg]);
+//     } catch (error) {
+//       setMessages((prev) => [
+//         ...prev,
+//         { role: "ai", text: "⚠️ Error: " + error.message },
+//       ]);
 //     }
 //   };
-
-//   useEffect(() => {
-//     fetchChats();
-//   }, []);
-
-//   useEffect(() => {
-//     scrollToBottom();
-//   }, [chats]);
 
 //   return (
 //     <>
-//       <Navbar />
-//       <div className="pt-24 flex justify-center items-center bg-pink-50 min-h-screen">
-//         <div className="w-full max-w-md flex flex-col bg-white shadow-xl rounded-3xl overflow-hidden">
+//       {/* Floating Icon */}
+//       {!isOpen && (
+//         <div className="chatbot-icon" onClick={() => setIsOpen(true)}>
+//           🤖
+//         </div>
+//       )}
 
-//           {/* Header */}
-//           <div className="bg-pink-500 text-white p-3 text-center font-bold text-lg rounded-t-3xl">
-//             💬 Mufflix Bakery Chat
+//       {/* Chat Window */}
+//       {isOpen && (
+//         <div className="chat-container">
+//           <div className="chat-header">
+//             🍰 Bakery Assistant
+//             <span className="close-btn" onClick={() => setIsOpen(false)}>
+//               ✖
+//             </span>
 //           </div>
 
-//           {/* Chat Messages */}
-//           <div className="flex-1 p-3 overflow-y-auto flex flex-col space-y-2 h-80">
-//             {chats.map((chat, idx) => (
+//           <div className="messages-box">
+//             {messages.map((msg, i) => (
 //               <div
-//                 key={idx}
-//                 className={`max-w-[75%] px-3 py-2 rounded-2xl break-words self-${
-//                   chat.sender === sender ? "end bg-pink-100 text-pink-800" : "start bg-gray-200 text-gray-800"
-//                 } relative`}
+//                 key={i}
+//                 className={`msg ${msg.role === "user" ? "user-msg" : "ai-msg"}`}
 //               >
-//                 {chat.message.startsWith("http") ? (
-//                   <img src={chat.message} alt="sticker" className="h-16 w-16 object-cover rounded-lg" />
-//                 ) : (
-//                   <>
-//                     <strong>{chat.sender}: </strong>
-//                     {chat.message}
-//                   </>
-//                 )}
-//                 <div
-//                   className={`absolute w-2 h-2 bg-${
-//                     chat.sender === sender ? "pink-100" : "gray-200"
-//                   } bottom-0 ${
-//                     chat.sender === sender ? "-right-1 rounded-l-full rounded-t-full" : "-left-1 rounded-r-full rounded-t-full"
-//                   }`}
-//                 ></div>
+//                 {msg.text}
 //               </div>
 //             ))}
-
-//             {isTyping && (
-//               <div className="max-w-[75%] px-3 py-2 rounded-2xl break-words self-start relative bg-gray-200 animate-pulse text-sm">
-//                 <div className="absolute w-2 h-2 bg-gray-200 bottom-0 -left-1 rounded-r-full rounded-t-full"></div>
-//                 <strong>AI:</strong> Baking a reply...
-//               </div>
-//             )}
-//             <div ref={chatEndRef} />
 //           </div>
 
-//           {/* Input + Send Button */}
-//           <div className="p-2 border-t border-gray-200 bg-white flex items-center gap-2">
+//           <div className="input-box">
 //             <input
 //               type="text"
-//               placeholder="Type a message..."
-//               value={message}
-//               onChange={(e) => setMessage(e.target.value)}
-//               className="flex-1 px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-300 text-sm"
+//               placeholder="Ask anything..."
+//               value={input}
+//               onChange={(e) => setInput(e.target.value)}
+//               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
 //             />
-//             <button
-//               onClick={sendMessage}
-//               className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-full text-sm transition"
-//             >
-//               Send
-//             </button>
-//             <button
-//               type="button"
-//               onClick={() => setShowStickers(!showStickers)}
-//               className="bg-yellow-300 hover:bg-yellow-400 text-white px-3 py-2 rounded-full text-sm transition"
-//             >
-//               🍰
-//             </button>
+//             <button onClick={sendMessage}>Send</button>
 //           </div>
-
-//           {/* Sticker picker */}
-//           {showStickers && (
-//             <div className="flex gap-2 p-2 bg-gray-100 border-t border-gray-200 overflow-x-auto">
-//               {stickers.map((s, idx) => (
-//                 <img
-//                   key={idx}
-//                   src={s}
-//                   alt={`sticker-${idx}`}
-//                   className="h-12 w-12 rounded-lg cursor-pointer hover:scale-110 transition"
-//                   onClick={() => sendMessage(null, s)}
-//                 />
-//               ))}
-//             </div>
-//           )}
 //         </div>
-//       </div>
-//       <Footer />
+//       )}
+
+//       {/* Styles */}
+//       <style>{`
+//         .chatbot-icon {
+//           position: fixed;
+//           bottom: 20px;
+//           right: 20px;
+//           font-size: 40px;
+//           cursor: pointer;
+//           z-index: 1000;
+//           transition: transform 0.2s;
+//         }
+//         .chatbot-icon:hover {
+//           transform: scale(1.2);
+//         }
+
+//         .chat-container {
+//           position: fixed;
+//           bottom: 20px;
+//           right: 20px;
+//           width: 320px;
+//           height: 400px;
+//           background: white;
+//           border: 1px solid #ddd;
+//           border-radius: 10px;
+//           display: flex;
+//           flex-direction: column;
+//           box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+//           z-index: 1000;
+//           overflow: hidden;
+//         }
+
+//         .chat-header {
+//           background: #111;
+//           color: white;
+//           padding: 10px;
+//           text-align: center;
+//           font-weight: bold;
+//           position: relative;
+//         }
+
+//         .close-btn {
+//           position: absolute;
+//           right: 10px;
+//           top: 5px;
+//           cursor: pointer;
+//         }
+
+//         .messages-box {
+//           flex: 1;
+//           padding: 10px;
+//           overflow-y: auto;
+//           display: flex;
+//           flex-direction: column;
+//           gap: 5px;
+//           background: #f9f9f9;
+//         }
+
+//         .msg {
+//           padding: 8px 10px;
+//           border-radius: 10px;
+//           max-width: 80%;
+//         }
+
+//         .user-msg {
+//           background: #d1e7ff;
+//           align-self: flex-end;
+//         }
+
+//         .ai-msg {
+//           background: #eee;
+//           align-self: flex-start;
+//         }
+
+//         .input-box {
+//           display: flex;
+//           border-top: 1px solid #ddd;
+//         }
+
+//         input {
+//           flex: 1;
+//           padding: 8px;
+//           border: none;
+//           outline: none;
+//         }
+
+//         button {
+//           padding: 8px 12px;
+//           border: none;
+//           background: black;
+//           color: white;
+//           cursor: pointer;
+//         }
+//       `}</style>
 //     </>
 //   );
-// };
-
-import React, { useState } from "react";
-import axios from "axios";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-
-export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    const newMessages = [...messages, { sender: "user", text: input }];
-    setMessages(newMessages);
-    setLoading(true);
-
-    try {
-      const response = await axios.post("http://localhost:5000/chats/generate", {
-        prompt: input,
-      });
-
-      const reply = response.data.reply || "⚠️ No reply from AI";
-      setMessages((prev) => [...prev, { sender: "ai", text: reply }]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "ai", text: "❌ Error connecting to AI server." },
-      ]);
-    }
-
-    setLoading(false);
-    setInput("");
-  };
-
-  const handleKey = (e) => {
-    if (e.key === "Enter") sendMessage();
-  };
-
-  return (
-    <>
-    <Navbar />
-    <br></br><br></br><br></br>
-    <div style={styles.container}>
-      <h2 style={styles.title}>🍰 Bakery AI Assistant</h2>
-
-      <div style={styles.chatBox}>
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              ...styles.message,
-              backgroundColor: msg.sender === "user" ? "#ffb8c6" : "#ffe8d6",
-              alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
-            }}
-          >
-            <b>{msg.sender === "user" ? "You" : "AI"}:</b> {msg.text}
-          </div>
-        ))}
-
-        {loading && <div style={styles.typing}>AI Typing...</div>}
-      </div>
-
-      <div style={styles.inputArea}>
-        <input
-          style={styles.input}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKey}
-          placeholder="Type your message..."
-        />
-        <button style={styles.button} onClick={sendMessage}>
-          Send
-        </button>
-      </div>
-    
-    </div>
-    <Footer />
-    </>);
-}
-
-const styles = {
-  container: {
-    width: "450px",
-    margin: "30px auto",
-    padding: "20px",
-    borderRadius: "12px",
-    backgroundColor: "#fff5f8",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-  },
-  title: { textAlign: "center", marginBottom: "15px", color: "#d6336c" },
-  chatBox: {
-    height: "400px",
-    padding: "15px",
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-    backgroundColor: "white",
-    borderRadius: "10px",
-    border: "1px solid #ffd6e0",
-  },
-  message: { maxWidth: "75%", padding: "10px 14px", borderRadius: "10px", fontSize: "14px", lineHeight: "20px" },
-  typing: { fontStyle: "italic", color: "#888" },
-  inputArea: { marginTop: "12px", display: "flex", gap: "10px" },
-  input: { flex: 1, padding: "12px", borderRadius: "10px", border: "1px solid #ffa4b6" },
-  button: { padding: "12px 18px", borderRadius: "10px", backgroundColor: "#ff5c8a", color: "white", border: "none", cursor: "pointer" },
-};
+// }
