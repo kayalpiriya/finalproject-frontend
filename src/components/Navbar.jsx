@@ -1062,7 +1062,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed w-full shadow z-50" style={{ backgroundColor: "#596E65" }}>
+    <nav className="fixed w-full shadow z-50" style={{ backgroundColor: "#2B1B17" }}>
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
@@ -1081,7 +1081,7 @@ function Navbar() {
           <Link to="/" className="hover:text-gray-300 transition">Home</Link>
           <Link to="/allproduct" className="hover:text-gray-300 transition">All Products</Link>
           <Link to="/detail" className="hover:text-gray-300 transition">Detail</Link>
-          <Link to="/reviews" className="hover:text-gray-300 transition">Customer Reviews</Link>
+          {/* <Link to="/reviews" className="hover:text-gray-300 transition">Customer Reviews</Link> */}
           {role === "admin" && (
             <Link to="/admin/blogwrite" className="hover:text-gray-300 transition">
               Write Blog

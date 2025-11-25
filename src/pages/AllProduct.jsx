@@ -649,6 +649,271 @@
 
 
 
+///important///
+// import React, { useEffect, useState, useContext, useRef } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { CartContext } from "../pages/CartContext";
+
+// function AllProduct() {
+//   const navigate = useNavigate();
+//   const { addToCart } = useContext(CartContext);
+//   const [products, setProducts] = useState([]);
+//   const [filteredProducts, setFilteredProducts] = useState([]);
+//   const [selectedProduct, setSelectedProduct] = useState(null);
+//   const [modalOpen, setModalOpen] = useState(false);
+//   const [search, setSearch] = useState("");
+//   const [showSuggestions, setShowSuggestions] = useState(false);
+
+//   const searchRef = useRef(null);
+
+//   useEffect(() => {
+//     axios
+//       .get("http://localhost:5000/products")
+//       .then((res) => {
+//         setProducts(res.data);
+//         setFilteredProducts(res.data);
+//       })
+//       .catch((err) => console.log(err));
+//   }, []);
+
+//   useEffect(() => {
+//     if (search === "") {
+//       setFilteredProducts(products);
+//       setShowSuggestions(false);
+//     } else {
+//       const filtered = products.filter((p) =>
+//         p.name.toLowerCase().includes(search.toLowerCase())
+//       );
+//       setFilteredProducts(filtered);
+//       setShowSuggestions(true);
+//     }
+//   }, [search, products]);
+
+//   useEffect(() => {
+//     const handleClickOutside = (e) => {
+//       if (searchRef.current && !searchRef.current.contains(e.target)) {
+//         setShowSuggestions(false);
+//       }
+//     };
+//     document.addEventListener("click", handleClickOutside);
+//     return () => document.removeEventListener("click", handleClickOutside);
+//   }, []);
+
+//   const handleAdd = (p) => {
+//     addToCart(p);
+//     navigate(`/product/${p._id}`, { state: p });
+//   };
+
+//   const openModal = (product) => {
+//     setSelectedProduct(product);
+//     setModalOpen(true);
+//   };
+
+//   const closeModal = () => {
+//     setSelectedProduct(null);
+//     setModalOpen(false);
+//   };
+
+//   const colors = {
+//     background: "#FFFFF",
+//     card: "#FFFFFF",
+//     cardShadow: "0 4px 12px rgba(0,0,0,0.1)",
+//     cardShadowHover: "0 12px 24px rgba(0,0,0,0.2)", // 🎀 improved
+//     title: "#D2691E",
+//     price: "#FF6F61",
+//     stock: "#6B7280",
+//     buttonPrimary: "#FF6F61",
+//     buttonPrimaryHover: "#FF8578",
+//     buttonSecondary: "#FFD8C2",
+//     buttonSecondaryText: "#D2691E",
+//   };
+
+//   return (
+//     <>
+//       <Navbar />
+//       <main className="pt-24 min-h-screen" style={{ backgroundColor: colors.background }}>
+//         <div className="max-w-7xl mx-auto px-6 py-12">
+//           <h2 className="text-3xl font-bold mb-6 text-center animate-fadeInUp" style={{ color: colors.title }}>
+//             All Products
+//           </h2>
+
+//           {/* SEARCH BAR */}
+//           <div className="flex justify-center mb-8 relative" ref={searchRef}>
+//             <input
+//               type="text"
+//               placeholder="Search products..."
+//               value={search}
+//               onChange={(e) => setSearch(e.target.value)}
+//               className="w-full max-w-md px-4 py-3 rounded-l-xl border-2 border-rose-300 focus:outline-none focus:border-rose-500"
+//             />
+//             <button
+//               onClick={() => {}}
+//               className="bg-rose-600 text-white px-5 rounded-r-xl hover:bg-rose-700 transition-all"
+//             >
+//               Search
+//             </button>
+
+//             {showSuggestions && filteredProducts.length > 0 && (
+//               <div className="absolute top-full left-0 w-full max-w-md bg-white shadow-lg rounded-b-xl z-50">
+//                 {filteredProducts.slice(0, 5).map((p) => (
+//                   <div
+//                     key={p._id}
+//                     className="px-4 py-2 cursor-pointer hover:bg-rose-50 transition"
+//                     onClick={() => {
+//                       navigate(`/product/${p._id}`, { state: p });
+//                       setSearch("");
+//                       setShowSuggestions(false);
+//                     }}
+//                   >
+//                     {p.name}
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+
+//           {/* PRODUCT CARDS */}
+//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+//             {filteredProducts.map((p, index) => (
+//               <div
+//                 key={p._id}
+//                 className="rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-105 card-animate"
+//                 style={{
+//                   backgroundColor: colors.card,
+//                   boxShadow: colors.cardShadow,
+//                   animationDelay: `${index * 100}ms`,
+//                 }}
+//               >
+
+//                 {/* FIXED IMAGE AREA */}
+//                 <div className="w-full h-56 md:h-60 lg:h-64 overflow-hidden relative bg-gray-100 flex items-center justify-center">
+//                   <img
+//                     src={p.img || "src/assets/default.jpg"}
+//                     alt={p.name}
+//                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+//                   />
+//                 </div>
+
+//                 <div className="p-4 flex flex-col justify-between h-48">
+//                   <div>
+//                     <h3 className="text-lg font-semibold truncate" style={{ color: colors.title }}>
+//                       {p.name}
+//                     </h3>
+//                     <p className="font-bold mt-1 text-lg" style={{ color: colors.price }}>
+//                       ₹{p.price}
+//                     </p>
+//                     <p className="text-sm mt-1" style={{ color: colors.stock }}>
+//                       Stock: {p.stock}
+//                     </p>
+//                   </div>
+
+//                   <div className="mt-3 flex gap-2">
+//                     <button
+//                       onClick={() => handleAdd(p)}
+//                       className="flex-1 px-4 py-2 rounded-lg text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+//                       style={{ backgroundColor: colors.buttonPrimary }}
+//                       onMouseOver={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimaryHover)}
+//                       onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimary)}
+//                     >
+//                       Add 
+//                     </button>
+
+//                     <button
+//                       onClick={() => openModal(p)}
+//                       className="flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+//                       style={{ backgroundColor: colors.buttonSecondary, color: colors.buttonSecondaryText }}
+//                     >
+//                       Quick View
+//                     </button>
+//                   </div>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+
+//         {/* QUICK VIEW MODAL */}
+//         {modalOpen && selectedProduct && (
+//           <div className="fixed inset-0 bg-black bg-opacity-60 flex items-end md:items-center justify-center z-50">
+//             <div className="bg-white rounded-2xl shadow-2xl w-full md:w-2/3 lg:w-1/2 relative transform transition-transform duration-500"
+//               style={{ backgroundColor: colors.card }}>
+//               <button
+//                 onClick={closeModal}
+//                 className="absolute top-3 right-3 text-gray-500 text-3xl hover:text-gray-700 transition"
+//               >
+//                 &times;
+//               </button>
+
+//               <div className="grid grid-cols-1 md:grid-cols-2">
+//                 <img
+//                   src={selectedProduct.img || "src/assets/default.jpg"}
+//                   alt={selectedProduct.name}
+//                   className="w-full h-80 object-cover rounded-t-2xl md:rounded-l-2xl transition-transform duration-500 hover:scale-105"
+//                 />
+
+//                 <div className="p-6 flex flex-col justify-between">
+//                   <div>
+//                     <h3 className="text-2xl font-bold animate-fadeInUp" style={{ color: colors.title }}>
+//                       {selectedProduct.name}
+//                     </h3>
+//                     <p className="font-bold mt-2 text-xl" style={{ color: colors.price }}>
+//                       ₹{selectedProduct.price}
+//                     </p>
+//                     <p className="mt-2" style={{ color: colors.stock }}>
+//                       Stock: {selectedProduct.stock}
+//                     </p>
+//                     <p className="mt-4 text-gray-600">
+//                       {selectedProduct.description || "Delicious bakery item!"}
+//                     </p>
+//                   </div>
+
+//                   <button
+//                     onClick={() => handleAdd(selectedProduct)}
+//                     className="mt-6 w-full px-4 py-2 rounded-lg text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+//                     style={{ backgroundColor: colors.buttonPrimary }}
+//                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimaryHover)}
+//                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimary)}
+//                   >
+//                     Add to Cart
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         )}
+//       </main>
+
+//       <Footer />
+
+//       {/* Animations */}
+//       <style>
+//         {`
+//         @keyframes fadeInUp {
+//           0% { opacity: 0; transform: translateY(20px); }
+//           100% { opacity: 1; transform: translateY(0); }
+//         }
+//         .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+
+//         .card-animate {
+//           opacity: 0;
+//           transform: translateY(20px);
+//           animation: fadeInUp 0.7s ease forwards;
+//         }
+
+//         .card-animate:hover {
+//           box-shadow: ${colors.cardShadowHover};
+//         }
+//       `}
+//       </style>
+//     </>
+//   );
+// }
+
+// export default AllProduct;
+
 
 import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
@@ -656,29 +921,41 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { CartContext } from "../pages/CartContext";
+import "../styles/allProduct.css"
 
 function AllProduct() {
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
+  const searchRef = useRef(null);
+
+  // --- YOUR ORIGINAL STATE ---
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  const searchRef = useRef(null);
-
+  // --- DATA FETCHING ---
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get("http://localhost:5000/products")
       .then((res) => {
         setProducts(res.data);
         setFilteredProducts(res.data);
+        setTimeout(() => setIsLoading(false), 1200);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }, []);
 
+  // --- SEARCH LOGIC ---
   useEffect(() => {
     if (search === "") {
       setFilteredProducts(products);
@@ -692,6 +969,7 @@ function AllProduct() {
     }
   }, [search, products]);
 
+  // --- CLICK OUTSIDE LOGIC ---
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -702,6 +980,7 @@ function AllProduct() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  // --- YOUR FUNCTIONS ---
   const handleAdd = (p) => {
     addToCart(p);
     navigate(`/product/${p._id}`, { state: p });
@@ -717,198 +996,352 @@ function AllProduct() {
     setModalOpen(false);
   };
 
-  const colors = {
-    background: "#FFFFF",
-    card: "#FFFFFF",
-    cardShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    cardShadowHover: "0 12px 24px rgba(0,0,0,0.2)", // 🎀 improved
-    title: "#D2691E",
-    price: "#FF6F61",
-    stock: "#6B7280",
-    buttonPrimary: "#FF6F61",
-    buttonPrimaryHover: "#FF8578",
-    buttonSecondary: "#FFD8C2",
-    buttonSecondaryText: "#D2691E",
-  };
-
   return (
-    <>
+    <div className="bg-[#FFFDF5] min-h-screen font-sans text-[#264653] selection:bg-[#E76F51] selection:text-white overflow-hidden">
       <Navbar />
-      <main className="pt-24 min-h-screen" style={{ backgroundColor: colors.background }}>
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <h2 className="text-3xl font-bold mb-6 text-center animate-fadeInUp" style={{ color: colors.title }}>
-            All Products
-          </h2>
 
-          {/* SEARCH BAR */}
-          <div className="flex justify-center mb-8 relative" ref={searchRef}>
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full max-w-md px-4 py-3 rounded-l-xl border-2 border-rose-300 focus:outline-none focus:border-rose-500"
-            />
-            <button
-              onClick={() => {}}
-              className="bg-rose-600 text-white px-5 rounded-r-xl hover:bg-rose-700 transition-all"
-            >
-              Search
-            </button>
+      {/* Background Texture */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
+      
+      {/* Animated Blob */}
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#FAE1DD] rounded-full blur-[100px] opacity-40 -z-10 animate-blob"></div>
+      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-[#E9C46A]/30 rounded-full blur-[100px] opacity-40 -z-10 animate-blob animation-delay-2000"></div>
 
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24">
+        
+        {/* Hero Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between mb-20 relative">
+          <div className="text-left animate-fadeInUp relative z-10">
+            <span className="font-serif italic text-[#E76F51] text-2xl mb-2 block">Artisanal & Organic</span>
+            <h2 className="text-6xl md:text-8xl font-serif font-black text-[#264653] leading-[0.9] mb-6">
+              Fresh from <br/> <span className="text-[#E76F51]">the Oven.</span>
+            </h2>
+            <p className="text-[#264653]/70 text-lg max-w-md font-medium">
+              Handcrafted pastries baked with love, flour, and passion.
+            </p>
+          </div>
+
+          {/* Rotating Badge */}
+          <div className="hidden md:flex absolute top-0 right-0 animate-spin-slow opacity-10 pointer-events-none">
+             <svg viewBox="0 0 200 200" width="300" height="300">
+               <defs>
+                 <path id="circle" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" />
+               </defs>
+               <text fontSize="18" fill="#264653" fontWeight="bold" letterSpacing="3">
+                 <textPath xlinkHref="#circle">
+                   FRESHLY BAKED • ORGANIC INGREDIENTS • SWEET TREATS •
+                 </textPath>
+               </text>
+             </svg>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex justify-center mb-20 relative z-40" ref={searchRef}>
+          <div className="w-full max-w-xl relative group animate-fadeInUp" style={{animationDelay: '100ms'}}>
+            <div className="relative flex items-center bg-[#FFFDF5] rounded-full shadow-[inset_4px_4px_8px_#d9d7d0,inset_-4px_-4px_8px_#ffffff] p-3 border border-white/50">
+              <div className="pl-4 text-[#E76F51]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+              <input
+                type="text"
+                placeholder="Find your craving..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full px-4 py-2 bg-transparent text-[#264653] text-lg font-medium focus:outline-none placeholder-[#264653]/40 font-serif"
+              />
+            </div>
+
+            {/* Suggestions */}
             {showSuggestions && filteredProducts.length > 0 && (
-              <div className="absolute top-full left-0 w-full max-w-md bg-white shadow-lg rounded-b-xl z-50">
+              <div className="absolute top-full left-6 right-6 mt-3 bg-white rounded-2xl shadow-[10px_10px_30px_#d1d1d1,-10px_-10px_30px_#ffffff] overflow-hidden animate-slideDown z-50">
                 {filteredProducts.slice(0, 5).map((p) => (
                   <div
                     key={p._id}
-                    className="px-4 py-2 cursor-pointer hover:bg-rose-50 transition"
-                    onClick={() => {
-                      navigate(`/product/${p._id}`, { state: p });
-                      setSearch("");
-                      setShowSuggestions(false);
-                    }}
+                    className="px-5 py-4 hover:bg-[#FAE1DD] cursor-pointer flex items-center gap-4 transition-colors"
+                    onClick={() => { navigate(`/product/${p._id}`, { state: p }); setSearch(""); setShowSuggestions(false); }}
                   >
-                    {p.name}
+                    <img src={p.img || "src/assets/default.jpg"} className="w-12 h-12 rounded-full object-cover border-2 border-white" alt=""/>
+                    <span className="font-bold text-[#264653] font-serif text-lg">{p.name}</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
+        </div>
 
-          {/* PRODUCT CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {/* Product Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="bg-white rounded-[2rem] h-[28rem] p-4 shadow-xl animate-pulse flex flex-col items-center justify-center">
+                <div className="w-32 h-32 bg-[#FAE1DD] rounded-full mb-4 animate-bounce"></div>
+                <div className="h-4 bg-[#FAE1DD] rounded-full w-1/2 mb-2"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 perspective-1000">
             {filteredProducts.map((p, index) => (
               <div
                 key={p._id}
-                className="rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-105 card-animate"
-                style={{
-                  backgroundColor: colors.card,
-                  boxShadow: colors.cardShadow,
-                  animationDelay: `${index * 100}ms`,
-                }}
+                className="group relative bg-white rounded-[2rem] p-4 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(231,111,81,0.2)] cursor-pointer flex flex-col items-center text-center border border-[#FAE1DD]/30 animate-fadeInUp"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
+                {/* Image Area */}
+                <div className="relative w-full h-60 mb-4 flex items-center justify-center">
+                   {/* Floating Ingredients */}
+                   <span className="absolute top-1/2 left-1/2 text-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:-translate-x-16 group-hover:-translate-y-16 delay-75">🍓</span>
+                   <span className="absolute top-1/2 left-1/2 text-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:translate-x-16 group-hover:-translate-y-12 delay-100">🍫</span>
+                   <span className="absolute top-1/2 left-1/2 text-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:translate-x-12 group-hover:translate-y-10 delay-150">🥛</span>
 
-                {/* FIXED IMAGE AREA */}
-                <div className="w-full h-56 md:h-60 lg:h-64 overflow-hidden relative bg-gray-100 flex items-center justify-center">
-                  <img
+                   <img
                     src={p.img || "src/assets/default.jpg"}
                     alt={p.name}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    className="w-48 h-48 object-cover rounded-full shadow-lg z-10 transition-transform duration-500 group-hover:scale-90 group-hover:rotate-3"
                   />
+                  
+                  {/* Steam Effect */}
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white/40 blur-xl opacity-0 group-hover:opacity-100 group-hover:-translate-y-4 transition-all duration-700 rounded-full"></div>
+
+                  {/* Quick View Button */}
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); openModal(p); }}
+                    className="absolute bottom-0 bg-white/80 backdrop-blur border border-[#E76F51]/20 text-[#E76F51] px-4 py-2 rounded-full text-sm font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#E76F51] hover:text-white z-20 translate-y-4 group-hover:translate-y-0"
+                  >
+                    Quick View
+                  </button>
                 </div>
 
-                <div className="p-4 flex flex-col justify-between h-48">
-                  <div>
-                    <h3 className="text-lg font-semibold truncate" style={{ color: colors.title }}>
+                {/* Card Info */}
+                <div className="flex-1 w-full flex flex-col">
+                   <h3 className="text-xl font-serif font-bold text-[#264653] mb-1 group-hover:text-[#E76F51] transition-colors">
                       {p.name}
-                    </h3>
-                    <p className="font-bold mt-1 text-lg" style={{ color: colors.price }}>
-                      ₹{p.price}
-                    </p>
-                    <p className="text-sm mt-1" style={{ color: colors.stock }}>
-                      Stock: {p.stock}
-                    </p>
-                  </div>
-
-                  <div className="mt-3 flex gap-2">
-                    <button
-                      onClick={() => handleAdd(p)}
-                      className="flex-1 px-4 py-2 rounded-lg text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-                      style={{ backgroundColor: colors.buttonPrimary }}
-                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimaryHover)}
-                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimary)}
-                    >
-                      Add 
-                    </button>
-
-                    <button
-                      onClick={() => openModal(p)}
-                      className="flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-                      style={{ backgroundColor: colors.buttonSecondary, color: colors.buttonSecondaryText }}
-                    >
-                      Quick View
-                    </button>
-                  </div>
+                   </h3>
+                   <div className="w-12 h-1 bg-[#E76F51]/20 mx-auto rounded-full mb-3"></div>
+                   
+                   <p className="text-[#264653]/60 text-sm font-medium line-clamp-2 mb-4 font-sans">
+                     {p.description || "Baked fresh this morning with organic ingredients."}
+                   </p>
+                   
+                   <div className="mt-auto flex items-center justify-between w-full px-2">
+                      <span className="text-2xl font-serif font-bold text-[#264653]">₹{p.price}</span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleAdd(p); }}
+                        className="w-10 h-10 rounded-full bg-[#264653] text-white flex items-center justify-center shadow-md hover:bg-[#E76F51] hover:scale-110 transition-all duration-300 active:scale-90"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                      </button>
+                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        )}
 
-        {/* QUICK VIEW MODAL */}
+        {/* 🔮 ENHANCED PRO POPUP MODAL */}
         {modalOpen && selectedProduct && (
-          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-end md:items-center justify-center z-50">
-            <div className="bg-white rounded-2xl shadow-2xl w-full md:w-2/3 lg:w-1/2 relative transform transition-transform duration-500"
-              style={{ backgroundColor: colors.card }}>
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-8">
+            
+            {/* Backdrop with Blur */}
+            <div 
+              className="absolute inset-0 bg-black/60 backdrop-blur-md transition-all duration-500 animate-fadeIn"
+              onClick={closeModal}
+            ></div>
+
+            {/* Modal Container */}
+            <div className=" model relative w-full max-w-4xl  rounded-[2rem]  overflow-hidden animate-modalSlideUp">
+              
+              {/* Close Button */}
               <button
                 onClick={closeModal}
-                className="absolute top-3 right-3 text-gray-500 text-3xl hover:text-gray-700 transition"
+                className="absolute top-6 right-6 z-30 w-12 h-12 bg-white/90 hover:bg-red-500 text-slate-600 hover:text-white rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 hover:rotate-90 hover:scale-110 flex items-center justify-center group"
               >
-                &times;
+                <svg className="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
               </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                <img
-                  src={selectedProduct.img || "src/assets/default.jpg"}
-                  alt={selectedProduct.name}
-                  className="w-full h-80 object-cover rounded-t-2xl md:rounded-l-2xl transition-transform duration-500 hover:scale-105"
-                />
+              <div className="flex flex-col lg:flex-row min-h-[500px]">
+                
+                {/* Left: Image Section */}
+                <div className="w-full lg:w-1/2 relative bg-gradient-to-br from-[#FAE1DD] via-[#FFF5F3] to-[#FCE7E4] p-8 lg:p-12 flex items-center justify-center overflow-hidden">
+                  
+                  {/* Decorative Circles */}
+                  <div className="absolute top-10 left-10 w-32 h-32 bg-[#E76F51]/10 rounded-full blur-2xl animate-pulse"></div>
+                  <div className="absolute bottom-10 right-10 w-40 h-40 bg-[#264653]/10 rounded-full blur-2xl animate-pulse animation-delay-2000"></div>
+                  
+                  {/* Floating Ingredients in Modal */}
+                  <span className="absolute top-16 left-16 text-4xl animate-float opacity-60">🍓</span>
+                  <span className="absolute bottom-20 right-20 text-3xl animate-float-delayed opacity-60">🍫</span>
+                  <span className="absolute top-1/2 right-12 text-2xl animate-float opacity-40">🥛</span>
 
-                <div className="p-6 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-2xl font-bold animate-fadeInUp" style={{ color: colors.title }}>
-                      {selectedProduct.name}
-                    </h3>
-                    <p className="font-bold mt-2 text-xl" style={{ color: colors.price }}>
+                  {/* Main Image */}
+                  <div className="relative z-10 animate-zoomIn">
+                    <div className="w-72 h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-8 border-white/50 transition-transform duration-500 hover:scale-105 hover:rotate-3">
+                      <img
+                        src={selectedProduct.img || "src/assets/default.jpg"}
+                        alt={selectedProduct.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    {/* Price Badge */}
+                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-[#E76F51] text-white px-6 py-3 rounded-full shadow-lg font-bold text-xl animate-bounceIn">
                       ₹{selectedProduct.price}
-                    </p>
-                    <p className="mt-2" style={{ color: colors.stock }}>
-                      Stock: {selectedProduct.stock}
-                    </p>
-                    <p className="mt-4 text-gray-600">
-                      {selectedProduct.description || "Delicious bakery item!"}
-                    </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Content Section */}
+                <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white">
+                  
+                  {/* Badge */}
+                  <div className="flex items-center gap-3 mb-4 animate-slideInRight" style={{animationDelay: '100ms'}}>
+                    <span className="px-4 py-2 bg-gradient-to-r from-[#E76F51] to-[#F4A261] text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-md">
+                      ✨ Signature Item
+                    </span>
+                    <span className="px-4 py-2 bg-green-100 text-green-700 text-xs font-bold uppercase tracking-widest rounded-full">
+                      {selectedProduct.stock > 0 ? `${selectedProduct.stock} Left` : "Sold Out"}
+                    </span>
                   </div>
 
-                  <button
-                    onClick={() => handleAdd(selectedProduct)}
-                    className="mt-6 w-full px-4 py-2 rounded-lg text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-                    style={{ backgroundColor: colors.buttonPrimary }}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimaryHover)}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = colors.buttonPrimary)}
-                  >
-                    Add to Cart
-                  </button>
+                  {/* Title */}
+                  <h2 className="text-4xl lg:text-5xl font-serif font-black text-[#264653] mb-4 leading-tight animate-slideInRight" style={{animationDelay: '150ms'}}>
+                    {selectedProduct.name}
+                  </h2>
+
+                  {/* Divider */}
+                  <div className="w-20 h-1.5 bg-gradient-to-r from-[#E76F51] to-[#F4A261] rounded-full mb-6 animate-slideInRight" style={{animationDelay: '200ms'}}></div>
+
+                  {/* Description */}
+                  <p className="text-[#264653]/70 text-lg leading-relaxed mb-8 font-sans animate-slideInRight" style={{animationDelay: '250ms'}}>
+                    {selectedProduct.description || "Soft, fluffy, and baked to perfection. This artisanal creation is made with premium organic ingredients and pairs wonderfully with your morning coffee or afternoon tea."}
+                  </p>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-3 mb-8 animate-slideInRight" style={{animationDelay: '300ms'}}>
+                    <span className="flex items-center gap-2 px-4 py-2 bg-[#FAE1DD] text-[#264653] rounded-full text-sm font-medium">
+                      <span>🌿</span> Organic
+                    </span>
+                    <span className="flex items-center gap-2 px-4 py-2 bg-[#FAE1DD] text-[#264653] rounded-full text-sm font-medium">
+                      <span>🔥</span> Fresh Baked
+                    </span>
+                    <span className="flex items-center gap-2 px-4 py-2 bg-[#FAE1DD] text-[#264653] rounded-full text-sm font-medium">
+                      <span>❤️</span> Handmade
+                    </span>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 mt-auto animate-slideInRight" style={{animationDelay: '350ms'}}>
+                    <button
+                      onClick={() => handleAdd(selectedProduct)}
+                      className="flex-1 py-4 px-8 rounded-2xl bg-gradient-to-r from-[#264653] to-[#2A9D8F] text-white text-lg font-bold shadow-xl shadow-[#264653]/30 hover:shadow-2xl hover:shadow-[#264653]/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 group"
+                    >
+                      <span>Add to Cart</span>
+                      <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                      </svg>
+                    </button>
+                    
+                    <button
+                      onClick={() => { handleAdd(selectedProduct); closeModal(); }}
+                      className="py-4 px-8 rounded-2xl bg-gradient-to-r from-[#E76F51] to-[#F4A261] text-white text-lg font-bold shadow-xl shadow-[#E76F51]/30 hover:shadow-2xl hover:shadow-[#E76F51]/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
+                    >
+                      <span>Buy Now</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
-      </main>
 
+      </main>
       <Footer />
 
-      {/* Animations */}
-      <style>
-        {`
+      {/* CSS Animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Quicksand:wght@400;500;700&display=swap');
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: 'Quicksand', sans-serif; }
+
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { animation: blob 10s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow { animation: spin-slow 20s linear infinite; }
+
         @keyframes fadeInUp {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+        .animate-fadeInUp { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
 
-        .card-animate {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.7s ease forwards;
+        @keyframes fadeIn { 
+          from { opacity: 0; } 
+          to { opacity: 1; } 
         }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
 
-        .card-animate:hover {
-          box-shadow: ${colors.cardShadowHover};
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-      `}
-      </style>
-    </>
+        .animate-slideDown { animation: slideDown 0.2s ease-out forwards; }
+
+        /* Modal Animations */
+        @keyframes modalSlideUp {
+          0% { opacity: 0; transform: translateY(100px) scale(0.9); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-modalSlideUp { animation: modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes zoomIn {
+          0% { opacity: 0; transform: scale(0.5); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        .animate-zoomIn { animation: zoomIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes bounceIn {
+          0% { opacity: 0; transform: translateX(-50%) scale(0); }
+          50% { transform: translateX(-50%) scale(1.1); }
+          100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+        .animate-bounceIn { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s forwards; opacity: 0; }
+
+        @keyframes slideInRight {
+          0% { opacity: 0; transform: translateX(30px); }
+          100% { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slideInRight { animation: slideInRight 0.5s ease-out forwards; opacity: 0; }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-12px) rotate(-5deg); }
+        }
+        .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite; animation-delay: 1s; }
+      `}</style>
+    </div>
   );
 }
 

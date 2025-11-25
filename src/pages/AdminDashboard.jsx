@@ -2114,7 +2114,7 @@ function ChatsList() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/chats", {
+        const res = await axios.get("http://localhost:5000/chats", {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         setChats(res.data || []);
@@ -2131,7 +2131,7 @@ function ChatsList() {
   const deleteChat = async (id) => {
     if (!window.confirm("Are you sure you want to delete this chat?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/chats/${id}`, {
+      await axios.delete(`http://localhost:5000/chats/${id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setChats((prev) => prev.filter((c) => c._id !== id));
