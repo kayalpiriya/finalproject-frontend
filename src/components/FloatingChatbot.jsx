@@ -411,7 +411,7 @@ export default function Chatbot() {
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const API_KEY = "AIzaSyAAgj8SzHk1QZkiMY0MCmn9w1DVnhntw3w";
+  const API_KEY = "AIzaSyAD4-WaQyKprjz1q1WtsTrfx1ZfHOds58w";
 
   const sendMessage = async () => {
     if (!input.trim()) return;

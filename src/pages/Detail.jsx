@@ -291,120 +291,120 @@
 // }
 
 
-import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+// import React, { useState } from "react";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
 
-export default function Detail() {
-  const [activeTab, setActiveTab] = useState("specialties");
+// export default function Detail() {
+//   const [activeTab, setActiveTab] = useState("specialties");
 
-  const specialties = [
-    "Chocolate Fudge Cake",
-    "Vanilla Cupcakes",
-    "Custom Birthday Cakes",
-    "Assorted Pastries",
-  ];
+//   const specialties = [
+//     "Chocolate Fudge Cake",
+//     "Vanilla Cupcakes",
+//     "Custom Birthday Cakes",
+//     "Assorted Pastries",
+//   ];
 
-  return (
-    <>
-      <Navbar />
-      <main className="pt-24 bg-pink-50">
-        <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="bg-white rounded-3xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
-            {/* Image Section */}
-            <div className="flex items-center justify-center">
-              <img
-                src="https://images.unsplash.com/photo-1606755962770-ec9e3b43eb6f?auto=format&fit=crop&w=800&q=80"
-                alt="bakery"
-                className="rounded-2xl object-cover h-96 w-full shadow-md"
-              />
-            </div>
+//   return (
+//     <>
+//       <Navbar />
+//       <main className="pt-24 bg-pink-50">
+//         <div className="max-w-6xl mx-auto px-6 py-10">
+//           <div className="bg-white rounded-3xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+//             {/* Image Section */}
+//             <div className="flex items-center justify-center">
+//               <img
+//                 src="https://images.unsplash.com/photo-1606755962770-ec9e3b43eb6f?auto=format&fit=crop&w=800&q=80"
+//                 alt="bakery"
+//                 className="rounded-2xl object-cover h-96 w-full shadow-md"
+//               />
+//             </div>
 
-            {/* Info Section */}
-            <div className="py-4 flex flex-col justify-between">
-              <div>
-                <h1 className="text-3xl font-extrabold text-pink-700 mb-3">
-                  Mufflix Bakery
-                </h1>
-                <p className="text-gray-600 mb-6">
-                  Freshly baked cakes, cupcakes, muffins, and pastries every day.
-                  Love and quality in every bite!
-                </p>
+//             {/* Info Section */}
+//             <div className="py-4 flex flex-col justify-between">
+//               <div>
+//                 <h1 className="text-3xl font-extrabold text-pink-700 mb-3">
+//                   Mufflix Bakery
+//                 </h1>
+//                 <p className="text-gray-600 mb-6">
+//                   Freshly baked cakes, cupcakes, muffins, and pastries every day.
+//                   Love and quality in every bite!
+//                 </p>
 
-                {/* Tabs */}
-                <div className="flex gap-3 mb-6">
-                  <button
-                    className={`px-4 py-2 rounded-md font-medium transition ${
-                      activeTab === "specialties"
-                        ? "bg-pink-600 text-white"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                    onClick={() => setActiveTab("specialties")}
-                  >
-                    🍰 Specialties
-                  </button>
-                  <button
-                    className={`px-4 py-2 rounded-md font-medium transition ${
-                      activeTab === "hours"
-                        ? "bg-pink-600 text-white"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                    onClick={() => setActiveTab("hours")}
-                  >
-                    ⏰ Hours
-                  </button>
-                  <button
-                    className={`px-4 py-2 rounded-md font-medium transition ${
-                      activeTab === "location"
-                        ? "bg-pink-600 text-white"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                    onClick={() => setActiveTab("location")}
-                  >
-                    📍 Location
-                  </button>
-                </div>
+//                 {/* Tabs */}
+//                 <div className="flex gap-3 mb-6">
+//                   <button
+//                     className={`px-4 py-2 rounded-md font-medium transition ${
+//                       activeTab === "specialties"
+//                         ? "bg-pink-600 text-white"
+//                         : "bg-gray-100 text-gray-700"
+//                     }`}
+//                     onClick={() => setActiveTab("specialties")}
+//                   >
+//                     🍰 Specialties
+//                   </button>
+//                   <button
+//                     className={`px-4 py-2 rounded-md font-medium transition ${
+//                       activeTab === "hours"
+//                         ? "bg-pink-600 text-white"
+//                         : "bg-gray-100 text-gray-700"
+//                     }`}
+//                     onClick={() => setActiveTab("hours")}
+//                   >
+//                     ⏰ Hours
+//                   </button>
+//                   <button
+//                     className={`px-4 py-2 rounded-md font-medium transition ${
+//                       activeTab === "location"
+//                         ? "bg-pink-600 text-white"
+//                         : "bg-gray-100 text-gray-700"
+//                     }`}
+//                     onClick={() => setActiveTab("location")}
+//                   >
+//                     📍 Location
+//                   </button>
+//                 </div>
 
-                {/* Tab Content */}
-                <div>
-                  {activeTab === "specialties" && (
-                    <div className="grid grid-cols-2 gap-3">
-                      {specialties.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-pink-50 rounded-md p-3 text-gray-700 shadow-sm hover:shadow-md transition"
-                        >
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  {activeTab === "hours" && (
-                    <div className="text-gray-700 space-y-1">
-                      <p>Mon - Sat: 8:00 AM - 8:00 PM</p>
-                      <p>Sun: 9:00 AM - 6:00 PM</p>
-                    </div>
-                  )}
-                  {activeTab === "location" && (
-                    <div className="text-gray-700 space-y-1">
-                      <p>123 Bakery Street</p>
-                      <p>Colombo, Sri Lanka</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+//                 {/* Tab Content */}
+//                 <div>
+//                   {activeTab === "specialties" && (
+//                     <div className="grid grid-cols-2 gap-3">
+//                       {specialties.map((item, idx) => (
+//                         <div
+//                           key={idx}
+//                           className="bg-pink-50 rounded-md p-3 text-gray-700 shadow-sm hover:shadow-md transition"
+//                         >
+//                           {item}
+//                         </div>
+//                       ))}
+//                     </div>
+//                   )}
+//                   {activeTab === "hours" && (
+//                     <div className="text-gray-700 space-y-1">
+//                       <p>Mon - Sat: 8:00 AM - 8:00 PM</p>
+//                       <p>Sun: 9:00 AM - 6:00 PM</p>
+//                     </div>
+//                   )}
+//                   {activeTab === "location" && (
+//                     <div className="text-gray-700 space-y-1">
+//                       <p>123 Bakery Street</p>
+//                       <p>Colombo, Sri Lanka</p>
+//                     </div>
+//                   )}
+//                 </div>
+//               </div>
 
-              {/* Order Button */}
-              <div className="mt-6">
-                <button className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition">
-                  Order Now 🛒
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
-  );
-}
+//               {/* Order Button */}
+//               <div className="mt-6">
+//                 <button className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition">
+//                   Order Now 🛒
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </main>
+//       <Footer />
+//     </>
+//   );
+// }

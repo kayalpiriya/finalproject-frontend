@@ -350,10 +350,255 @@
 // export default ShoppingCart;
 
 
+// import React, { useContext, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { motion } from "framer-motion";
+// import { FiTrash2, FiMinus, FiPlus, FiArrowRight, FiShoppingBag, FiMapPin, FiCreditCard } from "react-icons/fi";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+// import { CartContext } from "../pages/CartContext.jsx";
+
+// function ShoppingCart() {
+//   const navigate = useNavigate();
+//   const { cartItems, updateQuantity, removeFromCart, totalItems, totalPrice, placeOrder } = useContext(CartContext);
+
+//   const [address, setAddress] = useState("");
+//   const [paymentMethod, setPaymentMethod] = useState("Online Payment");
+//   const [isProcessing, setIsProcessing] = useState(false);
+
+//   const handleProceedToPay = async () => {
+//     if (!address) return alert("Please enter your delivery address to continue.");
+    
+//     setIsProcessing(true);
+//     // Simulate a small delay for the "processing" feel
+//     setTimeout(async () => {
+//       await placeOrder(paymentMethod, address);
+//       setIsProcessing(false);
+//     }, 1500);
+//   };
+
+//   // Animation Variants
+//   const containerVariants = {
+//     hidden: { opacity: 0 },
+//     show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+//   };
+
+//   const itemVariants = {
+//     hidden: { opacity: 0, y: 20 },
+//     show: { opacity: 1, y: 0 }
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-[#FFF8EC] font-sans text-[#6A4E3B]">
+//       <Navbar />
+      
+//       <main className="max-w-7xl mx-auto pt-32 pb-20 px-6">
+//         <div className="mb-10">
+//           <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#6A4E3B]" style={{ fontFamily: "'Playfair Display', serif" }}>
+//             Your Basket
+//           </h1>
+//           <p className="text-[#8C7B6F] mt-2">
+//             {totalItems} {totalItems === 1 ? "item" : "items"} selected for checkout
+//           </p>
+//         </div>
+
+//         {cartItems.length === 0 ? (
+//           /* --- Empty State --- */
+//           <motion.div 
+//             initial={{ opacity: 0, scale: 0.95 }}
+//             animate={{ opacity: 1, scale: 1 }}
+//             className="flex flex-col items-center justify-center py-20 bg-white rounded-[2rem] shadow-sm border border-[#E8C7BE]/30"
+//           >
+//             <div className="bg-[#FFF8EC] p-6 rounded-full mb-6">
+//               <FiShoppingBag className="w-12 h-12 text-[#D6A85B]" />
+//             </div>
+//             <h2 className="text-2xl font-serif font-bold mb-2">Your basket is empty</h2>
+//             <p className="text-gray-500 mb-8">Looks like you haven't made your choice yet.</p>
+//             <button
+//               onClick={() => navigate("/allproduct")}
+//               className="bg-[#6A4E3B] text-white px-8 py-3 rounded-full font-bold hover:bg-[#563e2d] transition-all shadow-lg flex items-center gap-2"
+//             >
+//               Browse Menu <FiArrowRight />
+//             </button>
+//           </motion.div>
+//         ) : (
+//           <div className="grid lg:grid-cols-3 gap-10">
+            
+//             {/* --- Left Column: Cart Items --- */}
+//             <div className="lg:col-span-2">
+//               <motion.div 
+//                 variants={containerVariants}
+//                 initial="hidden"
+//                 animate="show"
+//                 className="space-y-6"
+//               >
+//                 {cartItems.map((item) => (
+//                   <motion.div
+//                     key={item._id}
+//                     variants={itemVariants}
+//                     className="group bg-white p-5 rounded-3xl shadow-[0_5px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(106,78,59,0.1)] transition-all border border-transparent hover:border-[#E8C7BE]/50 flex flex-col sm:flex-row items-center gap-6"
+//                   >
+//                     {/* Product Image */}
+//                     <div className="relative w-28 h-28 flex-shrink-0 overflow-hidden rounded-2xl bg-[#F9F9F9]">
+//                       <img 
+//                         src={item.img || "/assets/default.jpg"} 
+//                         alt={item.title} 
+//                         className="w-full h-full object-cover"
+//                       />
+//                     </div>
+
+//                     {/* Details */}
+//                     <div className="flex-grow text-center sm:text-left">
+//                       <h3 className="font-serif text-xl font-bold text-[#6A4E3B] mb-1">
+//                         {item.title}
+//                       </h3>
+//                       <p className="text-[#D6A85B] font-bold text-lg mb-1">₹{item.price}</p>
+//                       {item.stock < 5 && (
+//                         <p className="text-xs text-red-400 font-medium">Only {item.stock} left in stock</p>
+//                       )}
+//                     </div>
+
+//                     {/* Controls */}
+//                     <div className="flex flex-col items-center gap-4 sm:items-end">
+//                       {/* Quantity Pill */}
+//                       <div className="flex items-center bg-[#FFF8EC] rounded-full border border-[#E8C7BE] p-1">
+//                         <button
+//                           onClick={() => updateQuantity(item._id, Math.max(item.quantity - 1, 1))}
+//                           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#D6A85B] hover:text-white transition-colors text-[#6A4E3B]"
+//                         >
+//                           <FiMinus size={14} />
+//                         </button>
+//                         <span className="w-8 text-center font-bold text-[#6A4E3B]">{item.quantity}</span>
+//                         <button
+//                           onClick={() => updateQuantity(item._id, Math.min(item.quantity + 1, item.stock))}
+//                           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#D6A85B] hover:text-white transition-colors text-[#6A4E3B]"
+//                         >
+//                           <FiPlus size={14} />
+//                         </button>
+//                       </div>
+
+//                       {/* Remove Button */}
+//                       <button
+//                         onClick={() => removeFromCart(item._id)}
+//                         className="text-black-400 hover:text-red-500 transition-colors flex items-center gap-1 text-xs font-medium uppercase tracking-wide "
+//                       >
+//                         <FiTrash2 /> Remove
+//                       </button>
+//                     </div>
+//                   </motion.div>
+//                 ))}
+//               </motion.div>
+
+//               <button
+//                 onClick={() => navigate("/allproduct")}
+//                 className="mt-8 text-[#D6A85B] font-bold hover:text-[#6A4E3B] transition-colors flex items-center gap-2"
+//               >
+//                 <FiArrowRight className="rotate-180" /> Continue Shopping
+//               </button>
+//             </div>
+
+//             {/* --- Right Column: Order Summary --- */}
+//             <div className="lg:col-span-1">
+//               <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-[#E8C7BE]/30 sticky top-28">
+//                 <h2 className="text-2xl font-serif font-bold text-[#6A4E3B] mb-6 border-b border-[#E8C7BE] pb-4">
+//                   Order Summary
+//                 </h2>
+
+//                 <div className="space-y-6">
+//                   {/* Address Input */}
+//                   <div className="group">
+//                     <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D6A85B] mb-2">
+//                       <FiMapPin /> Delivery Address
+//                     </label>
+//                     <textarea
+//                       placeholder="Enter your full address here..."
+//                       value={address}
+//                       onChange={(e) => setAddress(e.target.value)}
+//                       className="w-full bg-[#F9F9F9] border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D6A85B] transition-all resize-none h-24"
+//                     />
+//                   </div>
+
+//                   {/* Payment Method */}
+//                   <div>
+//                     <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D6A85B] mb-2">
+//                       <FiCreditCard /> Payment Method
+//                     </label>
+//                     <div className="relative">
+//                       <select
+//                         value={paymentMethod}
+//                         onChange={(e) => setPaymentMethod(e.target.value)}
+//                         className="w-full bg-[#F9F9F9] border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D6A85B] appearance-none"
+//                       >
+//                         <option value="Online Payment">Online Payment (Secure)</option>
+//                         <option value="Cash on Delivery">Cash on Delivery</option>
+//                       </select>
+//                       <div className="absolute right-3 top-3.5 pointer-events-none text-gray-400">
+//                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+//                       </div>
+//                     </div>
+//                   </div>
+
+//                   {/* Totals */}
+//                   <div className="bg-[#FFF8EC] p-4 rounded-xl space-y-2 mt-4">
+//                     <div className="flex justify-between text-sm text-[#8C7B6F]">
+//                       <span>Subtotal ({totalItems} items)</span>
+//                       <span>₹{totalPrice}</span>
+//                     </div>
+//                     <div className="flex justify-between text-sm text-[#8C7B6F]">
+//                       <span>Shipping</span>
+//                       <span className="text-green-600 font-medium">Free</span>
+//                     </div>
+//                     <div className="flex justify-between items-center pt-3 border-t border-[#E8C7BE]/50 mt-2">
+//                       <span className="font-serif font-bold text-xl text-[#6A4E3B]">Total</span>
+//                       <span className="font-serif font-bold text-2xl text-[#D6A85B]">₹{totalPrice}</span>
+//                     </div>
+//                   </div>
+
+//                   {/* Checkout Button */}
+//                   <button
+//                     onClick={handleProceedToPay}
+//                     disabled={isProcessing}
+//                     className={`w-full bg-[#6A4E3B] text-white font-bold py-4 rounded-xl shadow-lg hover:bg-[#563e2d] hover:shadow-[#6A4E3B]/30 transition-all transform active:scale-98 flex items-center justify-center gap-2 ${
+//                       isProcessing ? "opacity-75 cursor-wait" : ""
+//                     }`}
+//                   >
+//                     {isProcessing ? (
+//                       <>Processing...</>
+//                     ) : (
+//                       <>Checkout <FiArrowRight /></>
+//                     )}
+//                   </button>
+                  
+//                   <p className="text-xs text-center text-gray-400 mt-4 flex items-center justify-center gap-1">
+//                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+//                     Secure Encrypted Transaction
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+
+//           </div>
+//         )}
+//       </main>
+//       <Footer />
+//     </div>
+//   );
+// }
+
+// export default ShoppingCart;
+
+
+
+
+
+
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { FiTrash2, FiMinus, FiPlus, FiArrowRight, FiShoppingBag, FiMapPin, FiCreditCard } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  FiTrash2, FiMinus, FiPlus, FiArrowRight, 
+  FiShoppingBag, FiMapPin, FiCreditCard, FiShield, FiPackage 
+} from "react-icons/fi";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { CartContext } from "../pages/CartContext.jsx";
@@ -365,216 +610,473 @@ function ShoppingCart() {
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Online Payment");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null); // For hover states using inline JS
 
   const handleProceedToPay = async () => {
     if (!address) return alert("Please enter your delivery address to continue.");
     
     setIsProcessing(true);
-    // Simulate a small delay for the "processing" feel
     setTimeout(async () => {
       await placeOrder(paymentMethod, address);
       setIsProcessing(false);
     }, 1500);
   };
 
-  // Animation Variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  // --- STYLES OBJECT (Theme Definition) ---
+  const theme = {
+    bg: "#FAF9F6",         // Bone White
+    cardBg: "#FFFFFF",     // Pure White
+    textMain: "#2C2420",   // Dark Espresso
+    textSec: "#8C7B6F",    // Taupe
+    accent: "#D6A85B",     // Muted Gold
+    border: "#E5E0D8",     // Light Stone
+    success: "#4CAF50",
+    danger: "#FF5252",
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+  const styles = {
+    page: {
+      minHeight: "100vh",
+      backgroundColor: theme.bg,
+      color: theme.textMain,
+      fontFamily: "'DM Sans', sans-serif", // Modern Sans
+      position: "relative",
+    },
+    container: {
+      maxWidth: "1280px",
+      margin: "0 auto",
+      padding: "140px 24px 80px 24px",
+    },
+    header: {
+      marginBottom: "50px",
+      borderBottom: `1px solid ${theme.border}`,
+      paddingBottom: "20px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+      flexWrap: "wrap",
+    },
+    title: {
+      fontFamily: "'Playfair Display', serif",
+      fontSize: "3.5rem",
+      fontWeight: "700",
+      color: theme.textMain,
+      margin: "0 0 10px 0",
+      lineHeight: "1.1",
+    },
+    subtitle: {
+      color: theme.textSec,
+      fontSize: "1rem",
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+    },
+    badge: {
+      backgroundColor: theme.accent,
+      color: "#fff",
+      padding: "2px 8px",
+      borderRadius: "12px",
+      fontSize: "0.8rem",
+      fontWeight: "bold",
+    },
+    emptyState: {
+      textAlign: "center",
+      padding: "80px 20px",
+      backgroundColor: theme.cardBg,
+      borderRadius: "40px",
+      border: `1px solid ${theme.border}`,
+      boxShadow: "0 10px 40px rgba(0,0,0,0.02)",
+    },
+    gridContainer: {
+      display: "flex",
+      flexWrap: "wrap", // Allows stacking on mobile
+      gap: "40px",
+    },
+    leftColumn: {
+      flex: "2",
+      minWidth: "300px", // Ensures it doesn't get too small
+    },
+    rightColumn: {
+      flex: "1",
+      minWidth: "320px",
+    },
+    card: {
+      backgroundColor: theme.cardBg,
+      borderRadius: "30px",
+      padding: "25px",
+      marginBottom: "20px",
+      border: `1px solid ${theme.border}`,
+      boxShadow: "0 4px 20px rgba(0,0,0,0.02)",
+      display: "flex",
+      alignItems: "center",
+      gap: "20px",
+      transition: "border-color 0.3s ease",
+    },
+    imgContainer: {
+      width: "110px",
+      height: "110px",
+      borderRadius: "20px",
+      overflow: "hidden",
+      backgroundColor: "#F5F5F0",
+      flexShrink: 0,
+    },
+    img: {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+    itemDetails: {
+      flexGrow: 1,
+    },
+    itemTitle: {
+      fontFamily: "'Playfair Display', serif",
+      fontSize: "1.25rem",
+      fontWeight: "700",
+      margin: "0 0 5px 0",
+    },
+    itemPrice: {
+      color: theme.accent,
+      fontSize: "1.1rem",
+      fontWeight: "700",
+      margin: "0",
+    },
+    controls: {
+      display: "flex",
+      alignItems: "center",
+      gap: "15px",
+    },
+    stepper: {
+      display: "flex",
+      alignItems: "center",
+      border: `1px solid ${theme.border}`,
+      borderRadius: "50px",
+      padding: "4px",
+    },
+    stepBtn: {
+      width: "32px",
+      height: "32px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "transparent",
+      border: "none",
+      cursor: "pointer",
+      color: theme.textMain,
+      borderRadius: "50%",
+      transition: "background 0.2s",
+    },
+    qtyText: {
+      width: "30px",
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: "0.9rem",
+    },
+    removeBtn: {
+      background: "#FFF5F5",
+      border: "none",
+      color: theme.danger,
+      width: "40px",
+      height: "40px",
+      borderRadius: "50%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+    },
+    summaryCard: {
+      backgroundColor: theme.cardBg,
+      borderRadius: "30px",
+      padding: "30px",
+      border: `1px solid ${theme.border}`,
+      boxShadow: "0 20px 50px -10px rgba(0,0,0,0.05)",
+      position: "sticky",
+      top: "120px", // Sticky effect
+    },
+    inputGroup: {
+      marginBottom: "25px",
+    },
+    label: {
+      display: "block",
+      fontSize: "0.75rem",
+      fontWeight: "800",
+      textTransform: "uppercase",
+      letterSpacing: "1px",
+      color: theme.textSec,
+      marginBottom: "10px",
+    },
+    input: {
+      width: "100%",
+      padding: "16px",
+      borderRadius: "16px",
+      border: `1px solid ${theme.border}`,
+      backgroundColor: theme.bg,
+      fontSize: "0.95rem",
+      fontFamily: "inherit",
+      outline: "none",
+      resize: "none",
+      boxSizing: "border-box", // Crucial for padding
+    },
+    totalBox: {
+      backgroundColor: theme.textMain,
+      color: "#fff",
+      borderRadius: "20px",
+      padding: "25px",
+      marginTop: "20px",
+      position: "relative",
+      overflow: "hidden",
+    },
+    totalRow: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "10px",
+      fontSize: "0.9rem",
+      opacity: 0.8,
+    },
+    finalTotal: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+      marginTop: "15px",
+      paddingTop: "15px",
+      borderTop: "1px solid rgba(255,255,255,0.1)",
+    },
+    checkoutBtn: {
+      width: "100%",
+      marginTop: "25px",
+      backgroundColor: theme.accent,
+      color: "#fff",
+      border: "none",
+      padding: "18px",
+      borderRadius: "16px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "10px",
+      boxShadow: `0 10px 20px ${theme.accent}40`,
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF8EC] font-sans text-[#6A4E3B]">
+    <div style={styles.page}>
+      {/* Mobile Responsiveness CSS */}
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap');
+          
+          /* Custom Scrollbar */
+          ::-webkit-scrollbar { width: 8px; }
+          ::-webkit-scrollbar-track { background: #f1f1f1; }
+          ::-webkit-scrollbar-thumb { background: #D6A85B; border-radius: 4px; }
+
+          /* Responsive Media Query for Stacked Layout */
+          @media (max-width: 968px) {
+            .responsive-grid { flex-direction: column !important; }
+            .cart-card-responsive { flex-direction: column; align-items: flex-start !important; }
+            .cart-controls-responsive { width: 100%; justify-content: space-between; margin-top: 15px; }
+            .main-title { font-size: 2.5rem !important; }
+          }
+        `}
+      </style>
+
       <Navbar />
       
-      <main className="max-w-7xl mx-auto pt-32 pb-20 px-6">
-        <div className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#6A4E3B]" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Your Basket
-          </h1>
-          <p className="text-[#8C7B6F] mt-2">
-            {totalItems} {totalItems === 1 ? "item" : "items"} selected for checkout
-          </p>
-        </div>
+      <main style={styles.container}>
+        {/* HEADER */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={styles.header}
+        >
+          <div>
+            <h1 style={styles.title} className="main-title">Your Collection</h1>
+            <p style={styles.subtitle}>
+              <span style={styles.badge}>{totalItems}</span> 
+              items ready for checkout
+            </p>
+          </div>
+          <motion.button 
+            whileHover={{ x: 5, color: theme.textMain }}
+            onClick={() => navigate("/allproduct")}
+            style={{ 
+              background: "none", border: "none", color: theme.accent, 
+              fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "1rem"
+            }}
+          >
+             <FiArrowRight style={{ transform: "rotate(180deg)" }} /> Continue Shopping
+          </motion.button>
+        </motion.div>
 
+        {/* EMPTY STATE */}
         {cartItems.length === 0 ? (
-          /* --- Empty State --- */
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center py-20 bg-white rounded-[2rem] shadow-sm border border-[#E8C7BE]/30"
+            style={styles.emptyState}
           >
-            <div className="bg-[#FFF8EC] p-6 rounded-full mb-6">
-              <FiShoppingBag className="w-12 h-12 text-[#D6A85B]" />
+            <div style={{ 
+              width: "80px", height: "80px", background: "#FFF8EC", borderRadius: "50%", 
+              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px auto" 
+            }}>
+              <FiShoppingBag size={35} color={theme.accent} />
             </div>
-            <h2 className="text-2xl font-serif font-bold mb-2">Your basket is empty</h2>
-            <p className="text-gray-500 mb-8">Looks like you haven't made your choice yet.</p>
-            <button
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", marginBottom: "10px" }}>Your cart is empty</h2>
+            <p style={{ color: theme.textSec, marginBottom: "30px" }}>Looks like you haven't made your choice yet.</p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/allproduct")}
-              className="bg-[#6A4E3B] text-white px-8 py-3 rounded-full font-bold hover:bg-[#563e2d] transition-all shadow-lg flex items-center gap-2"
+              style={{ 
+                backgroundColor: theme.textMain, color: "#fff", padding: "15px 40px", 
+                borderRadius: "50px", border: "none", fontWeight: "bold", cursor: "pointer", fontSize: "1rem" 
+              }}
             >
-              Browse Menu <FiArrowRight />
-            </button>
+              Browse Collection
+            </motion.button>
           </motion.div>
         ) : (
-          <div className="grid lg:grid-cols-3 gap-10">
+          /* CART CONTENT */
+          <div style={styles.gridContainer} className="responsive-grid">
             
-            {/* --- Left Column: Cart Items --- */}
-            <div className="lg:col-span-2">
-              <motion.div 
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="space-y-6"
-              >
+            {/* LEFT COLUMN: ITEMS */}
+            <div style={styles.leftColumn}>
+              <AnimatePresence>
                 {cartItems.map((item) => (
                   <motion.div
                     key={item._id}
-                    variants={itemVariants}
-                    className="group bg-white p-5 rounded-3xl shadow-[0_5px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(106,78,59,0.1)] transition-all border border-transparent hover:border-[#E8C7BE]/50 flex flex-col sm:flex-row items-center gap-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    whileHover={{ scale: 1.01, borderColor: theme.accent }}
+                    layout
+                    style={styles.card}
+                    className="cart-card-responsive"
                   >
-                    {/* Product Image */}
-                    <div className="relative w-28 h-28 flex-shrink-0 overflow-hidden rounded-2xl bg-[#F9F9F9]">
-                      <img 
-                        src={item.img || "/assets/default.jpg"} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover"
-                      />
+                    <div style={styles.imgContainer}>
+                      <img src={item.img || "/assets/default.jpg"} alt={item.title} style={styles.img} />
                     </div>
 
-                    {/* Details */}
-                    <div className="flex-grow text-center sm:text-left">
-                      <h3 className="font-serif text-xl font-bold text-[#6A4E3B] mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-[#D6A85B] font-bold text-lg mb-1">₹{item.price}</p>
+                    <div style={styles.itemDetails}>
+                      <h3 style={styles.itemTitle}>{item.title}</h3>
+                      <p style={styles.itemPrice}>₹{item.price}</p>
                       {item.stock < 5 && (
-                        <p className="text-xs text-red-400 font-medium">Only {item.stock} left in stock</p>
+                        <p style={{ color: theme.danger, fontSize: "0.75rem", marginTop: "5px", display: "flex", alignItems: "center", gap: "5px" }}>
+                           <FiPackage /> Only {item.stock} left
+                        </p>
                       )}
                     </div>
 
-                    {/* Controls */}
-                    <div className="flex flex-col items-center gap-4 sm:items-end">
-                      {/* Quantity Pill */}
-                      <div className="flex items-center bg-[#FFF8EC] rounded-full border border-[#E8C7BE] p-1">
-                        <button
+                    <div style={styles.controls} className="cart-controls-responsive">
+                      <div style={styles.stepper}>
+                        <button 
                           onClick={() => updateQuantity(item._id, Math.max(item.quantity - 1, 1))}
-                          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#D6A85B] hover:text-white transition-colors text-[#6A4E3B]"
+                          style={styles.stepBtn}
+                          onMouseEnter={(e) => e.currentTarget.style.background = "#f0f0f0"}
+                          onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                         >
-                          <FiMinus size={14} />
+                          <FiMinus size={12} />
                         </button>
-                        <span className="w-8 text-center font-bold text-[#6A4E3B]">{item.quantity}</span>
-                        <button
+                        <span style={styles.qtyText}>{item.quantity}</span>
+                        <button 
                           onClick={() => updateQuantity(item._id, Math.min(item.quantity + 1, item.stock))}
-                          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#D6A85B] hover:text-white transition-colors text-[#6A4E3B]"
+                          style={styles.stepBtn}
+                          onMouseEnter={(e) => e.currentTarget.style.background = "#f0f0f0"}
+                          onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                         >
-                          <FiPlus size={14} />
+                          <FiPlus size={12} />
                         </button>
                       </div>
 
-                      {/* Remove Button */}
                       <button
                         onClick={() => removeFromCart(item._id)}
-                        className="text-black-400 hover:text-red-500 transition-colors flex items-center gap-1 text-xs font-medium uppercase tracking-wide "
+                        style={styles.removeBtn}
+                        title="Remove Item"
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "#FFEAEA"; e.currentTarget.style.transform = "scale(1.1)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "#FFF5F5"; e.currentTarget.style.transform = "scale(1)"; }}
                       >
-                        <FiTrash2 /> Remove
+                        <FiTrash2 size={16} />
                       </button>
                     </div>
                   </motion.div>
                 ))}
-              </motion.div>
-
-              <button
-                onClick={() => navigate("/allproduct")}
-                className="mt-8 text-[#D6A85B] font-bold hover:text-[#6A4E3B] transition-colors flex items-center gap-2"
-              >
-                <FiArrowRight className="rotate-180" /> Continue Shopping
-              </button>
+              </AnimatePresence>
             </div>
 
-            {/* --- Right Column: Order Summary --- */}
-            <div className="lg:col-span-1">
-              <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-[#E8C7BE]/30 sticky top-28">
-                <h2 className="text-2xl font-serif font-bold text-[#6A4E3B] mb-6 border-b border-[#E8C7BE] pb-4">
-                  Order Summary
-                </h2>
+            {/* RIGHT COLUMN: CHECKOUT */}
+            <div style={styles.rightColumn}>
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                style={styles.summaryCard}
+              >
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem", marginBottom: "25px" }}>Checkout</h2>
 
-                <div className="space-y-6">
-                  {/* Address Input */}
-                  <div className="group">
-                    <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D6A85B] mb-2">
-                      <FiMapPin /> Delivery Address
-                    </label>
-                    <textarea
-                      placeholder="Enter your full address here..."
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="w-full bg-[#F9F9F9] border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D6A85B] transition-all resize-none h-24"
-                    />
-                  </div>
-
-                  {/* Payment Method */}
-                  <div>
-                    <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D6A85B] mb-2">
-                      <FiCreditCard /> Payment Method
-                    </label>
-                    <div className="relative">
-                      <select
-                        value={paymentMethod}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="w-full bg-[#F9F9F9] border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D6A85B] appearance-none"
-                      >
-                        <option value="Online Payment">Online Payment (Secure)</option>
-                        <option value="Cash on Delivery">Cash on Delivery</option>
-                      </select>
-                      <div className="absolute right-3 top-3.5 pointer-events-none text-gray-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Totals */}
-                  <div className="bg-[#FFF8EC] p-4 rounded-xl space-y-2 mt-4">
-                    <div className="flex justify-between text-sm text-[#8C7B6F]">
-                      <span>Subtotal ({totalItems} items)</span>
-                      <span>₹{totalPrice}</span>
-                    </div>
-                    <div className="flex justify-between text-sm text-[#8C7B6F]">
-                      <span>Shipping</span>
-                      <span className="text-green-600 font-medium">Free</span>
-                    </div>
-                    <div className="flex justify-between items-center pt-3 border-t border-[#E8C7BE]/50 mt-2">
-                      <span className="font-serif font-bold text-xl text-[#6A4E3B]">Total</span>
-                      <span className="font-serif font-bold text-2xl text-[#D6A85B]">₹{totalPrice}</span>
-                    </div>
-                  </div>
-
-                  {/* Checkout Button */}
-                  <button
-                    onClick={handleProceedToPay}
-                    disabled={isProcessing}
-                    className={`w-full bg-[#6A4E3B] text-white font-bold py-4 rounded-xl shadow-lg hover:bg-[#563e2d] hover:shadow-[#6A4E3B]/30 transition-all transform active:scale-98 flex items-center justify-center gap-2 ${
-                      isProcessing ? "opacity-75 cursor-wait" : ""
-                    }`}
-                  >
-                    {isProcessing ? (
-                      <>Processing...</>
-                    ) : (
-                      <>Checkout <FiArrowRight /></>
-                    )}
-                  </button>
-                  
-                  <p className="text-xs text-center text-gray-400 mt-4 flex items-center justify-center gap-1">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    Secure Encrypted Transaction
-                  </p>
+                {/* Address */}
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}><FiMapPin /> Delivery Address</label>
+                  <textarea
+                    placeholder="Street, City, Zip Code..."
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    style={styles.input}
+                    rows={3}
+                    onFocus={(e) => e.target.style.borderColor = theme.accent}
+                    onBlur={(e) => e.target.style.borderColor = theme.border}
+                  />
                 </div>
-              </div>
+
+                {/* Payment */}
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}><FiCreditCard /> Payment Method</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    style={{...styles.input, cursor: "pointer"}}
+                    onFocus={(e) => e.target.style.borderColor = theme.accent}
+                    onBlur={(e) => e.target.style.borderColor = theme.border}
+                  >
+                    <option value="Online Payment">Online Payment</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                  </select>
+                </div>
+
+                {/* Total Calculation */}
+                <div style={styles.totalBox}>
+                  {/* Decoration Blur */}
+                  <div style={{ position: "absolute", top: "-20px", right: "-20px", width: "100px", height: "100px", background: "rgba(255,255,255,0.1)", borderRadius: "50%", filter: "blur(20px)" }}></div>
+                  
+                  <div style={styles.totalRow}>
+                    <span>Subtotal</span>
+                    <span>₹{totalPrice}</span>
+                  </div>
+                  <div style={styles.totalRow}>
+                    <span>Shipping</span>
+                    <span style={{ color: theme.accent }}>Free</span>
+                  </div>
+                  <div style={styles.finalTotal}>
+                    <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem" }}>Total</span>
+                    <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: "bold", color: theme.accent }}>₹{totalPrice}</span>
+                  </div>
+                </div>
+
+                <motion.button
+                  onClick={handleProceedToPay}
+                  disabled={isProcessing}
+                  whileHover={{ scale: 1.02, backgroundColor: "#C5984B" }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{...styles.checkoutBtn, opacity: isProcessing ? 0.7 : 1}}
+                >
+                  {isProcessing ? "Processing..." : <>Pay Now <FiArrowRight /></>}
+                </motion.button>
+                
+                <p style={{ textAlign: "center", color: "#ccc", fontSize: "0.7rem", marginTop: "15px", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                  <FiShield color="#4CAF50" /> Secure Transaction
+                </p>
+
+              </motion.div>
             </div>
 
           </div>

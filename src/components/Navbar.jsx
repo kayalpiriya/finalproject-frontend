@@ -1080,7 +1080,7 @@ function Navbar() {
         <div className="hidden md:flex items-center space-x-6 font-medium text-white">
           <Link to="/" className="hover:text-gray-300 transition">Home</Link>
           <Link to="/allproduct" className="hover:text-gray-300 transition">All Products</Link>
-          <Link to="/detail" className="hover:text-gray-300 transition">Detail</Link>
+          <Link to="/About" className="hover:text-gray-300 transition">About</Link>
           {/* <Link to="/reviews" className="hover:text-gray-300 transition">Customer Reviews</Link> */}
           {role === "admin" && (
             <Link to="/admin/blogwrite" className="hover:text-gray-300 transition">
@@ -1149,7 +1149,7 @@ function Navbar() {
         <div className="md:hidden px-6 py-4 space-y-3" style={{ backgroundColor: "#596E65" }}>
           <Link to="/" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Home</Link>
           <Link to="/allproduct" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">All Products</Link>
-          <Link to="/detail" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Detail</Link>
+          <Link to="/about" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">About</Link>
           <Link to="/reviews" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">Customer Reviews</Link>
           {role === "admin" && (
             <Link to="/admin/blogwrite" onClick={() => setMobileOpen(false)} className="block text-white hover:text-gray-300 transition">
@@ -1183,7 +1183,7 @@ function Navbar() {
 
               <button
                 onClick={handleLogout}
-                className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
+                className="bg-pink-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
               >
                 Logout
               </button>
@@ -1191,7 +1191,7 @@ function Navbar() {
           ) : (
             <button
               onClick={() => { navigate("/login"); setMobileOpen(false); }}
-              className="bg-green-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
+              className="bg-pink-700 text-white px-3 py-1 rounded-md hover:bg-green-800 transition w-full text-left"
             >
               Sign In
             </button>
