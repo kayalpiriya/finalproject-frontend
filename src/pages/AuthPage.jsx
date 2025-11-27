@@ -582,7 +582,7 @@ function AuthPage() {
       // Clean the URL (remove the token) so it doesn't look messy
       window.history.replaceState({}, document.title, "/");
       
-      navigate("/");
+      navigate("/allproduct");
     }
   }, [location, navigate]);
 
