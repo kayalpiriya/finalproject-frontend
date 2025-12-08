@@ -7,10 +7,10 @@ export default function Footer() {
   return (
     <footer className="text-white mt-10" style={{ backgroundColor: "#2B1B17" }}>
       {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
         {/* About Section */}
         <div>
-          <h3 className="text-3xl font-bold mb-4">🍰 Mufflix Bakery</h3>
+          <h3 className="text-3xl py-8 font-bold mb-4">🍰 Mufflix Bakery</h3>
           <p className="text-gray-200">
             Delicious cakes and pastries made with love. Visit us for fresh treats every day!
           </p>
@@ -18,7 +18,7 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div>
-          <h4 className="text-2xl font-semibold mb-4">Quick Links</h4>
+          <h4 className="text-2xl py-8 font-semibold mb-4">Quick Links</h4>
           <ul className="space-y-2">
             <li><Link to="/" className="hover:text-gray-400 transition">Home</Link></li>
             <li><Link to="/detail" className="hover:text-gray-400 transition">Detail</Link></li>
@@ -29,7 +29,7 @@ export default function Footer() {
 
         {/* Contact & Social */}
         <div>
-          <h4 className="text-2xl font-semibold mb-4">Contact Us</h4>
+          <h4 className="text-2xl py-8 font-semibold mb-4">Contact Us</h4>
           <p>Email: kayal@mufflixbakery.com</p>
           <p>Phone: +94 123 456 789</p>
           <p>Address: 154 Bakery Street, Vaddakkachchi</p>
