@@ -1,6 +1,7 @@
 import axios from "axios";
+IM
 
-const API_URL = "http://localhost:5000/auth";
+const API_URL = "https://finalproject-backend-tf6k.onrender.com/auth";
 
 export const getAllUsers = () => axios.get(API_URL); // ✅ add this
 export const registerUser = (data) => axios.post(`${API_URL}/register`, data);
