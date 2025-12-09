@@ -1,7 +1,8 @@
 import axios from "axios";
 IM
 
-const API_URL = "https://finalproject-backend-tf6k.onrender.com/auth";
+// const API_URL = "https://finalproject-backend-tf6k.onrender.com/auth";
+const API_URL = import.meta.env.VITE_API_URL || 'https://finalproject-backend-tf6k.onrender.com/auth';
 
 export const getAllUsers = () => axios.get(API_URL); // ✅ add this
 export const registerUser = (data) => axios.post(`${API_URL}/register`, data);
