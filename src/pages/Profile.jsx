@@ -1517,7 +1517,7 @@ function Profile() {
   const [previewImage, setPreviewImage] = useState(null);
   
   // ✅ CONFIGURATION
-  const API_URL = "http://localhost:5000"; 
+  const API_URL = "https://finalproject-backend-7rqa.onrender.com"; 
   const token = localStorage.getItem("token");
 
   const colors = {

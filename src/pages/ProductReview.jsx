@@ -15,7 +15,7 @@ function ProductReview({ productId }) {
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const res = await axios.get(`http://localhost:5000/reviews/${productId}`);
+        const res = await axios.get(`"https://finalproject-backend-7rqa.onrender.com/reviews/${productId}`);
         setReviews(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error(err);

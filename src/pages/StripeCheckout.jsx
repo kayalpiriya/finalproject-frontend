@@ -154,7 +154,7 @@ function CheckoutForm({ orderData }) {
     // window.location.href = stripeUrl;
 
     const res = await axios.post(
-      "http://localhost:5000/payments",
+      "https://finalproject-backend-7rqa.onrender.com/payments",
       {
         orderId: orderData._id || orderData.orderId,
         amount: orderData.total,
@@ -196,7 +196,7 @@ function CheckoutForm({ orderData }) {
         try{
           const token = localStorage.getItem("token");
           await axios.post(
-            "http://localhost:5000/payments/confirm",
+            "https://finalproject-backend-7rqa.onrender.com/payments/confirm",
             { paymentId: orderData.paymentId }, // make sure you have paymentId from createPayment response
             { headers: { Authorization: `Bearer ${token}` } }
           );
