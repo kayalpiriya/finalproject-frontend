@@ -494,7 +494,7 @@ export const CartProvider = ({ children }) => {
   const fetchCart = async () => {
     if (!token) return;
     try {
-      const res = await axios.get("http://localhost:5000/cart", {
+      const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -529,7 +529,7 @@ export const CartProvider = ({ children }) => {
     if (token) {
       try {
         await axios.post(
-          "http://localhost:5000/cart/add",
+          "https://finalproject-backend-7rqa.onrender.com/cart/add",
           { productId: product._id, quantity: 1 },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -565,7 +565,7 @@ export const CartProvider = ({ children }) => {
     } else {
       try {
         await axios.post(
-          "http://localhost:5000/cart/add",
+          "https://finalproject-backend-7rqa.onrender.com/cart/add",
           { productId, quantity: newQuantity },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -582,7 +582,7 @@ export const CartProvider = ({ children }) => {
 
     if (token) {
       try {
-        await axios.delete("http://localhost:5000/cart/remove", {
+        await axios.delete("https://finalproject-backend-7rqa.onrender.com/cart/remove", {
           headers: { Authorization: `Bearer ${token}` },
           data: { productId },
         });
@@ -599,7 +599,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (token) {
       try {
-        await axios.delete("http://localhost:5000/cart/clear", {
+        await axios.delete("https://finalproject-backend-7rqa.onrender.com/cart/clear", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCartItems([]);
@@ -623,7 +623,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/orders",
+        "https://finalproject-backend-7rqa.onrender.com/orders",
         {
           products: cartItems.map((p) => ({ productId: p._id, quantity: p.quantity })),
           total: totalPrice,
@@ -640,7 +640,7 @@ export const CartProvider = ({ children }) => {
 
       // Redirect to Stripe
       const resPayment = await axios.post(
-        "http://localhost:5000/payments",
+        "https://finalproject-backend-7rqa.onrender.com/payments",
         { orderId: order._id, amount: totalPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );
