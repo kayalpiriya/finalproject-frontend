@@ -1657,7 +1657,7 @@ function OrdersList() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/orders", {
+        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/orders", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data || []);
@@ -1682,7 +1682,7 @@ function OrdersList() {
   const handleStatusSave = async (orderId) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/orders/${orderId}`,
+        `https://finalproject-backend-7rqa.onrender.com/orders/${orderId}`,
         { status: statusValue },
         { headers: { Authorization: `Bearer ${token}` } }
       );

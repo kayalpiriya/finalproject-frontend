@@ -33,7 +33,7 @@ function UsersList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/users", {
+        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);

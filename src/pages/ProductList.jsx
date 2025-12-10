@@ -2326,7 +2326,7 @@ function ProductList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/products");
+        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/products");
         setProducts(res.data);
         setLoading(false);
       } catch (err) {
@@ -2363,7 +2363,7 @@ function ProductList() {
       formData.append("description", addData.description);
       if (addData.img) formData.append("img", addData.img);
 
-      const res = await axios.post("http://localhost:5000/products", formData, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/products", formData, { headers: { Authorization: `Bearer ${token}` } });
       setProducts([...products, res.data]);
       setAddModal(false);
       setAddData({ name: "", price: "", stock: "", description: "", img: null });
@@ -2396,7 +2396,7 @@ function ProductList() {
       formData.append("description", editData.description);
       if (editData.img) formData.append("img", editData.img);
 
-      const res = await axios.put(`http://localhost:5000/products/${editingProduct}`, formData, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.put(`https://finalproject-backend-7rqa.onrender.com/products/${editingProduct}`, formData, { headers: { Authorization: `Bearer ${token}` } });
       setProducts(products.map((p) => p._id === editingProduct ? res.data : p));
       setEditingProduct(null);
     } catch (err) {
@@ -2407,7 +2407,7 @@ function ProductList() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:5000/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`https://finalproject-backend-7rqa.onrender.com/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       setProducts(products.filter((p) => p._id !== id));
     } catch (err) {
       alert("Delete failed: " + err.response?.data?.message);
