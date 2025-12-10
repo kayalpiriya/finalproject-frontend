@@ -4,7 +4,7 @@ import axios from "axios";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
-  const API_URL = "http://localhost:5000/orders";
+  const API_URL = "https://finalproject-backend-7rqa.onrender.com/orders";
 
   const fetchOrders = async () => {
     if (!token) return alert("Please login first!");

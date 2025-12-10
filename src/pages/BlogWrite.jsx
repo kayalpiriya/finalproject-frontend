@@ -323,7 +323,7 @@ export default function BlogWrite() {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/blogs",
+        "https://finalproject-backend-7rqa.onrender.com/api/blogs",
         { title, summary, content, image },
         {
           headers: {

@@ -9,7 +9,7 @@ export default function BlogsPage() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/api/blogs");
       setBlogs(res.data);
     };
     fetchBlogs();

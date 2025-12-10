@@ -120,7 +120,7 @@ export default function BlogDetail() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`, {
+        const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBlog(res.data);
@@ -138,7 +138,7 @@ export default function BlogDetail() {
   const deleteBlog = async () => {
     if (!window.confirm("Are you sure you want to delete this story? This cannot be undone.")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/blogs");

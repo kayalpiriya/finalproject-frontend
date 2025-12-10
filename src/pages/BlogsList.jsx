@@ -231,7 +231,7 @@ function BlogsList() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/blogs", {
+      const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/api/blogs", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(res.data);
@@ -246,7 +246,7 @@ function BlogsList() {
   const deleteBlog = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(blogs.filter((b) => b._id !== id));
@@ -260,13 +260,13 @@ function BlogsList() {
     try {
       if (modalBlog._id) {
         // Edit
-        await axios.put(`http://localhost:5000/api/blogs/${modalBlog._id}`, modalBlog, {
+        await axios.put(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${modalBlog._id}`, modalBlog, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBlogs(blogs.map((b) => (b._id === modalBlog._id ? modalBlog : b)));
       } else {
         // Create
-        const res = await axios.post("http://localhost:5000/api/blogs", modalBlog, {
+        const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/api/blogs", modalBlog, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBlogs([...blogs, res.data]);
