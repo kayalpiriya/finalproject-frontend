@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000/cart" });
+const API = axios.create({ baseURL: "https://finalproject-backend-7rqa.onrender.com/cart" });
 
 // include token automatically
 API.interceptors.request.use((req) => {
