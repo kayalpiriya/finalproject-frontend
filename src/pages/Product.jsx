@@ -129,7 +129,7 @@
 // //   useEffect(() => {
 // //     const fetchProduct = async () => {
 // //       try {
-// //         const res = await axios.get(`http://localhost:5000/products/${id}`);
+// //         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 // //         setProduct(res.data);
 // //       } catch (err) {
 // //         console.error(err);
@@ -195,7 +195,7 @@
 //  useEffect(() => {
 //   const getSingleProduct = async () => {
 //     try {
-//       const res = await axios.get(`http://localhost:5000/products/${id}`);
+//       const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //       setProduct(res.data);
 //       setLoading(false);
 //     } catch (err) {
@@ -261,7 +261,7 @@
 //   useEffect(() => {
 //     const getSingleProduct = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //         setProduct(res.data);
 //         setLoading(false);
 //       } catch (err) {
@@ -330,7 +330,7 @@
 //   useEffect(() => {
 //     const getSingleProduct = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //         setProduct(res.data);
 //         setLoading(false);
 //       } catch (err) {
@@ -550,7 +550,7 @@
 //   useEffect(() => {
 //     const getProduct = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //         setProduct(res.data);
 //         setLoading(false);
 //       } catch (err) {
@@ -812,7 +812,7 @@
 //   useEffect(() => {
 //     const getProduct = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //         setProduct(res.data);
 //         setLoading(false);
 //       } catch (err) {
@@ -1135,7 +1135,7 @@
 //   useEffect(() => {
 //     const getProduct = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products/${id}`);
+//         const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
 //         setProduct(res.data);
 //       } catch (err) {
 //         console.error(err);
@@ -1487,7 +1487,7 @@ function Product() {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/products/${id}`);
+        const res = await axios.get(`https://finalproject-backend-7rqa.onrender.com/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error(err);

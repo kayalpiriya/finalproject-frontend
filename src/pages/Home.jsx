@@ -15,7 +15,7 @@
 //   // useEffect(() => {
 //   //   const fetchProducts = async () => {
 //   //     try {
-//   //       const res = await axios.get("http://localhost:5000/products");
+//   //       const res = await axios.get("https://finalproject-backend-7rqa.onrender.com");
 //   //       setProducts(res.data);
 //   //     } catch (err) {
 //   //       console.error("Error fetching products:", err);

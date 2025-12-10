@@ -108,7 +108,7 @@
 //   const [preview, setPreview] = useState(null);
 //   const token = localStorage.getItem("token");
 
-//   const API_URL = "http://localhost:5000/products"; // backend products route
+//   const API_URL = "https://finalproject-backend-7rqa.onrender.com"; // backend products route
 
 //   // ✅ Fetch all products
 //   const fetchProducts = async () => {
@@ -255,7 +255,7 @@
 //     if(image) formData.append("file", image);
 
 //     try {
-//       const res = await axios.post("http://localhost:5000/products", formData, {
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com", formData, {
 //         headers: { 
 //           "Content-Type": "multipart/form-data",
 //           "Authorization": `Bearer ${localStorage.getItem("token")}` // admin token
@@ -308,7 +308,7 @@
 //     if (image) formData.append("file", image);
 
 //     try {
-//       await axios.post("http://localhost:5000/products", formData, {
+//       await axios.post("https://finalproject-backend-7rqa.onrender.com", formData, {
 //         headers: {
 //           "Content-Type": "multipart/form-data",
 //           Authorization: `Bearer ${token}`,
@@ -395,7 +395,7 @@ function AdminAddProduct() {
     if (image) formData.append("img", image); // ✅ match backend field
 
     try {
-      await axios.post("http://localhost:5000/products", formData, {
+      await axios.post("https://finalproject-backend-7rqa.onrender.com", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

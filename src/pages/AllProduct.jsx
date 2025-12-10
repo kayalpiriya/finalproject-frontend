@@ -11,7 +11,7 @@
 //   const [products, setProducts] = useState([]);
 
 //   useEffect(() => {
-//     axios.get("http://localhost:5000/products")
+//     axios.get("https://finalproject-backend-7rqa.onrender.com")
 //       .then(res => setProducts(res.data))
 //       .catch(err => console.log(err));
 //   }, []);
@@ -67,7 +67,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:5000/products")
+//       .get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => setProducts(res.data))
 //       .catch((err) => console.log(err));
 //   }, []);
@@ -197,7 +197,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:5000/products")
+//       .get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => setProducts(res.data))
 //       .catch((err) => console.log(err));
 //   }, []);
@@ -399,7 +399,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:5000/products")
+//       .get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => {
 //         setProducts(res.data);
 //         setFilteredProducts(res.data);
@@ -671,7 +671,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:5000/products")
+//       .get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => {
 //         setProducts(res.data);
 //         setFilteredProducts(res.data);
@@ -943,7 +943,7 @@
 //   useEffect(() => {
 //     setIsLoading(true);
 //     axios
-//       .get("http://localhost:5000/products")
+//       .get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => {
 //         setProducts(res.data);
 //         setFilteredProducts(res.data);
@@ -1375,7 +1375,7 @@
 
 //   // Fetch Data
 //   useEffect(() => {
-//     axios.get("http://localhost:5000/products")
+//     axios.get("https://finalproject-backend-7rqa.onrender.com")
 //       .then((res) => {
 //         setProducts(res.data);
 //         setFilteredProducts(res.data);
