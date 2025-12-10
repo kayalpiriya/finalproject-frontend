@@ -3006,7 +3006,7 @@ export default function FloatingChatbot() {
   const chatEndRef = useRef(null);
 
   const API = axios.create({
-    baseURL: "http://localhost:5000/chats",
+    baseURL: "https://finalproject-backend-7rqa.onrender.com/chats",
     headers: { "Content-Type": "application/json" },
   });
 
