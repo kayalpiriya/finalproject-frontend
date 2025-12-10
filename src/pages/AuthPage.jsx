@@ -997,7 +997,7 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://finalproject-backend-7rqa.onrender.com/authregister", regData);
+      await axios.post("https://finalproject-backend-7rqa.onrender.com/auth/register", regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
       setLoading(false);
