@@ -18,7 +18,7 @@
 import axios from "axios";
 
 // Base API instance
-const API = axios.create({ baseURL: "http://localhost:5000/reviews" });
+const API = axios.create({ baseURL: "https://finalproject-backend-7rqa.onrender.com/reviews" });
 
 // Add token to headers if exists
 API.interceptors.request.use((req) => {
