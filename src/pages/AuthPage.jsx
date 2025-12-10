@@ -979,7 +979,7 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", loginData);
+      const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/auth/login", loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
