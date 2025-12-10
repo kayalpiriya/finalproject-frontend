@@ -4222,7 +4222,7 @@ export default function Home() {
                 key={idx}
                 onClick={() => setCurrentSlide(idx)}
                 style={{
-                  width: currentSlide === idx ? "30px" : "10px",
+                  width: currentSlide === idx ? "30ypx" : "10px",
                   height: "10px",
                   borderRadius: "5px",
                   background: currentSlide === idx ? accentPink : "rgba(255,255,255,0.5)",
@@ -4236,7 +4236,7 @@ export default function Home() {
         </section>
 
         {/* 2. SEARCH & FILTER */}
-        <div style={{ position: "sticky", top: "20px", zIndex: 100, marginBottom: "50px" }}>
+        <div style={{ top: "20px", zIndex: 100, marginBottom: "50px" }}>
           <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="glass" style={{ borderRadius: "100px", padding: "10px 15px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "15px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, paddingLeft: "15px" }}>
               <Search size={20} color="#888" />
