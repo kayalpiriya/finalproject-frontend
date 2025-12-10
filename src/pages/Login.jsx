@@ -12,7 +12,7 @@
 //   const [forgotEmail, setForgotEmail] = useState("");
 //   const navigate = useNavigate();
 
-//   const API_URL = "http://localhost:5000/auth/login";
+//   const API_URL = "https://finalproject-backend-7rqa.onrender.com/authlogin";
 
 //   const handleLogin = async (e) => {
 //     e.preventDefault();
@@ -33,7 +33,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:5000/auth/forgot-password",
+//         "https://finalproject-backend-7rqa.onrender.com/authforgot-password",
 //         { email: forgotEmail }
 //       );
 //       alert(res.data.message);
@@ -159,7 +159,7 @@
 //   const handleLogin = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       alert("Login successful!");
 //       localStorage.setItem("role", res.data.role); // 👈 இங்க role save பண்ணுறோம்
@@ -175,7 +175,7 @@
 //   const handleSendOTP = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authforgot-password", { email: forgotEmail });
 //       alert(res.data.message);
 //       setOtpSent(true); // OTP sent, now show OTP input + new password
 //     } catch (err) {
@@ -188,7 +188,7 @@
 //   const handleResetPassword = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/reset-password", {
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authreset-password", {
 //         email: forgotEmail,
 //         otp,
 //         password: newPassword,
@@ -359,7 +359,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:5000/auth/login",
+//         "https://finalproject-backend-7rqa.onrender.com/authlogin",
 //         { email, password }
 //       );
 
@@ -378,7 +378,7 @@
 //     e.preventDefault();
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:5000/auth/forgot-password",
+//         "https://finalproject-backend-7rqa.onrender.com/authforgot-password",
 //         { email: forgotEmail }
 //       );
 //       toast.success(res.data.message);
@@ -393,7 +393,7 @@
 //     e.preventDefault();
 //     try {
 //       const res = await axios.post(
-//         "http://localhost:5000/auth/reset-password",
+//         "https://finalproject-backend-7rqa.onrender.com/authreset-password",
 //         {
 //           email: forgotEmail,
 //           otp,
@@ -570,7 +570,7 @@
 //     e.preventDefault();
 //     if (!validateLogin()) return;
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✅ Login successful!");
@@ -583,7 +583,7 @@
 //   const handleSendOTP = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authforgot-password", { email: forgotEmail });
 //       toast.success(res.data.message);
 //       setOtpSent(true);
 //     } catch (err) {
@@ -594,7 +594,7 @@
 //   const handleResetPassword = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/reset-password", {
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authreset-password", {
 //         email: forgotEmail,
 //         otp,
 //         password: newPassword,
@@ -767,7 +767,7 @@
 //     e.preventDefault();
 //     if (!validateLogin()) return;
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✅ Login successful!");
@@ -890,7 +890,7 @@
 //     e.preventDefault();
 //     if (!validateLogin()) return;
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✅ Login successful!");
@@ -903,7 +903,7 @@
 //   const handleSendOTP = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authforgot-password", { email: forgotEmail });
 //       toast.success(res.data.message);
 //       setOtpSent(true);
 //     } catch (err) {
@@ -914,7 +914,7 @@
 //   const handleResetPassword = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/reset-password", {
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authreset-password", {
 //         email: forgotEmail,
 //         otp,
 //         password: newPassword,
@@ -1103,7 +1103,7 @@ function Login() {
     if (!validateLogin()) return;
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+      const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
@@ -1119,7 +1119,7 @@ function Login() {
     if (!forgotEmail) return toast.warning("Please enter your email first.");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+      const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authforgot-password", { email: forgotEmail });
       toast.success(res.data.message);
       setOtpSent(true);
     } catch (err) {
@@ -1134,7 +1134,7 @@ function Login() {
     if (!otp || !newPassword) return toast.warning("Please fill all fields.");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/auth/reset-password", {
+      const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authreset-password", {
         email: forgotEmail,
         otp,
         password: newPassword,
@@ -1473,7 +1473,7 @@ export default Login;
 //     e.preventDefault();
 //     setLoading(true);
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success(`Welcome back, ${res.data.name || "Baker"}! 🥐`);

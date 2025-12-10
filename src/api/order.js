@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/auth/orders";
+const API_URL = "https://finalproject-backend-7rqa.onrender.com/authorders";
 
 export const createOrder = (data, token) =>
   axios.post(API_URL, data, {

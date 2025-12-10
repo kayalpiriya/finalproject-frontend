@@ -39,7 +39,7 @@
 //     e.preventDefault();
 //     if (!validateForm()) return;
 //     try {
-//       await axios.post("http://localhost:5000/auth/register", { name, email, password });
+//       await axios.post("https://finalproject-backend-7rqa.onrender.com/authregister", { name, email, password });
 //       toast.success("🎉 Registration successful!");
 //       setTimeout(() => navigate("/login"), 1500);
 //     } catch (err) {
@@ -51,7 +51,7 @@
 //     e.preventDefault();
 //     if (!validateForm()) return;
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", { email, password });
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✅ Login successful!");
@@ -64,7 +64,7 @@
 //   const handleSendOTP = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/forgot-password", { email: forgotEmail });
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authforgot-password", { email: forgotEmail });
 //       toast.success(res.data.message);
 //       setOtpSent(true);
 //     } catch (err) {
@@ -75,7 +75,7 @@
 //   const handleResetPassword = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/reset-password", {
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authreset-password", {
 //         email: forgotEmail,
 //         otp,
 //         password: newPassword,
@@ -221,7 +221,7 @@
 //     e.preventDefault();
 //     setLoading(true);
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", loginData);
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", loginData);
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✨ Welcome back!");
@@ -559,7 +559,7 @@
 //   // --- 1. HANDLE GOOGLE LOGIN REDIRECT ---
 //   const handleGoogleLogin = () => {
 //     // Redirects browser to your Backend Google Auth Endpoint
-//     window.open("http://localhost:5000/auth/google", "_self");
+//     window.open("https://finalproject-backend-7rqa.onrender.com/authgoogle", "_self");
 //   };
 
 //   // --- 2. HANDLE GOOGLE CALLBACK (Token Capture) ---
@@ -594,7 +594,7 @@
 //     e.preventDefault();
 //     setLoading(true);
 //     try {
-//       const res = await axios.post("http://localhost:5000/auth/login", loginData);
+//       const res = await axios.post("https://finalproject-backend-7rqa.onrender.com/authlogin", loginData);
 //       localStorage.setItem("token", res.data.token);
 //       localStorage.setItem("role", res.data.role);
 //       toast.success("✨ Welcome back!");
@@ -610,7 +610,7 @@
 //     setLoading(true);
 //     try {
 //       // If you don't have the separate api/auth file, use axios directly:
-//       await axios.post("http://localhost:5000/auth/register", regData);
+//       await axios.post("https://finalproject-backend-7rqa.onrender.com/authregister", regData);
       
 //       toast.success("🎉 Account created! Please login.");
 //       setIsSignUpMode(false); // Slide back to login
@@ -949,7 +949,7 @@ function AuthPage() {
 
   // --- 2. HANDLE GOOGLE LOGIN REDIRECT ---
   const handleGoogleLogin = () => {
-    window.open("http://localhost:5000/auth/google", "_self");
+    window.open("https://finalproject-backend-7rqa.onrender.com/authgoogle", "_self");
   };
 
   // --- 3. HANDLE GOOGLE CALLBACK (Token Capture) ---
@@ -997,7 +997,7 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/auth/register", regData);
+      await axios.post("https://finalproject-backend-7rqa.onrender.com/authregister", regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
       setLoading(false);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/auth/products";
+const API_URL = "https://finalproject-backend-7rqa.onrender.com/authproducts";
 
 export const getAllProducts = () => axios.get(API_URL);
 

@@ -107,7 +107,7 @@
 //               <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
 //               {/* <a href="#"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google" /></a> */}
 //  {/* Google Login Button */}
-//  <a href="http://localhost:5000/auth/google">
+//  <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle">
 //                 <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" />
 //               </a>
 //             </div>
@@ -193,7 +193,7 @@
 
 //             <div className="social-login">
 //               <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" /></a>
-//               <a href="http://localhost:5000/auth/google">
+//               <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle">
 //                 <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" />
 //               </a>
 //             </div>
@@ -292,7 +292,7 @@
 //                 />
 //               </a>
 
-//               <a href="http://localhost:5000/auth/google">
+//               <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle">
 //                 <img
 //                   src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
 //                   alt="Google Login"
@@ -413,7 +413,7 @@
 //                   className="w-10 h-10 rounded-full hover:scale-105 transition"
 //                 />
 //               </a>
-//               <a href="http://localhost:5000/auth/google">
+//               <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle">
 //                 <img
 //                   src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png"
 //                   alt="Google Login"
@@ -542,7 +542,7 @@
 
 //             <div className="flex justify-center md:justify-start space-x-4 mb-6">
 //               <a href="#"><img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" className="w-10 h-10 rounded-full hover:scale-110 transition" /></a>
-//               <a href="http://localhost:5000/auth/google"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" className="w-10 h-10 rounded-full hover:scale-110 transition" /></a>
+//               <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle"><img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" className="w-10 h-10 rounded-full hover:scale-110 transition" /></a>
 //             </div>
 
 //             <form className="space-y-4" onSubmit={handleRegister}>
@@ -661,7 +661,7 @@
 //               <a href="#" className="p-2 border border-minimal-border rounded-lg hover:border-minimal-accent transition">
 //                 <img src="src/assets/facebook-logo-blue-circle_705838-12823.jpg" alt="Facebook" className="w-6 h-6" />
 //               </a>
-//               <a href="http://localhost:5000/auth/google" className="p-2 border border-minimal-border rounded-lg hover:border-minimal-accent transition">
+//               <a href="https://finalproject-backend-7rqa.onrender.com/authgoogle" className="p-2 border border-minimal-border rounded-lg hover:border-minimal-accent transition">
 //                 <img src="src/assets/97a0b7ac-13bb-4f59-986e-8c3e960435fd-cover.png" alt="Google Login" className="w-6 h-6" />
 //               </a>
 //             </div>
