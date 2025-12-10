@@ -395,7 +395,7 @@ function AdminAddProduct() {
     if (image) formData.append("img", image); // ✅ match backend field
 
     try {
-      await axios.post("http://localhost:5000/products", formData, {
+      await axios.post("https://finalproject-backend-7rqa.onrender.com/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
