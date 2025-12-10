@@ -204,7 +204,7 @@
 //     const fetchCounts = async () => {
 //       try {
 //         const token = localStorage.getItem("token");
-//         const productsRes = await fetch("https://finalproject-backend-7rqa.onrender.com");
+//         const productsRes = await fetch("http://localhost:5000/products");
 //         const ordersRes = await fetch("http://localhost:5000/orders");
 //         const productsData = await productsRes.json();
 //         const ordersData = await ordersRes.json();
@@ -303,7 +303,7 @@
 //   useEffect(() => {
 //     const fetchCounts = async () => {
 //       try {
-//         const productsRes = await fetch("https://finalproject-backend-7rqa.onrender.com");
+//         const productsRes = await fetch("http://localhost:5000/products");
 //         const ordersRes = await fetch("http://localhost:5000/orders");
 //         const productsData = await productsRes.json();
 //         const ordersData = await ordersRes.json();
@@ -444,7 +444,7 @@
 //   useEffect(() => {
 //     const fetchCounts = async () => {
 //       try {
-//         const productsRes = await fetch("https://finalproject-backend-7rqa.onrender.com");
+//         const productsRes = await fetch("http://localhost:5000/products");
 //         const ordersRes = await fetch("http://localhost:5000/orders");
 //         const productsData = await productsRes.json();
 //         const ordersData = await ordersRes.json();
@@ -608,7 +608,7 @@
 //         });
 //         setDashboardData(dashRes.data);
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setProductsCount(prodRes.data.length);
@@ -938,7 +938,7 @@
 //         });
 //         setDashboardData(dashRes.data);
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setProductsCount(prodRes.data.length);
@@ -1358,7 +1358,7 @@
 //         });
 //         setDashboardData(dashRes.data);
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setProductsCount(prodRes.data.length);
@@ -1783,7 +1783,7 @@
 //         });
 //         setDashboardData(dashRes.data);
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setProductsCount(prodRes.data.length);
@@ -2390,7 +2390,7 @@
 //         });
 //         setDashboardData(dashRes.data || { monthlyData: [] });
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: token ? { Authorization: `Bearer ${token}` } : {},
 //         });
 //         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
@@ -3157,7 +3157,7 @@
 //         });
 //         setDashboardData(dashRes.data || { monthlyData: [] });
 
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", {
+//         const prodRes = await axios.get("http://localhost:5000/products", {
 //           headers: token ? { Authorization: `Bearer ${token}` } : {},
 //         });
 //         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
@@ -3831,7 +3831,7 @@
 //       try {
 //         const dashRes = await axios.get("http://localhost:5000/admin/dashboard", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setDashboardData(dashRes.data || { monthlyData: [] });
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+//         const prodRes = await axios.get("http://localhost:5000/products", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
 //         const orderRes = await axios.get("http://localhost:5000/orders", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setOrdersCount(Array.isArray(orderRes.data) ? orderRes.data.length : 0);
@@ -4677,7 +4677,7 @@
 //       try {
 //         const dashRes = await axios.get("http://localhost:5000/admin/dashboard", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setDashboardData(dashRes.data || { monthlyData: [] });
-//         const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+//         const prodRes = await axios.get("http://localhost:5000/products", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
 //         const orderRes = await axios.get("http://localhost:5000/orders", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
 //         setOrdersCount(Array.isArray(orderRes.data) ? orderRes.data.length : 0);
@@ -5557,7 +5557,7 @@ function AdminDashboard() {
       try {
         const dashRes = await axios.get("http://localhost:5000/admin/dashboard", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setDashboardData(dashRes.data || { monthlyData: [] });
-        const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const prodRes = await axios.get("http://localhost:5000/products", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
         const orderRes = await axios.get("http://localhost:5000/orders", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setOrdersCount(Array.isArray(orderRes.data) ? orderRes.data.length : 0);
