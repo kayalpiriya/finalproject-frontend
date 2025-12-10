@@ -5137,7 +5137,7 @@ function UsersList({ searchTerm }) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/users", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/users", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setUsers(res.data || []);
         setLoading(false);
       } catch (err) { setLoading(false); }
@@ -5250,7 +5250,7 @@ function ChatsList({ searchTerm }) {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/chats", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/chats", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setChats(res.data || []);
         setLoading(false);
       } catch (err) { setLoading(false); }
@@ -5264,7 +5264,7 @@ function ChatsList({ searchTerm }) {
   const deleteChat = async (id) => {
     if(!window.confirm("Delete?")) return;
     try {
-      await axios.delete(`http://localhost:5000/chats/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+      await axios.delete(`https://finalproject-backend-7rqa.onrender.com/chats/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       setChats(prev => prev.filter(c => c._id !== id));
       if(selectedChat && selectedChat._id === id) setSelectedChat(null);
     } catch (err) { alert("Error"); }
@@ -5365,7 +5365,7 @@ function BlogsList({ searchTerm }) {
   // --- FETCH BLOGS ---
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/api/blogs");
       setBlogs(res.data || []);
     } catch (e) {
       console.error("Error fetching blogs", e);
@@ -5379,7 +5379,7 @@ function BlogsList({ searchTerm }) {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+        await axios.delete(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${id}`);
         setBlogs((prev) => prev.filter((b) => b._id !== id));
       } catch (e) { alert("Failed to delete"); }
     }
@@ -5400,10 +5400,10 @@ function BlogsList({ searchTerm }) {
       const token = localStorage.getItem("token");
       const config = { headers: token ? { Authorization: `Bearer ${token}` } : {} };
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/blogs/${currentId}`, payload, config);
+        await axios.put(`https://finalproject-backend-7rqa.onrender.com/api/blogs/${currentId}`, payload, config);
         alert("Blog Updated!");
       } else {
-        await axios.post("http://localhost:5000/api/blogs", payload, config);
+        await axios.post("https://finalproject-backend-7rqa.onrender.com/api/blogs", payload, config);
         alert("Blog Created!");
       }
       setShowModal(false); fetchBlogs();
@@ -5555,11 +5555,11 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dashRes = await axios.get("http://localhost:5000/admin/dashboard", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const dashRes = await axios.get("https://finalproject-backend-7rqa.onrender.com/admin/dashboard", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setDashboardData(dashRes.data || { monthlyData: [] });
-        const prodRes = await axios.get("http://localhost:5000/products", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const prodRes = await axios.get("https://finalproject-backend-7rqa.onrender.com/products", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setProductsCount(Array.isArray(prodRes.data) ? prodRes.data.length : 0);
-        const orderRes = await axios.get("http://localhost:5000/orders", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+        const orderRes = await axios.get("https://finalproject-backend-7rqa.onrender.com/orders", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         setOrdersCount(Array.isArray(orderRes.data) ? orderRes.data.length : 0);
       } catch (err) { console.error(err); }
     };
