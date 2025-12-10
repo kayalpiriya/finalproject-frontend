@@ -1884,7 +1884,7 @@ function AllProduct() {
 
   // Fetch Data
   useEffect(() => {
-    axios.get("http://localhost:5000/products")
+    axios.get("https://finalproject-backend-7rqa.onrender.com/products")
       .then((res) => {
         setProducts(res.data);
         setFilteredProducts(res.data);
