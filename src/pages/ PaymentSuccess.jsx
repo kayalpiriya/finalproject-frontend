@@ -229,7 +229,7 @@ export default function PaymentSuccess() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `http://localhost:5000/payments/session/${sessionId}`,
+          `https://finalproject-backend-7rqa.onrender.com/payments/session/${sessionId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setOrderData(res.data);
@@ -237,7 +237,7 @@ export default function PaymentSuccess() {
         // Automatically download invoice
         if (res.data?._id) {
           const invoiceRes = await axios.get(
-            `http://localhost:5000/payments/invoice/${res.data._id}`,
+            `https://finalproject-backend-7rqa.onrender.com/payments/invoice/${res.data._id}`,
             { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
           );
 
