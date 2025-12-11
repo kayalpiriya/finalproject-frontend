@@ -960,7 +960,7 @@ function ShoppingCart() {
 
                     <div style={styles.itemDetails}>
                       <h3 style={styles.itemTitle}>{item.title}</h3>
-                      <p style={styles.itemPrice}>₹{item.price}</p>
+                      <p style={styles.itemPrice}>LKR{item.price}</p>
                       {item.stock < 5 && (
                         <p style={{ color: theme.danger, fontSize: "0.75rem", marginTop: "5px", display: "flex", alignItems: "center", gap: "5px" }}>
                            <FiPackage /> Only {item.stock} left
@@ -1050,7 +1050,7 @@ function ShoppingCart() {
                   
                   <div style={styles.totalRow}>
                     <span>Subtotal</span>
-                    <span>₹{totalPrice}</span>
+                    <span>LKR{totalPrice}</span>
                   </div>
                   <div style={styles.totalRow}>
                     <span>Shipping</span>
@@ -1058,7 +1058,7 @@ function ShoppingCart() {
                   </div>
                   <div style={styles.finalTotal}>
                     <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem" }}>Total</span>
-                    <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: "bold", color: theme.accent }}>₹{totalPrice}</span>
+                    <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: "bold", color: theme.accent }}>LKR{totalPrice}</span>
                   </div>
                 </div>
 
