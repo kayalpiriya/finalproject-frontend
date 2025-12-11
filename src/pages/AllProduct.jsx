@@ -2179,7 +2179,7 @@ function AllProduct() {
                     <h3 style={{ fontFamily: "'Playfair Display'", fontSize: "1.3rem", margin: "0 0 5px 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "180px" }}>{p.name}</h3>
                     <span style={{ fontSize: "0.85rem", color: theme.textSec }}>Freshly Baked</span>
                   </div>
-                  <span style={{ fontSize: "1.3rem", fontWeight: "bold", color: theme.accent }}>₹{p.price}</span>
+                  <span style={{ fontSize: "1.3rem", fontWeight: "bold", color: theme.accent }}>LKR{p.price}</span>
                 </div>
               </motion.div>
             ))}
@@ -2226,7 +2226,7 @@ function AllProduct() {
                 </h2>
                 
                 <h3 style={{ fontSize: "2rem", margin: "0 0 30px 0", color: theme.textMain }}>
-                  ₹{selectedProduct.price} <span style={{ fontSize: "1rem", color: "#999", fontWeight: "normal" }}>/ piece</span>
+                  LKR{selectedProduct.price} <span style={{ fontSize: "1rem", color: "#999", fontWeight: "normal" }}>/ piece</span>
                 </h3>
 
                 <p style={{ color: theme.textSec, lineHeight: "1.8", fontSize: "1.05rem", marginBottom: "40px" }}>
