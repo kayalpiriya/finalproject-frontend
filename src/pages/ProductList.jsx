@@ -2451,7 +2451,7 @@ function ProductList() {
                   {p.img ? <img src={p.img} alt={p.name} style={styles.img} /> : <div style={styles.noImg}>No Img</div>}
                 </td>
                 <td style={{...styles.td, fontWeight: '600', color: '#111827'}}>{p.name}</td>
-                <td style={{...styles.td, fontWeight: '700', color: '#111827'}}>₹{p.price}</td>
+                <td style={{...styles.td, fontWeight: '700', color: '#111827'}}>LKR{p.price}</td>
                 <td style={styles.td}>
                    <span style={{...styles.badge, background: p.stock > 10 ? '#ecfdf5' : p.stock > 0 ? '#fffbeb' : '#fef2f2', color: p.stock > 10 ? '#047857' : p.stock > 0 ? '#b45309' : '#b91c1c'}}>
                        {p.stock > 0 ? `${p.stock} in stock` : 'Out of stock'}
@@ -2515,7 +2515,7 @@ function ProductList() {
             <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
               <div style={styles.inputGroup}><label style={styles.label}>Product Name</label><input name="name" placeholder="e.g. Wireless Headphones" onChange={handleAddChange} style={styles.input} className="hover-input" /></div>
               <div style={{display: 'flex', gap: '16px'}}>
-                  <div style={{flex: 1}}><label style={styles.label}>Price (₹)</label><input name="price" placeholder="0.00" type="number" onChange={handleAddChange} style={styles.input} className="hover-input" /></div>
+                  <div style={{flex: 1}}><label style={styles.label}>Price (LKR)</label><input name="price" placeholder="0.00" type="number" onChange={handleAddChange} style={styles.input} className="hover-input" /></div>
                   <div style={{flex: 1}}><label style={styles.label}>Stock Qty</label><input name="stock" placeholder="0" type="number" onChange={handleAddChange} style={styles.input} className="hover-input" /></div>
               </div>
               <div style={styles.inputGroup}><label style={styles.label}>Description</label><textarea name="description" placeholder="Enter product details..." rows="3" onChange={handleAddChange} style={{...styles.input, resize:'none', fontFamily: 'inherit'}} className="hover-input" /></div>
@@ -2533,7 +2533,7 @@ function ProductList() {
             <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
               <div style={styles.inputGroup}><label style={styles.label}>Product Name</label><input name="name" value={editData.name} onChange={handleEditChange} style={styles.input} className="hover-input" /></div>
               <div style={{display: 'flex', gap: '16px'}}>
-                  <div style={{flex: 1}}><label style={styles.label}>Price (₹)</label><input name="price" value={editData.price} onChange={handleEditChange} type="number" style={styles.input} className="hover-input" /></div>
+                  <div style={{flex: 1}}><label style={styles.label}>Price (LKR)</label><input name="price" value={editData.price} onChange={handleEditChange} type="number" style={styles.input} className="hover-input" /></div>
                   <div style={{flex: 1}}><label style={styles.label}>Stock Qty</label><input name="stock" value={editData.stock} onChange={handleEditChange} type="number" style={styles.input} className="hover-input" /></div>
               </div>
               <div style={styles.inputGroup}><label style={styles.label}>Description</label><textarea name="description" value={editData.description} onChange={handleEditChange} rows="3" style={{...styles.input, resize:'none'}} className="hover-input" /></div>

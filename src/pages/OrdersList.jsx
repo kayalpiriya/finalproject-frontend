@@ -1721,7 +1721,7 @@ function OrdersList() {
              <div style={{padding:'10px', borderRadius:'50%', background: 'rgba(255, 181, 71, 0.1)'}}><ShoppingBag size={20} color={colors.warning} /></div>
              <span style={styles.statLabel}>Total Revenue</span>
           </div>
-          <span style={styles.statValue}>₹{totalRevenue}</span>
+          <span style={styles.statValue}>LKR{totalRevenue}</span>
           <div style={{ width: "100%", height: "80px" }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={revenueData}><Tooltip cursor={{fill: 'transparent'}} contentStyle={{borderRadius:'8px', border:'none', boxShadow:'0px 5px 15px rgba(0,0,0,0.1)'}} /><Bar dataKey="value" fill={colors.warning} radius={[4, 4, 0, 0]} barSize={15} /></BarChart>
@@ -1785,7 +1785,7 @@ function OrdersList() {
                         {order.user?.name || "Guest User"}
                      </div>
                   </td>
-                  <td style={styles.td}>₹{order.total || 0}</td>
+                  <td style={styles.td}>LKR{order.total || 0}</td>
                   <td style={styles.td}>
                     <span style={{fontWeight:'bold', color: colors.textHeader}}>{totalItemsOrder || 0}</span>
                   </td>
