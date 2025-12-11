@@ -1592,7 +1592,7 @@ function Product() {
             </h1>
 
             <div className="flex items-end gap-4 mb-8">
-              <span className="text-3xl font-medium text-[#D6A85B]">₹{product.price}</span>
+              <span className="text-3xl font-medium text-[#D6A85B]">LKR{product.price}</span>
               <span className="text-sm text-[#8C7B6F] mb-1">per unit / inclusive of tax</span>
             </div>
 
