@@ -1435,21 +1435,7 @@
 //                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
 //                 <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
 //               </div>
-//               {/* <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a> */}
-//               <p
-//   onClick={() => navigate("/forgot-password")}
-//   style={{
-//     color: "#333",
-//     fontSize: "14px",
-//     textDecoration: "none",
-//     margin: "15px 0",
-//     fontWeight: "500",
-//     cursor: "pointer"
-//   }}
-// >
-//   Forgot your password?
-// </p>
-
+//               <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
 //               <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
 //             </form>
 //           </div>
@@ -1482,9 +1468,7 @@
 // export default AuthPage;
 
 
-
-import { useState, useEffect } from "react"; 
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FiUser, FiMail, FiLock, FiFacebook, FiGithub } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
@@ -1492,263 +1476,240 @@ import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// --- IMPORT IMAGE ---
-import cakeBg from "../assets/cakee1.jpg"; 
+const styles = {
+  inputGroup: "flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-2 bg-white",
+  input: "w-full bg-transparent outline-none text-gray-700",
+  button: "bg-black text-white w-full py-2 rounded-lg hover:bg-gray-800 transition-all mt-4",
+};
 
-// --- BACKEND BASE URL ---
-const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
+const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/";
 
 function AuthPage() {
-  const [isSignUpMode, setIsSignUpMode] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation(); 
-  const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
 
-  // FORM STATES
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [regData, setRegData] = useState({ name: "", email: "", password: "" });
+  // LOGIN FIELDS
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
 
-  // COLORS
-  const colors = {
-    primary: "#E76F51", 
-    secondary: "#264653", 
-    bg: "#FDFCF8",
-    white: "#FFFFFF"
+  // REGISTER FIELDS
+  const [registerData, setRegisterData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  // FORGOT PASSWORD FIELD
+  const [emailForReset, setEmailForReset] = useState("");
+
+  const handleChange = (e, type) => {
+    const { name, value } = e.target;
+    type === "login"
+      ? setLoginData({ ...loginData, [name]: value })
+      : setRegisterData({ ...registerData, [name]: value });
   };
 
-  // --- CHECK LOGIN ---
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) navigate("/allproduct", { replace: true });
-  }, [navigate]);
+  // ------------------------------
+  // LOGIN
+  // ------------------------------
+  const handleLogin = async () => {
+    if (!loginData.email || !loginData.password)
+      return toast.error("Fill all the fields");
 
-  // --- GOOGLE LOGIN ---
-  const handleGoogleLogin = () => {
-    window.open(`${BASE_URL}/google`, "_self");
-  };
-
-  // --- HANDLE GOOGLE CALLBACK ---
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const token = queryParams.get("token");
-    if (token) {
-      localStorage.setItem("token", token);
-      toast.success("✨ Google Login Successful!");
-      navigate("/allproduct", { replace: true });
-    }
-  }, [location, navigate]);
-
-  // --- INPUT HANDLERS ---
-  const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
-
-  // --- LOGIN SUBMIT ---
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/login`, loginData);
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-      toast.success("✨ Welcome back!");
-      navigate("/allproduct", { replace: true });
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid credentials.");
+      const { data } = await axios.post(`${BASE_URL}auth/login`, loginData);
+      toast.success("Login Successful!");
+      console.log(data);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login Failed");
     }
-    setLoading(false);
   };
 
-  // --- REGISTER SUBMIT ---
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  // ------------------------------
+  // REGISTER
+  // ------------------------------
+  const handleRegister = async () => {
+    if (!registerData.email || !registerData.password || !registerData.username)
+      return toast.error("Fill all the fields");
+
     try {
-      await axios.post(`${BASE_URL}/register`, regData);
-      toast.success("🎉 Account created! Please login.");
-      setIsSignUpMode(false); 
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed.");
+      const { data } = await axios.post(`${BASE_URL}auth/register`, registerData);
+      toast.success("Account Created Successfully!");
+      console.log(data);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration Failed");
     }
-    setLoading(false);
+  };
+
+  // ------------------------------
+  // FORGOT PASSWORD → SEND OTP
+  // ------------------------------
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!emailForReset) return toast.error("Enter your email");
+
+    try {
+      await axios.post(`${BASE_URL}authforgot-password`, { email: emailForReset });
+      toast.success("OTP sent to your email!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send OTP.");
+    }
   };
 
   return (
-    <div style={{ backgroundColor: colors.bg, minHeight: "100vh" }}>
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
 
-      {/* STYLES */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
+      <div className="flex flex-1 justify-center items-center px-6 sm:px-12 lg:px-20">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            
+            {/* LEFT SECTION */}
+            <div className="p-10 bg-gray-50 border-r border-gray-200 flex flex-col justify-center">
+              <img
+                src="https://img.freepik.com/premium-vector/bakery-shop-concept_541075-62.jpg"
+                alt="auth-banner"
+                className="rounded-lg shadow-md w-full"
+              />
+            </div>
 
-        .container {
-          position: relative;
-          overflow: hidden;
-          width: 1000px;
-          max-width: 100%;
-          min-height: 650px;
-          background-color: #fff;
-          border-radius: 30px;
-          box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-        }
+            {/* RIGHT SECTION */}
+            <div className="p-10">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+                {forgotMode ? "Forgot Password" : isSignUp ? "Create Account" : "Welcome Back"}
+              </h2>
 
-        .form-container {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          transition: all 0.6s ease-in-out;
-        }
+              {/* ---------------- LOGIN FORM ---------------- */}
+              {!isSignUp && !forgotMode && (
+                <div>
+                  <div className={styles.inputGroup}>
+                    <FiMail />
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className={styles.input}
+                      onChange={(e) => handleChange(e, "login")}
+                    />
+                  </div>
 
-        .sign-in-container { left: 0; width: 50%; z-index: 2; }
-        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+                  <div className={styles.inputGroup}>
+                    <FiLock />
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      className={styles.input}
+                      onChange={(e) => handleChange(e, "login")}
+                    />
+                  </div>
 
-        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
-        .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
+                  <button onClick={handleLogin} className={styles.button}>
+                    Login
+                  </button>
 
-        @keyframes show {
-          0%, 49.99% { opacity: 0; z-index: 1; }
-          50%, 100% { opacity: 1; z-index: 5; }
-        }
+                  <p
+                    className="text-blue-500 text-center mt-4 cursor-pointer"
+                    onClick={() => setForgotMode(true)}
+                  >
+                    Forgot your password?
+                  </p>
 
-        .overlay-container {
-          position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
-          overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
-          border-top-right-radius: 30px; border-bottom-right-radius: 30px;
-        }
+                  <p className="text-center mt-4">
+                    Don't have an account?{" "}
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => setIsSignUp(true)}
+                    >
+                      Sign up
+                    </span>
+                  </p>
+                </div>
+              )}
 
-        .container.right-panel-active .overlay-container { transform: translateX(-100%); }
+              {/* ---------------- REGISTER FORM ---------------- */}
+              {isSignUp && !forgotMode && (
+                <div>
+                  <div className={styles.inputGroup}>
+                    <FiUser />
+                    <input
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      className={styles.input}
+                      onChange={(e) => handleChange(e, "register")}
+                    />
+                  </div>
 
-        .overlay {
-          background: linear-gradient(to right, #E76F51, #264653);
-          color: #ffffff;
-          position: relative;
-          left: -100%; height: 100%; width: 200%;
-          transform: translateX(0); transition: transform 0.6s ease-in-out;
-        }
+                  <div className={styles.inputGroup}>
+                    <FiMail />
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className={styles.input}
+                      onChange={(e) => handleChange(e, "register")}
+                    />
+                  </div>
 
-        .container.right-panel-active .overlay { transform: translateX(50%); }
+                  <div className={styles.inputGroup}>
+                    <FiLock />
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      className={styles.input}
+                      onChange={(e) => handleChange(e, "register")}
+                    />
+                  </div>
 
-        .overlay-panel {
-          position: absolute; display: flex; align-items: center; justify-content: center;
-          flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
-          transition: transform 0.6s ease-in-out;
-        }
+                  <button onClick={handleRegister} className={styles.button}>
+                    Sign Up
+                  </button>
 
-        .overlay-left { transform: translateX(-20%); }
-        .container.right-panel-active .overlay-left { transform: translateX(0); }
+                  <p className="text-center mt-4">
+                    Already have an account?{" "}
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => setIsSignUp(false)}
+                    >
+                      Sign in
+                    </span>
+                  </p>
+                </div>
+              )}
 
-        .overlay-right { right: 0; }
+              {/* ---------------- FORGOT PASSWORD FORM ---------------- */}
+              {forgotMode && (
+                <div>
+                  <div className={styles.inputGroup}>
+                    <FiMail />
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className={styles.input}
+                      value={emailForReset}
+                      onChange={(e) => setEmailForReset(e.target.value)}
+                    />
+                  </div>
 
-        .modern-input {
-          background-color: #F5F5F5; padding: 15px 15px 15px 45px;
-          width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem;
-          border: 2px solid transparent; transition: 0.3s;
-        }
+                  <button onClick={handleForgotPassword} className={styles.button}>
+                    Send OTP
+                  </button>
 
-        .modern-input:focus { background: white; border-color: ${colors.primary}; }
-
-        .btn-primary {
-          border-radius: 25px; border: none; background-color: ${colors.primary};
-          color: #ffffff; padding: 15px 45px; margin-top: 10px; font-weight: bold;
-          cursor: pointer;
-        }
-
-        .btn-ghost {
-          background-color: transparent; border: 2px solid white; color: white;
-          padding: 12px 40px; border-radius: 25px; cursor: pointer;
-        }
-
-        .social-btn {
-          border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex;
-          justify-content: center; align-items: center; margin: 0 5px;
-          height: 45px; width: 45px; cursor: pointer;
-        }
-
-        .bg-image {
-          position: absolute; inset: 0; z-index: -1; 
-          background-image: url(${cakeBg});
-          background-size: cover; background-position: center; opacity: 0.4;
-        }
-      `}</style>
-
-      {/* MAIN BOX */}
-      <div style={{ display: "flex", justifyContent: "center", padding: "80px 20px" }}>
-        
-        <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
-
-          {/* SIGN UP */}
-          <div className="form-container sign-up-container">
-            <form onSubmit={handleRegister} style={formStyle}>
-              <h1 style={titleStyle}>Create Account</h1>
-
-              <div style={{ margin: "20px 0" }}>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-                <button type="button" className="social-btn"><FiGithub size={20} /></button>
-              </div>
-
-              <span style={smallText}>or use your email</span>
-
-              <Input icon={<FiUser />} name="name" placeholder="Name" value={regData.name} onChange={handleRegChange} />
-              <Input icon={<FiMail />} name="email" placeholder="Email" value={regData.email} onChange={handleRegChange} />
-              <Input icon={<FiLock />} name="password" placeholder="Password" value={regData.password} onChange={handleRegChange} />
-
-              <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
-            </form>
-          </div>
-
-          {/* SIGN IN */}
-          <div className="form-container sign-in-container">
-            <form onSubmit={handleLogin} style={formStyle}>
-              <h1 style={titleStyle}>Sign In</h1>
-
-              <div style={{ margin: "20px 0" }}>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-                <button type="button" className="social-btn"><FiGithub size={20} /></button>
-              </div>
-
-              <span style={smallText}>or use your account</span>
-
-              <Input icon={<FiMail />} name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
-              <Input icon={<FiLock />} name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
-
-              {/* 🔥 FORGOT PASSWORD WORKS 100% */}
-              <p
-                onClick={() => navigate("/forgot-password")}
-                style={{
-                  color: "#333",
-                  fontSize: "14px",
-                  margin: "10px 0",
-                  cursor: "pointer",
-                  textDecoration: "underline"
-                }}
-              >
-                Forgot your password?
-              </p>
-
-              <button className="btn-primary" disabled={loading}>{loading ? "Signing..." : "Sign In"}</button>
-            </form>
-          </div>
-
-          {/* OVERLAY */}
-          <div className="overlay-container">
-            <div className="overlay">
-
-              <div className="overlay-panel overlay-left">
-                <h1 style={titleStyle}>Welcome Back!</h1>
-                <p style={overlayText}>Login with your personal details</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
-              </div>
-
-              <div className="overlay-panel overlay-right">
-                <h1 style={titleStyle}>Hello, Friend!</h1>
-                <p style={overlayText}>Enter your personal information to continue</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
-              </div>
+                  <p
+                    className="text-center mt-4 text-blue-500 cursor-pointer"
+                    onClick={() => setForgotMode(false)}
+                  >
+                    Back to Login
+                  </p>
+                </div>
+              )}
 
             </div>
           </div>
-
         </div>
       </div>
 
@@ -1756,46 +1717,5 @@ function AuthPage() {
     </div>
   );
 }
-
-// ----------------- Reusable Input  --------------------
-const Input = ({ icon, ...props }) => (
-  <div style={{ width: "100%", position: "relative" }}>
-    <div style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }}>
-      {icon}
-    </div>
-    <input className="modern-input" {...props} />
-  </div>
-);
-
-// Styles
-const formStyle = {
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "0 50px",
-  backgroundColor: "white"
-};
-
-const titleStyle = {
-  fontFamily: "'Playfair Display', serif",
-  fontSize: "2.3rem",
-  marginBottom: "10px",
-  color: "#264653"
-};
-
-const smallText = {
-  fontSize: "12px",
-  marginBottom: "15px",
-  color: "#888"
-};
-
-const overlayText = {
-  fontSize: "14px",
-  margin: "20px 0 30px",
-  fontWeight: 300,
-  lineHeight: "20px"
-};
 
 export default AuthPage;
