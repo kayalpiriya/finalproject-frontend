@@ -1435,7 +1435,21 @@ function AuthPage() {
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
                 <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
               </div>
-              <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
+              {/* <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a> */}
+              <p
+  onClick={() => navigate("/forgot-password")}
+  style={{
+    color: "#333",
+    fontSize: "14px",
+    textDecoration: "none",
+    margin: "15px 0",
+    fontWeight: "500",
+    cursor: "pointer"
+  }}
+>
+  Forgot your password?
+</p>
+
               <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
             </form>
           </div>
