@@ -1477,58 +1477,68 @@ import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// IMAGE
+// --- IMPORT IMAGE ---
 import cakeBg from "../assets/cakee1.jpg"; 
 
+// --- BASE URL ---
 const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
-  const [forgotMode, setForgotMode] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); 
   const [loading, setLoading] = useState(false);
 
-  // LOGIN / REGISTER STATES
+  // --- FORM STATES ---
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
 
-  // FORGOT PASSWORD STATES
+  // --- FORGOT PASSWORD STATES ---
+  const [forgotMode, setForgotMode] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-  const colors = { primary: "#E76F51", secondary: "#264653", bg: "#FDFCF8" };
+  // --- THEME ---
+  const colors = {
+    primary: "#E76F51", 
+    secondary: "#264653", 
+    bg: "#FDFCF8",
+    white: "#FFFFFF"
+  };
 
-  // ------------------------ REDIRECT IF LOGGED IN ------------------------
+  // --- AUTO LOGIN IF TOKEN EXISTS ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) navigate("/allproduct", { replace: true });
   }, [navigate]);
 
-  // ------------------------ GOOGLE LOGIN ------------------------
+  // --- GOOGLE LOGIN ---
   const handleGoogleLogin = () => {
     window.open(`${BASE_URL}/google`, "_self");
   };
+
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const token = query.get("token");
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get("token");
+
     if (token) {
       localStorage.setItem("token", token);
-      localStorage.setItem("role", "user");
+      localStorage.setItem("role", "user"); 
       toast.success("✨ Google Login Successful!");
       window.history.replaceState({}, document.title, "/");
       navigate("/allproduct", { replace: true });
     }
   }, [location, navigate]);
 
-  // ------------------------ FORM HANDLERS ------------------------
+  // --- HANDLERS ---
   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
   const handleLogin = async (e) => {
-    e.preventDefault(); setLoading(true);
+    e.preventDefault();
+    setLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/login`, loginData);
       localStorage.setItem("token", res.data.token);
@@ -1542,18 +1552,20 @@ function AuthPage() {
   };
 
   const handleRegister = async (e) => {
-    e.preventDefault(); setLoading(true);
+    e.preventDefault();
+    setLoading(true);
     try {
       await axios.post(`${BASE_URL}/register`, regData);
       toast.success("🎉 Account created! Please login.");
-      setIsSignUpMode(false); setLoading(false);
+      setIsSignUpMode(false); 
+      setLoading(false);
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed.");
       setLoading(false);
     }
   };
 
-  // ------------------------ FORGOT PASSWORD ------------------------
+  // --- FORGOT PASSWORD HANDLERS ---
   const handleSendOTP = async (e) => {
     e.preventDefault();
     try {
@@ -1564,13 +1576,17 @@ function AuthPage() {
       toast.error(err.response?.data?.message || "Failed to send OTP.");
     }
   };
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(`${BASE_URL}/reset-password`, { email: forgotEmail, otp, password: newPassword });
       toast.success(res.data.message || "Password updated!");
-      setOtpSent(false); setForgotMode(false);
-      setForgotEmail(""); setOtp(""); setNewPassword("");
+      setOtpSent(false); 
+      setForgotMode(false);
+      setForgotEmail(""); 
+      setOtp(""); 
+      setNewPassword("");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to reset password.");
     }
@@ -1580,49 +1596,100 @@ function AuthPage() {
     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
       <Navbar />
 
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
+      {/* STYLES */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
+        .container { position: relative; overflow: hidden; width: 1000px; max-width: 100%; min-height: 650px; background-color: #fff; border-radius: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1);}
+        .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
+        .sign-in-container { left: 0; width: 50%; z-index: 2; }
+        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+        .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
+        @keyframes show {0%,49.99%{opacity:0; z-index:1;}50%,100%{opacity:1; z-index:5;}}
+        .overlay-container { position: absolute; top:0; left:50%; width:50%; height:100%; overflow:hidden; transition:transform 0.6s ease-in-out; z-index:100; border-top-right-radius:30px; border-bottom-right-radius:30px;}
+        .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px;}
+        .overlay { background: linear-gradient(to right, #E76F51, #264653); background-repeat:no-repeat; background-size:cover; background-position:0 0; color:#fff; position:relative; left:-100%; height:100%; width:200%; transform: translateX(0); transition: transform 0.6s ease-in-out;}
+        .container.right-panel-active .overlay { transform: translateX(50%); }
+        .overlay-panel { position:absolute; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:0 40px; text-align:center; top:0; height:100%; width:50%; transform: translateX(0); transition: transform 0.6s ease-in-out;}
+        .overlay-left { transform: translateX(-20%); }
+        .container.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right:0; transform: translateX(0); }
+        .container.right-panel-active .overlay-right { transform: translateX(20%); }
+        .modern-input { background-color: #F5F5F5; border:2px solid transparent; padding:15px 15px 15px 45px; width:100%; border-radius:12px; margin-bottom:15px; font-size:0.95rem; outline:none; transition:0.3s; }
+        .modern-input:focus { background:white; border-color:${colors.primary}; box-shadow:0 5px 15px rgba(231,111,81,0.1);}
+        .btn-primary { border-radius:25px; border:none; background-color:${colors.primary}; color:#fff; font-size:14px; font-weight:bold; padding:15px 45px; letter-spacing:1px; text-transform:uppercase; transition:transform 80ms ease-in; cursor:pointer; margin-top:10px; box-shadow:0 10px 20px rgba(231,111,81,0.3);}
+        .btn-primary:active { transform: scale(0.95); }
+        .btn-ghost { background-color:transparent; border-color:#fff; border:2px solid white; border-radius:25px; color:white; padding:12px 40px; font-weight:bold; cursor:pointer; transition:0.3s; }
+        .btn-ghost:hover { background:white; color:${colors.primary}; }
+        .social-btn { border:1px solid #DDD; border-radius:50%; display:inline-flex; justify-content:center; align-items:center; margin:0 5px; height:45px; width:45px; cursor:pointer; transition:0.3s; }
+        .social-btn:hover { border-color:${colors.primary}; transform: translateY(-3px); }
+        .bg-image { position:absolute; inset:0; z-index:-1; background-image:url(${cakeBg}); background-size:cover; background-position:center; opacity:0.4; mix-blend-mode:overlay; }
+      `}</style>
+
+      <div style={{ minHeight: "100vh", display:"flex", alignItems:"center", justifyContent:"center", padding:"100px 20px" }}>
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
 
           {/* SIGN UP */}
           <div className="form-container sign-up-container">
-            <form onSubmit={handleRegister}>
-              <h1>Create Account</h1>
-              <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle /></button>
-              <button type="button" className="social-btn"><FiFacebook /></button>
-              <button type="button" className="social-btn"><FiGithub /></button>
-              <input type="text" name="name" placeholder="Name" value={regData.name} onChange={handleRegChange} />
-              <input type="email" name="email" placeholder="Email" value={regData.email} onChange={handleRegChange} />
-              <input type="password" name="password" placeholder="Password" value={regData.password} onChange={handleRegChange} />
-              <button disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
+            <form onSubmit={handleRegister} style={{height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"0 50px", backgroundColor:"white"}}>
+              <h1 style={{fontFamily:"'Playfair Display', serif", fontSize:"2.5rem", margin:0, color:colors.secondary}}>Create Account</h1>
+              <div style={{ margin:"20px 0" }}>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20}/></button>
+                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2"/></button>
+                <button type="button" className="social-btn"><FiGithub size={20}/></button>
+              </div>
+              <span style={{fontSize:"12px", marginBottom:"15px", color:"#888"}}>or use your email for registration</span>
+              <div style={{width:"100%", position:"relative"}}>
+                <FiUser style={{position:"absolute", top:"18px", left:"15px", color:"#bbb"}} />
+                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
+              </div>
+              <div style={{width:"100%", position:"relative"}}>
+                <FiMail style={{position:"absolute", top:"18px", left:"15px", color:"#bbb"}} />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
+              </div>
+              <div style={{width:"100%", position:"relative"}}>
+                <FiLock style={{position:"absolute", top:"18px", left:"15px", color:"#bbb"}} />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
+              </div>
+              <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
-          {/* SIGN IN */}
+          {/* SIGN IN + FORGOT PASSWORD */}
           <div className="form-container sign-in-container">
             {!forgotMode ? (
-              <form onSubmit={handleLogin}>
-                <h1>Sign In</h1>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle /></button>
-                <button type="button" className="social-btn"><FiFacebook /></button>
-                <button type="button" className="social-btn"><FiGithub /></button>
-                <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
-                <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
-                <p style={{ cursor: "pointer", color: "#333" }} onClick={() => setForgotMode(true)}>Forgot your password?</p>
-                <button disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
+              <form onSubmit={handleLogin} style={{height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"0 50px", backgroundColor:"white"}}>
+                <h1 style={{fontFamily:"'Playfair Display', serif", fontSize:"2.5rem", margin:0, color:colors.secondary}}>Sign In</h1>
+                <div style={{ margin:"20px 0" }}>
+                  <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20}/></button>
+                  <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2"/></button>
+                  <button type="button" className="social-btn"><FiGithub size={20}/></button>
+                </div>
+                <span style={{fontSize:"12px", marginBottom:"15px", color:"#888"}}>or use your account</span>
+                <div style={{width:"100%", position:"relative"}}>
+                  <FiMail style={{position:"absolute", top:"18px", left:"15px", color:"#bbb"}} />
+                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
+                </div>
+                <div style={{width:"100%", position:"relative"}}>
+                  <FiLock style={{position:"absolute", top:"18px", left:"15px", color:"#bbb"}} />
+                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
+                </div>
+                <p style={{ cursor:"pointer", color:"#333", margin:"15px 0" }} onClick={()=>setForgotMode(true)}>Forgot your password?</p>
+                <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
               </form>
             ) : !otpSent ? (
-              <form onSubmit={handleSendOTP}>
-                <h1>Forgot Password</h1>
-                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} />
-                <button>Send OTP</button>
-                <p style={{ cursor: "pointer" }} onClick={() => setForgotMode(false)}>Back to login</p>
+              <form onSubmit={handleSendOTP} style={{height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"0 50px", backgroundColor:"white"}}>
+                <h1 style={{fontFamily:"'Playfair Display', serif", fontSize:"2rem", margin:0, color:colors.secondary}}>Forgot Password</h1>
+                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e)=>setForgotEmail(e.target.value)} className="modern-input" />
+                <button className="btn-primary">Send OTP</button>
+                <p style={{ cursor:"pointer", color:"#333", margin:"10px 0" }} onClick={()=>setForgotMode(false)}>Back to Login</p>
               </form>
             ) : (
-              <form onSubmit={handleResetPassword}>
-                <h1>Reset Password</h1>
-                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
-                <input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                <button>Reset Password</button>
+              <form onSubmit={handleResetPassword} style={{height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"0 50px", backgroundColor:"white"}}>
+                <h1 style={{fontFamily:"'Playfair Display', serif", fontSize:"2rem", margin:0, color:colors.secondary}}>Reset Password</h1>
+                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e)=>setOtp(e.target.value)} className="modern-input" />
+                <input type="password" placeholder="New Password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} className="modern-input" />
+                <button className="btn-primary">Reset Password</button>
               </form>
             )}
           </div>
@@ -1631,15 +1698,16 @@ function AuthPage() {
           <div className="overlay-container">
             <div className="overlay">
               <div className="bg-image"></div>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
               <div className="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>To keep connected with us please login with your personal info</p>
-                <button onClick={() => setIsSignUpMode(false)}>Sign In</button>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
+                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
               </div>
               <div className="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your personal details and start your delicious journey with us</p>
-                <button onClick={() => setIsSignUpMode(true)}>Sign Up</button>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
+                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
               </div>
             </div>
           </div>
