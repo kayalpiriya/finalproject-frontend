@@ -1866,8 +1866,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { CartContext } from "../pages/CartContext";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 function AllProduct() {
   // =================================================================
   // 1. LOGIC (UNCHANGED)
@@ -1886,7 +1884,7 @@ function AllProduct() {
 
   // Fetch Data
   useEffect(() => {
-    axios.get(`${BASE_URL}/products`)
+    axios.get("https://finalproject-backend-7rqa.onrender.com/products")
       .then((res) => {
         setProducts(res.data);
         setFilteredProducts(res.data);
