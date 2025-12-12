@@ -1187,297 +1187,20 @@
 
 
 
-// import { useState, useEffect } from "react"; 
-// import { useNavigate, useLocation } from "react-router-dom"; 
-// import axios from "axios";
-// import { FiUser, FiMail, FiLock, FiFacebook, FiGithub } from "react-icons/fi";
-// import { FcGoogle } from "react-icons/fc";
-// import { toast } from "react-toastify";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-
-// // --- 1. IMPORT IMAGE CORRECTLY ---
-// import cakeBg from "../assets/cakee1.jpg"; 
-
-// // --- 2. DEFINE BASE URL (To avoid typo errors) ---
-// const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
-
-// function AuthPage() {
-//   const [isSignUpMode, setIsSignUpMode] = useState(false);
-//   const navigate = useNavigate();
-//   const location = useLocation(); 
-//   const [loading, setLoading] = useState(false);
-
-//   // --- FORM STATES ---
-//   const [loginData, setLoginData] = useState({ email: "", password: "" });
-//   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
-  
-//   // --- THEME ---
-//   const colors = {
-//     primary: "#E76F51", 
-//     secondary: "#264653", 
-//     bg: "#FDFCF8",
-//     white: "#FFFFFF"
-//   };
-
-//   // ---------------------------------------------------------
-//   // 🔒 "BOUNCER" LOGIC
-//   // ---------------------------------------------------------
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (token) {
-//       navigate("/allproduct", { replace: true });
-//     }
-//   }, [navigate]);
-
-//   // --- 3. FIX GOOGLE LOGIN URL ---
-//   const handleGoogleLogin = () => {
-//     // Fixed: Added slash -> /auth/google
-//     window.open(`${BASE_URL}/google`, "_self");
-//   };
-
-//   // --- HANDLE GOOGLE CALLBACK ---
-//   useEffect(() => {
-//     const queryParams = new URLSearchParams(location.search);
-//     const token = queryParams.get("token");
-
-//     if (token) {
-//       localStorage.setItem("token", token);
-//       localStorage.setItem("role", "user"); 
-
-//       toast.success("✨ Google Login Successful!");
-//       window.history.replaceState({}, document.title, "/");
-//       navigate("/allproduct", { replace: true });
-//     }
-//   }, [location, navigate]);
-
-//   // --- HANDLERS ---
-//   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
-//   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     try {
-//       // Fixed: Using BASE_URL -> /auth/login
-//       const res = await axios.post(`${BASE_URL}/login`, loginData);
-//       localStorage.setItem("token", res.data.token);
-//       localStorage.setItem("role", res.data.role);
-//       toast.success("✨ Welcome back!");
-//       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
-      
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Invalid credentials.");
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     try {
-//       // Fixed: Using BASE_URL -> /auth/register (This fixes your 404 error)
-//       await axios.post(`${BASE_URL}/register`, regData);
-//       toast.success("🎉 Account created! Please login.");
-//       setIsSignUpMode(false); 
-//       setLoading(false);
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Registration failed.");
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
-//       <Navbar />
-
-//       {/* --- STYLES --- */}
-//       <style>{`
-//         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
-
-//         .container {
-//           position: relative;
-//           overflow: hidden;
-//           width: 1000px;
-//           max-width: 100%;
-//           min-height: 650px;
-//           background-color: #fff;
-//           border-radius: 30px;
-//           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-//         }
-
-//         /* FORMS */
-//         .form-container {
-//           position: absolute;
-//           top: 0;
-//           height: 100%;
-//           transition: all 0.6s ease-in-out;
-//         }
-
-//         .sign-in-container { left: 0; width: 50%; z-index: 2; }
-//         .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
-
-//         .container.right-panel-active .sign-in-container { transform: translateX(100%); }
-//         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
-
-//         @keyframes show {
-//           0%, 49.99% { opacity: 0; z-index: 1; }
-//           50%, 100% { opacity: 1; z-index: 5; }
-//         }
-
-//         /* OVERLAY */
-//         .overlay-container {
-//           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
-//           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
-//           border-top-right-radius: 30px; border-bottom-right-radius: 30px;
-//         }
-//         .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px; }
-
-//         .overlay {
-//           background: #E76F51;
-//           background: linear-gradient(to right, #E76F51, #264653);
-//           background-repeat: no-repeat; background-size: cover; background-position: 0 0;
-//           color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%;
-//           transform: translateX(0); transition: transform 0.6s ease-in-out;
-//         }
-//         .container.right-panel-active .overlay { transform: translateX(50%); }
-
-//         .overlay-panel {
-//           position: absolute; display: flex; align-items: center; justify-content: center;
-//           flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
-//           transform: translateX(0); transition: transform 0.6s ease-in-out;
-//         }
-//         .overlay-left { transform: translateX(-20%); }
-//         .container.right-panel-active .overlay-left { transform: translateX(0); }
-//         .overlay-right { right: 0; transform: translateX(0); }
-//         .container.right-panel-active .overlay-right { transform: translateX(20%); }
-
-//         /* ELEMENTS */
-//         .modern-input {
-//           background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
-//           width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
-//         }
-//         .modern-input:focus { background: white; border-color: ${colors.primary}; box-shadow: 0 5px 15px rgba(231,111,81,0.1); }
-        
-//         .btn-primary {
-//           border-radius: 25px; border: none; background-color: ${colors.primary}; color: #ffffff;
-//           font-size: 14px; font-weight: bold; padding: 15px 45px; letter-spacing: 1px; text-transform: uppercase;
-//           transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px;
-//           box-shadow: 0 10px 20px rgba(231,111,81,0.3);
-//         }
-//         .btn-primary:active { transform: scale(0.95); }
-        
-//         .btn-ghost {
-//           background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
-//           color: white; padding: 12px 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
-//         }
-//         .btn-ghost:hover { background: white; color: ${colors.primary}; }
-
-//         .social-btn {
-//           border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex; justify-content: center;
-//           align-items: center; margin: 0 5px; height: 45px; width: 45px; cursor: pointer; transition: 0.3s;
-//         }
-//         .social-btn:hover { border-color: ${colors.primary}; transform: translateY(-3px); }
-
-//         .bg-image {
-//           position: absolute; inset: 0; z-index: -1; 
-//           /* 4. USE IMPORTED IMAGE VARIABLE HERE */
-//           background-image: url(${cakeBg});
-//           background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
-//         }
-//       `}</style>
-
-//       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
-        
-//         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
-
-//           {/* SIGN UP */}
-//           <div className="form-container sign-up-container">
-//             <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-//               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
-//               <div style={{ margin: "20px 0" }}>
-//                 <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-//                 <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-//                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
-//               </div>
-//               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
-//               </div>
-//               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
-//             </form>
-//           </div>
-
-//           {/* SIGN IN */}
-//           <div className="form-container sign-in-container">
-//             <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-//               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
-//               <div style={{ margin: "20px 0" }}>
-//                 <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-//                 <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-//                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
-//               </div>
-//               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
-//               </div>
-//               <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
-//               <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
-//             </form>
-//           </div>
-
-//           {/* OVERLAY */}
-//           <div className="overlay-container">
-//             <div className="overlay">
-//               <div className="bg-image"></div>
-//               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
-//               <div className="overlay-panel overlay-left">
-//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
-//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
-//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
-//               </div>
-//               <div className="overlay-panel overlay-right">
-//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
-//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
-//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
-//               </div>
-//             </div>
-//           </div>
-
-//         </div>
-//       </div>
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// export default AuthPage;
-
 import { useState, useEffect } from "react"; 
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
-import { FiUser, FiMail, FiLock, FiFacebook, FiGithub, FiKey, FiArrowLeft } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiFacebook, FiGithub } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// --- IMAGE IMPORT ---
+// --- 1. IMPORT IMAGE CORRECTLY ---
 import cakeBg from "../assets/cakee1.jpg"; 
+
+// --- 2. DEFINE BASE URL (To avoid typo errors) ---
+const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -1488,13 +1211,6 @@ function AuthPage() {
   // --- FORM STATES ---
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
-
-  // --- FORGOT PASSWORD STATES ---
-  const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   
   // --- THEME ---
   const colors = {
@@ -1504,34 +1220,9 @@ function AuthPage() {
     white: "#FFFFFF"
   };
 
-  // =========================================================
-  // 🔧 API CONFIGURATION 
-  // =========================================================
-  const SERVER_URL = "https://finalproject-backend-7rqa.onrender.com";
-
-  const ENDPOINTS = {
-    // These two likely work based on your previous code
-    login:          `${SERVER_URL}/authlogin`,    
-    register:       `${SERVER_URL}/authregister`, 
-    
-    // 👇👇👇 CHANGE THESE IF YOU STILL GET 404 👇👇👇
-    
-    // TRY 1: Standard Format (Current)
-    forgotPassword: `${SERVER_URL}/auth/forgot-password`,
-    resetPassword:  `${SERVER_URL}/auth/reset-password`,
-
-    // TRY 2: No Dash (Uncomment if Try 1 fails)
-    // forgotPassword: `${SERVER_URL}/authforgotpassword`,
-    // resetPassword:  `${SERVER_URL}/authresetpassword`,
-
-    // TRY 3: At Root (Uncomment if Try 1 & 2 fail)
-    // forgotPassword: `${SERVER_URL}/forgot-password`,
-    // resetPassword:  `${SERVER_URL}/reset-password`,
-
-    google:         `${SERVER_URL}/auth/google`
-  };
-  // =========================================================
-
+  // ---------------------------------------------------------
+  // 🔒 "BOUNCER" LOGIC
+  // ---------------------------------------------------------
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -1539,10 +1230,13 @@ function AuthPage() {
     }
   }, [navigate]);
 
+  // --- 3. FIX GOOGLE LOGIN URL ---
   const handleGoogleLogin = () => {
-    window.open(ENDPOINTS.google, "_self");
+    // Fixed: Added slash -> /auth/google
+    window.open(`${BASE_URL}/google`, "_self");
   };
 
+  // --- HANDLE GOOGLE CALLBACK ---
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
@@ -1550,94 +1244,45 @@ function AuthPage() {
     if (token) {
       localStorage.setItem("token", token);
       localStorage.setItem("role", "user"); 
+
       toast.success("✨ Google Login Successful!");
       window.history.replaceState({}, document.title, "/");
       navigate("/allproduct", { replace: true });
     }
   }, [location, navigate]);
 
+  // --- HANDLERS ---
   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
-  // --- LOGIN ---
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(ENDPOINTS.login, loginData);
+      // Fixed: Using BASE_URL -> /auth/login
+      const res = await axios.post(`${BASE_URL}/login`, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
+      
     } catch (err) {
-      console.error("LOGIN ERROR:", err);
       toast.error(err.response?.data?.message || "Invalid credentials.");
-    } finally {
       setLoading(false);
     }
   };
 
-  // --- REGISTER ---
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(ENDPOINTS.register, regData);
+      // Fixed: Using BASE_URL -> /auth/register (This fixes your 404 error)
+      await axios.post(`${BASE_URL}/register`, regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
+      setLoading(false);
     } catch (err) {
-      console.error("REGISTER ERROR:", err);
       toast.error(err.response?.data?.message || "Registration failed.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // --- SEND OTP ---
-  const handleSendOTP = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    console.log(`Sending OTP to: ${ENDPOINTS.forgotPassword}`);
-
-    try {
-      const res = await axios.post(ENDPOINTS.forgotPassword, { email: forgotEmail });
-      toast.success(res.data.message || "OTP sent to your email!");
-      setOtpSent(true);
-    } catch (err) {
-      console.error("FORGOT PASSWORD ERROR:", err);
-      
-      if (err.response && err.response.status === 404) {
-         toast.error("❌ 404 Error: The backend URL is incorrect. Check ENDPOINTS in code.");
-      } else {
-         toast.error(err.response?.data?.message || "❌ Failed to send OTP.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // --- RESET PASSWORD ---
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await axios.post(ENDPOINTS.resetPassword, {
-        email: forgotEmail,
-        otp,
-        password: newPassword,
-      });
-      toast.success(res.data.message || "Password reset successfully!");
-      
-      setOtpSent(false);
-      setForgotPasswordMode(false);
-      setForgotEmail("");
-      setOtp("");
-      setNewPassword("");
-    } catch (err) {
-      console.error("RESET PASSWORD ERROR:", err);
-      toast.error(err.response?.data?.message || "❌ Failed to reset password.");
-    } finally {
       setLoading(false);
     }
   };
@@ -1646,6 +1291,7 @@ function AuthPage() {
     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
       <Navbar />
 
+      {/* --- STYLES --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
 
@@ -1660,6 +1306,7 @@ function AuthPage() {
           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
         }
 
+        /* FORMS */
         .form-container {
           position: absolute;
           top: 0;
@@ -1678,6 +1325,7 @@ function AuthPage() {
           50%, 100% { opacity: 1; z-index: 5; }
         }
 
+        /* OVERLAY */
         .overlay-container {
           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
@@ -1704,6 +1352,7 @@ function AuthPage() {
         .overlay-right { right: 0; transform: translateX(0); }
         .container.right-panel-active .overlay-right { transform: translateX(20%); }
 
+        /* ELEMENTS */
         .modern-input {
           background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
           width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
@@ -1732,14 +1381,10 @@ function AuthPage() {
 
         .bg-image {
           position: absolute; inset: 0; z-index: -1; 
+          /* 4. USE IMPORTED IMAGE VARIABLE HERE */
           background-image: url(${cakeBg});
           background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
         }
-
-        .back-link {
-            color: #888; margin-top: 20px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s;
-        }
-        .back-link:hover { color: ${colors.primary}; }
       `}</style>
 
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
@@ -1756,91 +1401,43 @@ function AuthPage() {
                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
               </div>
               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
-              
               <div style={{ width: "100%", position: "relative" }}>
                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} required />
+                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} required />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} required />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
               </div>
               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
-          {/* SIGN IN PANEL */}
+          {/* SIGN IN */}
           <div className="form-container sign-in-container">
-            
-            {!forgotPasswordMode ? (
-              // 1. LOGIN FORM
-              <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
-                <div style={{ margin: "20px 0" }}>
-                  <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-                  <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-                  <button type="button" className="social-btn"><FiGithub size={20} /></button>
-                </div>
-                <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
-                
-                <div style={{ width: "100%", position: "relative" }}>
-                  <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} required />
-                </div>
-                <div style={{ width: "100%", position: "relative" }}>
-                  <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} required />
-                </div>
-                
-                <a href="#" onClick={(e) => { e.preventDefault(); setForgotPasswordMode(true); }} style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>
-                  Forgot your password?
-                </a>
-
-                <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
-              </form>
-            ) : (
-              // 2. FORGOT PASSWORD FORM
-              <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white", width: "100%" }}>
-                
-                {!otpSent ? (
-                  // STEP A: SEND OTP
-                  <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                     <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", marginBottom: "10px", color: colors.secondary }}>Reset Password</h1>
-                     <p style={{ textAlign: "center", fontSize: "14px", color: "#666", marginBottom: "20px" }}>Enter your email address to receive an OTP.</p>
-                     
-                     <div style={{ width: "100%", position: "relative" }}>
-                        <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                        <input type="email" placeholder="Enter your email" className="modern-input" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required />
-                     </div>
-                     <button className="btn-primary" disabled={loading}>{loading ? "Sending..." : "Send OTP"}</button>
-                  </form>
-                ) : (
-                  // STEP B: VERIFY OTP
-                  <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                     <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", marginBottom: "10px", color: colors.secondary }}>New Password</h1>
-                     <p style={{ textAlign: "center", fontSize: "14px", color: "#666", marginBottom: "20px" }}>Enter the OTP sent to {forgotEmail}</p>
-
-                     <div style={{ width: "100%", position: "relative" }}>
-                        <FiKey style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                        <input type="text" placeholder="Enter OTP" className="modern-input" value={otp} onChange={(e) => setOtp(e.target.value)} required />
-                     </div>
-                     <div style={{ width: "100%", position: "relative" }}>
-                        <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                        <input type="password" placeholder="New Password" className="modern-input" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                     </div>
-                     <button className="btn-primary" disabled={loading}>{loading ? "Resetting..." : "Reset Password"}</button>
-                  </form>
-                )}
-
-                <div className="back-link" onClick={() => { setForgotPasswordMode(false); setOtpSent(false); }}>
-                  <FiArrowLeft /> Back to Login
-                </div>
+            <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
+              <div style={{ margin: "20px 0" }}>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
+                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
+                <button type="button" className="social-btn"><FiGithub size={20} /></button>
               </div>
-            )}
+              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
+              </div>
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
+              </div>
+              <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
+              <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
+            </form>
           </div>
 
           {/* OVERLAY */}
