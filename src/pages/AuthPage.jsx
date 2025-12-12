@@ -1476,11 +1476,8 @@ import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// --- 1. IMPORT IMAGE CORRECTLY ---
+// --- IMAGE IMPORT ---
 import cakeBg from "../assets/cakee1.jpg"; 
-
-// --- 2. DEFINE BASE URL ---
-const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -1507,9 +1504,34 @@ function AuthPage() {
     white: "#FFFFFF"
   };
 
-  // ---------------------------------------------------------
-  // 🔒 "BOUNCER" LOGIC
-  // ---------------------------------------------------------
+  // =========================================================
+  // 🔧 API CONFIGURATION 
+  // =========================================================
+  const SERVER_URL = "https://finalproject-backend-7rqa.onrender.com";
+
+  const ENDPOINTS = {
+    // These two likely work based on your previous code
+    login:          `${SERVER_URL}/authlogin`,    
+    register:       `${SERVER_URL}/authregister`, 
+    
+    // 👇👇👇 CHANGE THESE IF YOU STILL GET 404 👇👇👇
+    
+    // TRY 1: Standard Format (Current)
+    forgotPassword: `${SERVER_URL}/auth/forgot-password`,
+    resetPassword:  `${SERVER_URL}/auth/reset-password`,
+
+    // TRY 2: No Dash (Uncomment if Try 1 fails)
+    // forgotPassword: `${SERVER_URL}/authforgotpassword`,
+    // resetPassword:  `${SERVER_URL}/authresetpassword`,
+
+    // TRY 3: At Root (Uncomment if Try 1 & 2 fail)
+    // forgotPassword: `${SERVER_URL}/forgot-password`,
+    // resetPassword:  `${SERVER_URL}/reset-password`,
+
+    google:         `${SERVER_URL}/auth/google`
+  };
+  // =========================================================
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -1517,9 +1539,8 @@ function AuthPage() {
     }
   }, [navigate]);
 
-  // --- GOOGLE LOGIN ---
   const handleGoogleLogin = () => {
-    window.open(`${BASE_URL}/google`, "_self");
+    window.open(ENDPOINTS.google, "_self");
   };
 
   useEffect(() => {
@@ -1535,76 +1556,87 @@ function AuthPage() {
     }
   }, [location, navigate]);
 
-  // --- HANDLERS ---
   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
+  // --- LOGIN ---
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/login`, loginData);
+      const res = await axios.post(ENDPOINTS.login, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
     } catch (err) {
+      console.error("LOGIN ERROR:", err);
       toast.error(err.response?.data?.message || "Invalid credentials.");
     } finally {
       setLoading(false);
     }
   };
 
+  // --- REGISTER ---
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${BASE_URL}/register`, regData);
+      await axios.post(ENDPOINTS.register, regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
     } catch (err) {
+      console.error("REGISTER ERROR:", err);
       toast.error(err.response?.data?.message || "Registration failed.");
     } finally {
       setLoading(false);
     }
   };
 
-  // --- FORGOT PASSWORD HANDLERS ---
+  // --- SEND OTP ---
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
+    console.log(`Sending OTP to: ${ENDPOINTS.forgotPassword}`);
+
     try {
-      // Endpoint mapped to: /auth/forgot-password
-      const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
+      const res = await axios.post(ENDPOINTS.forgotPassword, { email: forgotEmail });
       toast.success(res.data.message || "OTP sent to your email!");
       setOtpSent(true);
     } catch (err) {
-      toast.error(err.response?.data?.message || "❌ Failed to send OTP! Check your email.");
+      console.error("FORGOT PASSWORD ERROR:", err);
+      
+      if (err.response && err.response.status === 404) {
+         toast.error("❌ 404 Error: The backend URL is incorrect. Check ENDPOINTS in code.");
+      } else {
+         toast.error(err.response?.data?.message || "❌ Failed to send OTP.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  // --- RESET PASSWORD ---
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Endpoint mapped to: /auth/reset-password
-      const res = await axios.post(`${BASE_URL}/reset-password`, {
+      const res = await axios.post(ENDPOINTS.resetPassword, {
         email: forgotEmail,
         otp,
         password: newPassword,
       });
       toast.success(res.data.message || "Password reset successfully!");
       
-      // Reset states to go back to login
       setOtpSent(false);
       setForgotPasswordMode(false);
       setForgotEmail("");
       setOtp("");
       setNewPassword("");
     } catch (err) {
-      toast.error(err.response?.data?.message || "❌ Failed to reset password");
+      console.error("RESET PASSWORD ERROR:", err);
+      toast.error(err.response?.data?.message || "❌ Failed to reset password.");
     } finally {
       setLoading(false);
     }
@@ -1614,7 +1646,6 @@ function AuthPage() {
     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
       <Navbar />
 
-      {/* --- STYLES --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
 
@@ -1629,7 +1660,6 @@ function AuthPage() {
           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
         }
 
-        /* FORMS */
         .form-container {
           position: absolute;
           top: 0;
@@ -1648,7 +1678,6 @@ function AuthPage() {
           50%, 100% { opacity: 1; z-index: 5; }
         }
 
-        /* OVERLAY */
         .overlay-container {
           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
@@ -1675,7 +1704,6 @@ function AuthPage() {
         .overlay-right { right: 0; transform: translateX(0); }
         .container.right-panel-active .overlay-right { transform: translateX(20%); }
 
-        /* ELEMENTS */
         .modern-input {
           background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
           width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
@@ -1728,27 +1756,28 @@ function AuthPage() {
                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
               </div>
               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
+              
               <div style={{ width: "100%", position: "relative" }}>
                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
+                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} required />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} required />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} required />
               </div>
               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
-          {/* SIGN IN PANEL (Contains both Login and Forgot Password Logic) */}
+          {/* SIGN IN PANEL */}
           <div className="form-container sign-in-container">
             
-            {/* Logic: If NOT forgotPasswordMode, show Login Form */}
             {!forgotPasswordMode ? (
+              // 1. LOGIN FORM
               <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
                 <div style={{ margin: "20px 0" }}>
@@ -1757,16 +1786,16 @@ function AuthPage() {
                   <button type="button" className="social-btn"><FiGithub size={20} /></button>
                 </div>
                 <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
+                
                 <div style={{ width: "100%", position: "relative" }}>
                   <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
+                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} required />
                 </div>
                 <div style={{ width: "100%", position: "relative" }}>
                   <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
+                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} required />
                 </div>
                 
-                {/* FORGOT PASSWORD LINK - Enables the mode */}
                 <a href="#" onClick={(e) => { e.preventDefault(); setForgotPasswordMode(true); }} style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>
                   Forgot your password?
                 </a>
@@ -1774,11 +1803,11 @@ function AuthPage() {
                 <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
               </form>
             ) : (
-              // Logic: If forgotPasswordMode is TRUE
-              <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+              // 2. FORGOT PASSWORD FORM
+              <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white", width: "100%" }}>
                 
-                {/* STEP 1: SEND OTP FORM */}
                 {!otpSent ? (
+                  // STEP A: SEND OTP
                   <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", marginBottom: "10px", color: colors.secondary }}>Reset Password</h1>
                      <p style={{ textAlign: "center", fontSize: "14px", color: "#666", marginBottom: "20px" }}>Enter your email address to receive an OTP.</p>
@@ -1790,7 +1819,7 @@ function AuthPage() {
                      <button className="btn-primary" disabled={loading}>{loading ? "Sending..." : "Send OTP"}</button>
                   </form>
                 ) : (
-                  // STEP 2: VERIFY OTP & NEW PASSWORD FORM
+                  // STEP B: VERIFY OTP
                   <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", marginBottom: "10px", color: colors.secondary }}>New Password</h1>
                      <p style={{ textAlign: "center", fontSize: "14px", color: "#666", marginBottom: "20px" }}>Enter the OTP sent to {forgotEmail}</p>
@@ -1807,7 +1836,6 @@ function AuthPage() {
                   </form>
                 )}
 
-                {/* Back to Login Button */}
                 <div className="back-link" onClick={() => { setForgotPasswordMode(false); setOtpSent(false); }}>
                   <FiArrowLeft /> Back to Login
                 </div>
