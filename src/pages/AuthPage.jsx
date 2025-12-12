@@ -1481,8 +1481,10 @@ import Footer from "../components/Footer";
 // --- IMPORT IMAGE ---
 import cakeBg from "../assets/cakee1.jpg"; 
 
-// --- BASE URL FIX (Correct URL format) ---
-const BASE_URL = "https://finalproject-backend-7rqa.onrender.com";
+// --- BASE URL FIX ---
+// Unga backend "router" code padi, "/auth" common-aaga irukkalam.
+// Athanaal URL-ai ipadi maatrungal:
+const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -1517,9 +1519,7 @@ function AuthPage() {
   }, [navigate]);
 
   const handleGoogleLogin = () => {
-    // Note: Verify if your google route is /auth/google or /authgoogle
-    // Assuming /auth/google based on standard practice, but check your backend
-    window.open(`${BASE_URL}/auth/google`, "_self");
+    window.open(`${BASE_URL}/google`, "_self");
   };
 
   useEffect(() => {
@@ -1543,8 +1543,8 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      // FIX: URL matches your original code -> /authlogin
-      const res = await axios.post(`${BASE_URL}/authlogin`, loginData);
+      // Backend: router.post('/login') -> URL: /auth/login
+      const res = await axios.post(`${BASE_URL}/login`, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
@@ -1559,8 +1559,8 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      // FIX: URL matches your original code -> /authregister
-      await axios.post(`${BASE_URL}/authregister`, regData);
+      // Backend: router.post('/register') -> URL: /auth/register
+      await axios.post(`${BASE_URL}/register`, regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
       setLoading(false);
@@ -1573,19 +1573,19 @@ function AuthPage() {
   // --- FORGOT PASSWORD HANDLERS ---
   const handleSendOTP = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      console.log("Sending OTP to:", forgotEmail); // Debugging log
-      // FIX: URL matches your original code -> /authforgot-password
-      const res = await axios.post(`${BASE_URL}/authforgot-password`, { email: forgotEmail });
+      console.log("Sending OTP to:", forgotEmail);
+      // Backend: router.post('/forgot-password') -> URL: /auth/forgot-password
+      const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
       
       toast.success(res.data.message || "OTP Sent Successfully!");
       setOtpSent(true);
-      setLoading(false); // Stop loading on success
+      setLoading(false);
     } catch (err) {
-      console.error("OTP Error:", err); // Debugging log
+      console.error("OTP Error:", err);
       toast.error(err.response?.data?.message || "❌ Failed to send OTP! Check your email.");
-      setLoading(false); // Stop loading on error
+      setLoading(false);
     }
   };
 
@@ -1593,15 +1593,15 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      // FIX: URL matches your original code -> /authreset-password
-      const res = await axios.post(`${BASE_URL}/authreset-password`, {
+      // Backend: router.post('/reset-password') -> URL: /auth/reset-password
+      const res = await axios.post(`${BASE_URL}/reset-password`, {
         email: forgotEmail,
         otp,
         password: newPassword,
       });
       toast.success(res.data.message || "Password Reset Successful!");
       
-      // Reset states after success
+      // Reset states
       setOtpSent(false);
       setForgotPasswordMode(false);
       setForgotEmail("");
@@ -1722,7 +1722,7 @@ function AuthPage() {
         
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
 
-          {/* SIGN UP CONTAINER */}
+          {/* SIGN UP */}
           <div className="form-container sign-up-container">
             <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
@@ -1748,9 +1748,8 @@ function AuthPage() {
             </form>
           </div>
 
-          {/* SIGN IN CONTAINER (Contains Forgot Password Logic) */}
+          {/* SIGN IN */}
           <div className="form-container sign-in-container">
-            {/* Logic: If NOT in forgot password mode, show Login Form */}
             {!forgotPasswordMode ? (
               <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
@@ -1768,22 +1767,21 @@ function AuthPage() {
                   <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
                   <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
                 </div>
-                {/* Toggle to Forgot Password Mode */}
                 <span className="link-text" onClick={() => setForgotPasswordMode(true)}>Forgot your password?</span>
                 <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
               </form>
             ) : (
-              // Logic: FORGOT PASSWORD FORMS
+              // FORGOT PASSWORD FORM
               <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.2rem", margin: "0 0 20px 0", color: colors.secondary }}>
                   {otpSent ? "Reset Password" : "Forgot Password"}
                 </h1>
                 
                 {!otpSent ? (
-                  // Step 1: Send OTP Form
+                  // Step 1: Send OTP
                   <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <p style={{ fontSize: "14px", color: "#666", marginBottom: "20px", textAlign: "center" }}>
-                      Enter your email address and we'll send you an OTP to reset your password.
+                      Enter your email address to receive an OTP.
                     </p>
                     <div style={{ width: "100%", position: "relative" }}>
                       <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
@@ -1793,11 +1791,8 @@ function AuthPage() {
                     <button className="btn-primary" disabled={loading}>{loading ? "Sending..." : "Send OTP"}</button>
                   </form>
                 ) : (
-                  // Step 2: Reset Password Form
+                  // Step 2: Reset Password
                   <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <p style={{ fontSize: "14px", color: "#666", marginBottom: "20px", textAlign: "center" }}>
-                      Enter the OTP sent to your email and your new password.
-                    </p>
                     <div style={{ width: "100%", position: "relative" }}>
                       <FiKey style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
                       <input type="text" placeholder="Enter OTP" className="modern-input" 
@@ -1812,7 +1807,6 @@ function AuthPage() {
                   </form>
                 )}
                 
-                {/* Back button */}
                 <span className="link-text" style={{ marginTop: "20px" }} onClick={() => {
                   setForgotPasswordMode(false);
                   setOtpSent(false);
