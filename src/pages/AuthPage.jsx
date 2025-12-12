@@ -1187,342 +1187,63 @@
 
 
 
-// import { useState, useEffect } from "react"; 
-// import { useNavigate, useLocation } from "react-router-dom"; 
-// import axios from "axios";
-// import { FiUser, FiMail, FiLock, FiFacebook, FiGithub } from "react-icons/fi";
-// import { FcGoogle } from "react-icons/fc";
-// import { toast } from "react-toastify";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-
-// // --- 1. IMPORT IMAGE CORRECTLY ---
-// import cakeBg from "../assets/cakee1.jpg"; 
-
-// // --- 2. DEFINE BASE URL (To avoid typo errors) ---
-// const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
-
-// function AuthPage() {
-//   const [isSignUpMode, setIsSignUpMode] = useState(false);
-//   const navigate = useNavigate();
-//   const location = useLocation(); 
-//   const [loading, setLoading] = useState(false);
-
-//   // --- FORM STATES ---
-//   const [loginData, setLoginData] = useState({ email: "", password: "" });
-//   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
-  
-//   // --- THEME ---
-//   const colors = {
-//     primary: "#E76F51", 
-//     secondary: "#264653", 
-//     bg: "#FDFCF8",
-//     white: "#FFFFFF"
-//   };
-
-//   // ---------------------------------------------------------
-//   // 🔒 "BOUNCER" LOGIC
-//   // ---------------------------------------------------------
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (token) {
-//       navigate("/allproduct", { replace: true });
-//     }
-//   }, [navigate]);
-
-//   // --- 3. FIX GOOGLE LOGIN URL ---
-//   const handleGoogleLogin = () => {
-//     // Fixed: Added slash -> /auth/google
-//     window.open(`${BASE_URL}/google`, "_self");
-//   };
-
-//   // --- HANDLE GOOGLE CALLBACK ---
-//   useEffect(() => {
-//     const queryParams = new URLSearchParams(location.search);
-//     const token = queryParams.get("token");
-
-//     if (token) {
-//       localStorage.setItem("token", token);
-//       localStorage.setItem("role", "user"); 
-
-//       toast.success("✨ Google Login Successful!");
-//       window.history.replaceState({}, document.title, "/");
-//       navigate("/allproduct", { replace: true });
-//     }
-//   }, [location, navigate]);
-
-//   // --- HANDLERS ---
-//   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
-//   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     try {
-//       // Fixed: Using BASE_URL -> /auth/login
-//       const res = await axios.post(`${BASE_URL}/login`, loginData);
-//       localStorage.setItem("token", res.data.token);
-//       localStorage.setItem("role", res.data.role);
-//       toast.success("✨ Welcome back!");
-//       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
-      
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Invalid credentials.");
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     try {
-//       // Fixed: Using BASE_URL -> /auth/register (This fixes your 404 error)
-//       await axios.post(`${BASE_URL}/register`, regData);
-//       toast.success("🎉 Account created! Please login.");
-//       setIsSignUpMode(false); 
-//       setLoading(false);
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Registration failed.");
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
-//       <Navbar />
-
-//       {/* --- STYLES --- */}
-//       <style>{`
-//         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
-
-//         .container {
-//           position: relative;
-//           overflow: hidden;
-//           width: 1000px;
-//           max-width: 100%;
-//           min-height: 650px;
-//           background-color: #fff;
-//           border-radius: 30px;
-//           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-//         }
-
-//         /* FORMS */
-//         .form-container {
-//           position: absolute;
-//           top: 0;
-//           height: 100%;
-//           transition: all 0.6s ease-in-out;
-//         }
-
-//         .sign-in-container { left: 0; width: 50%; z-index: 2; }
-//         .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
-
-//         .container.right-panel-active .sign-in-container { transform: translateX(100%); }
-//         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
-
-//         @keyframes show {
-//           0%, 49.99% { opacity: 0; z-index: 1; }
-//           50%, 100% { opacity: 1; z-index: 5; }
-//         }
-
-//         /* OVERLAY */
-//         .overlay-container {
-//           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
-//           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
-//           border-top-right-radius: 30px; border-bottom-right-radius: 30px;
-//         }
-//         .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px; }
-
-//         .overlay {
-//           background: #E76F51;
-//           background: linear-gradient(to right, #E76F51, #264653);
-//           background-repeat: no-repeat; background-size: cover; background-position: 0 0;
-//           color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%;
-//           transform: translateX(0); transition: transform 0.6s ease-in-out;
-//         }
-//         .container.right-panel-active .overlay { transform: translateX(50%); }
-
-//         .overlay-panel {
-//           position: absolute; display: flex; align-items: center; justify-content: center;
-//           flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
-//           transform: translateX(0); transition: transform 0.6s ease-in-out;
-//         }
-//         .overlay-left { transform: translateX(-20%); }
-//         .container.right-panel-active .overlay-left { transform: translateX(0); }
-//         .overlay-right { right: 0; transform: translateX(0); }
-//         .container.right-panel-active .overlay-right { transform: translateX(20%); }
-
-//         /* ELEMENTS */
-//         .modern-input {
-//           background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
-//           width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
-//         }
-//         .modern-input:focus { background: white; border-color: ${colors.primary}; box-shadow: 0 5px 15px rgba(231,111,81,0.1); }
-        
-//         .btn-primary {
-//           border-radius: 25px; border: none; background-color: ${colors.primary}; color: #ffffff;
-//           font-size: 14px; font-weight: bold; padding: 15px 45px; letter-spacing: 1px; text-transform: uppercase;
-//           transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px;
-//           box-shadow: 0 10px 20px rgba(231,111,81,0.3);
-//         }
-//         .btn-primary:active { transform: scale(0.95); }
-        
-//         .btn-ghost {
-//           background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
-//           color: white; padding: 12px 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
-//         }
-//         .btn-ghost:hover { background: white; color: ${colors.primary}; }
-
-//         .social-btn {
-//           border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex; justify-content: center;
-//           align-items: center; margin: 0 5px; height: 45px; width: 45px; cursor: pointer; transition: 0.3s;
-//         }
-//         .social-btn:hover { border-color: ${colors.primary}; transform: translateY(-3px); }
-
-//         .bg-image {
-//           position: absolute; inset: 0; z-index: -1; 
-//           /* 4. USE IMPORTED IMAGE VARIABLE HERE */
-//           background-image: url(${cakeBg});
-//           background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
-//         }
-//       `}</style>
-
-//       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
-        
-//         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
-
-//           {/* SIGN UP */}
-//           <div className="form-container sign-up-container">
-//             <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-//               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
-//               <div style={{ margin: "20px 0" }}>
-//                 <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-//                 <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-//                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
-//               </div>
-//               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
-//               </div>
-//               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
-//             </form>
-//           </div>
-
-//           {/* SIGN IN */}
-//           <div className="form-container sign-in-container">
-//             <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-//               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
-//               <div style={{ margin: "20px 0" }}>
-//                 <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-//                 <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-//                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
-//               </div>
-//               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
-//               </div>
-//               <div style={{ width: "100%", position: "relative" }}>
-//                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-//                 <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
-//               </div>
-//               <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
-//               <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
-//             </form>
-//           </div>
-
-//           {/* OVERLAY */}
-//           <div className="overlay-container">
-//             <div className="overlay">
-//               <div className="bg-image"></div>
-//               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
-//               <div className="overlay-panel overlay-left">
-//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
-//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
-//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
-//               </div>
-//               <div className="overlay-panel overlay-right">
-//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
-//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
-//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
-//               </div>
-//             </div>
-//           </div>
-
-//         </div>
-//       </div>
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// export default AuthPage;
-
-
-
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react"; 
+import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
 import { FiUser, FiMail, FiLock, FiFacebook, FiGithub } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import cakeBg from "../assets/cakee1.jpg";
 
+// --- 1. IMPORT IMAGE CORRECTLY ---
+import cakeBg from "../assets/cakee1.jpg"; 
+
+// --- 2. DEFINE BASE URL (To avoid typo errors) ---
 const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); 
   const [loading, setLoading] = useState(false);
 
-  // Login + Register state
+  // --- FORM STATES ---
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
-
-  // Forgot password modal states
-  const [showForgot, setShowForgot] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [step, setStep] = useState(1); // 1 = enter email, 2 = enter otp + new password
-
+  
+  // --- THEME ---
   const colors = {
-    primary: "#E76F51",
-    secondary: "#264653",
+    primary: "#E76F51", 
+    secondary: "#264653", 
     bg: "#FDFCF8",
-    white: "#FFFFFF",
+    white: "#FFFFFF"
   };
 
-  // On page load redirect if logged in
+  // ---------------------------------------------------------
+  // 🔒 "BOUNCER" LOGIC
+  // ---------------------------------------------------------
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) navigate("/allproduct", { replace: true });
+    if (token) {
+      navigate("/allproduct", { replace: true });
+    }
   }, [navigate]);
 
-  // Google Login
+  // --- 3. FIX GOOGLE LOGIN URL ---
   const handleGoogleLogin = () => {
+    // Fixed: Added slash -> /auth/google
     window.open(`${BASE_URL}/google`, "_self");
   };
 
+  // --- HANDLE GOOGLE CALLBACK ---
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
 
     if (token) {
       localStorage.setItem("token", token);
-      localStorage.setItem("role", "user");
+      localStorage.setItem("role", "user"); 
 
       toast.success("✨ Google Login Successful!");
       window.history.replaceState({}, document.title, "/");
@@ -1530,38 +1251,35 @@ function AuthPage() {
     }
   }, [location, navigate]);
 
-  // Handle change
-  const handleLoginChange = (e) =>
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  // --- HANDLERS ---
+  const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
-  const handleRegChange = (e) =>
-    setRegData({ ...regData, [e.target.name]: e.target.value });
-
-  // Login
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Fixed: Using BASE_URL -> /auth/login
       const res = await axios.post(`${BASE_URL}/login`, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
-
       toast.success("✨ Welcome back!");
       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
+      
     } catch (err) {
       toast.error(err.response?.data?.message || "Invalid credentials.");
       setLoading(false);
     }
   };
 
-  // Register
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Fixed: Using BASE_URL -> /auth/register (This fixes your 404 error)
       await axios.post(`${BASE_URL}/register`, regData);
       toast.success("🎉 Account created! Please login.");
-      setIsSignUpMode(false);
+      setIsSignUpMode(false); 
       setLoading(false);
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed.");
@@ -1569,167 +1287,11 @@ function AuthPage() {
     }
   };
 
-  // ------------------------------
-  // 🔥 FORGOT PASSWORD FUNCTIONS
-  // ------------------------------
-
-  const sendOtp = async () => {
-    try {
-      const res = await axios.post(`${BASE_URL}/forgot-password`, {
-        email: forgotEmail,
-      });
-
-      toast.success(res.data.message);
-      setStep(2); // Move to OTP step
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Error sending OTP");
-    }
-  };
-
-  const resetPassword = async () => {
-    try {
-      const res = await axios.post(`${BASE_URL}/reset-password`, {
-        email: forgotEmail,
-        otp,
-        newPassword,
-      });
-
-      toast.success(res.data.message);
-      setShowForgot(false);
-      setStep(1);
-      setForgotEmail("");
-      setOtp("");
-      setNewPassword("");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to reset password");
-    }
-  };
-
   return (
-    <div
-      style={{
-        backgroundColor: colors.bg,
-        minHeight: "100vh",
-        fontFamily: "'DM Sans', sans-serif",
-        overflowX: "hidden",
-      }}
-    >
+    <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
       <Navbar />
 
-      {/* ====== FORGOT PASSWORD POPUP ====== */}
-      {showForgot && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 99999,
-          }}
-        >
-          <div
-            style={{
-              width: "400px",
-              background: "white",
-              padding: "30px",
-              borderRadius: "20px",
-              textAlign: "center",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-            }}
-          >
-            <h2 style={{ marginBottom: "20px" }}>
-              {step === 1 ? "Forgot Password" : "Reset Password"}
-            </h2>
-
-            {step === 1 && (
-              <>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={forgotEmail}
-                  onChange={(e) => setForgotEmail(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    marginBottom: "15px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                <button
-                  onClick={sendOtp}
-                  className="btn-primary"
-                  style={{ width: "100%" }}
-                >
-                  Send OTP
-                </button>
-              </>
-            )}
-
-            {step === 2 && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    marginBottom: "15px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                <input
-                  type="password"
-                  placeholder="New password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    marginBottom: "15px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-                <button
-                  onClick={resetPassword}
-                  className="btn-primary"
-                  style={{ width: "100%" }}
-                >
-                  Reset Password
-                </button>
-              </>
-            )}
-
-            <button
-              onClick={() => {
-                setShowForgot(false);
-                setStep(1);
-              }}
-              style={{
-                marginTop: "15px",
-                background: "transparent",
-                border: "none",
-                color: colors.primary,
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ========== EXISTING AUTH UI (NO CHANGES MADE) ========== */}
+      {/* --- STYLES --- */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
 
@@ -1743,11 +1305,18 @@ function AuthPage() {
           border-radius: 30px;
           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
         }
+
+        /* FORMS */
         .form-container {
-          position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out;
+          position: absolute;
+          top: 0;
+          height: 100%;
+          transition: all 0.6s ease-in-out;
         }
+
         .sign-in-container { left: 0; width: 50%; z-index: 2; }
         .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+
         .container.right-panel-active .sign-in-container { transform: translateX(100%); }
         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
 
@@ -1756,238 +1325,141 @@ function AuthPage() {
           50%, 100% { opacity: 1; z-index: 5; }
         }
 
+        /* OVERLAY */
         .overlay-container {
           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
           border-top-right-radius: 30px; border-bottom-right-radius: 30px;
         }
-        .container.right-panel-active .overlay-container { transform: translateX(-100%); }
+        .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px; }
 
         .overlay {
+          background: #E76F51;
           background: linear-gradient(to right, #E76F51, #264653);
-          position: relative; left: -100%; width: 200%; height: 100%;
+          background-repeat: no-repeat; background-size: cover; background-position: 0 0;
+          color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%;
           transform: translateX(0); transition: transform 0.6s ease-in-out;
         }
         .container.right-panel-active .overlay { transform: translateX(50%); }
 
         .overlay-panel {
-          position: absolute; display: flex; flex-direction: column;
-          align-items: center; justify-content: center;
-          top: 0; height: 100%; width: 50%;
-          padding: 0 40px; text-align: center;
+          position: absolute; display: flex; align-items: center; justify-content: center;
+          flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
+          transform: translateX(0); transition: transform 0.6s ease-in-out;
         }
+        .overlay-left { transform: translateX(-20%); }
+        .container.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .container.right-panel-active .overlay-right { transform: translateX(20%); }
 
+        /* ELEMENTS */
         .modern-input {
-          background-color: #F5F5F5; border: 2px solid transparent;
-          padding: 15px 15px 15px 45px; width: 100%;
-          border-radius: 12px; margin-bottom: 15px;
+          background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
+          width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
         }
-
+        .modern-input:focus { background: white; border-color: ${colors.primary}; box-shadow: 0 5px 15px rgba(231,111,81,0.1); }
+        
         .btn-primary {
-          border-radius: 25px; border: none; background-color: #E76F51;
-          color: #fff; font-weight: bold; padding: 15px 45px; letter-spacing: 1px;
+          border-radius: 25px; border: none; background-color: ${colors.primary}; color: #ffffff;
+          font-size: 14px; font-weight: bold; padding: 15px 45px; letter-spacing: 1px; text-transform: uppercase;
+          transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px;
           box-shadow: 0 10px 20px rgba(231,111,81,0.3);
+        }
+        .btn-primary:active { transform: scale(0.95); }
+        
+        .btn-ghost {
+          background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
+          color: white; padding: 12px 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-ghost:hover { background: white; color: ${colors.primary}; }
+
+        .social-btn {
+          border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex; justify-content: center;
+          align-items: center; margin: 0 5px; height: 45px; width: 45px; cursor: pointer; transition: 0.3s;
+        }
+        .social-btn:hover { border-color: ${colors.primary}; transform: translateY(-3px); }
+
+        .bg-image {
+          position: absolute; inset: 0; z-index: -1; 
+          /* 4. USE IMPORTED IMAGE VARIABLE HERE */
+          background-image: url(${cakeBg});
+          background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
         }
       `}</style>
 
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "100px 20px",
-        }}
-      >
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
+        
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
-          {/* ---------------- SIGN UP ---------------- */}
+
+          {/* SIGN UP */}
           <div className="form-container sign-up-container">
-            <form
-              onSubmit={handleRegister}
-              style={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "0 50px",
-                backgroundColor: "white",
-              }}
-            >
-              <h1 style={{ fontSize: "2.5rem", margin: 0, color: colors.secondary }}>
-                Create Account
-              </h1>
-
+            <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
               <div style={{ margin: "20px 0" }}>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn">
-                  <FcGoogle size={20} />
-                </button>
-                <button type="button" className="social-btn">
-                  <FiFacebook size={20} color="#1877F2" />
-                </button>
-                <button type="button" className="social-btn">
-                  <FiGithub size={20} />
-                </button>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
+                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
+                <button type="button" className="social-btn"><FiGithub size={20} /></button>
               </div>
-
-              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>
-                or use your email for registration
-              </span>
-
+              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  className="modern-input"
-                  value={regData.name}
-                  onChange={handleRegChange}
-                />
+                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
               </div>
-
               <div style={{ width: "100%", position: "relative" }}>
                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  className="modern-input"
-                  value={regData.email}
-                  onChange={handleRegChange}
-                />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
               </div>
-
               <div style={{ width: "100%", position: "relative" }}>
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="modern-input"
-                  value={regData.password}
-                  onChange={handleRegChange}
-                />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
               </div>
-
-              <button className="btn-primary" disabled={loading}>
-                {loading ? "Creating..." : "Sign Up"}
-              </button>
+              <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
-          {/* ---------------- SIGN IN ---------------- */}
+          {/* SIGN IN */}
           <div className="form-container sign-in-container">
-            <form
-              onSubmit={handleLogin}
-              style={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "0 50px",
-                backgroundColor: "white",
-              }}
-            >
-              <h1 style={{ fontSize: "2.5rem", margin: 0, color: colors.secondary }}>
-                Sign In
-              </h1>
-
+            <form onSubmit={handleLogin} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
               <div style={{ margin: "20px 0" }}>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn">
-                  <FcGoogle size={20} />
-                </button>
-                <button type="button" className="social-btn">
-                  <FiFacebook size={20} color="#1877F2" />
-                </button>
-                <button type="button" className="social-btn">
-                  <FiGithub size={20} />
-                </button>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
+                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
+                <button type="button" className="social-btn"><FiGithub size={20} /></button>
               </div>
-
-              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>
-                or use your account
-              </span>
-
+              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  className="modern-input"
-                  value={loginData.email}
-                  onChange={handleLoginChange}
-                />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
               </div>
-
               <div style={{ width: "100%", position: "relative" }}>
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="modern-input"
-                  value={loginData.password}
-                  onChange={handleLoginChange}
-                />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
               </div>
-
-              {/* Forgot Password Trigger */}
-              <a
-                href="#"
-                onClick={() => setShowForgot(true)}
-                style={{
-                  color: "#333",
-                  fontSize: "14px",
-                  textDecoration: "none",
-                  margin: "15px 0",
-                  fontWeight: "500",
-                }}
-              >
-                Forgot your password?
-              </a>
-
-              <button className="btn-primary" disabled={loading}>
-                {loading ? "Signing In..." : "Sign In"}
-              </button>
+              <a href="#" style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500" }}>Forgot your password?</a>
+              <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
             </form>
           </div>
 
-          {/* ---------------- OVERLAY ---------------- */}
+          {/* OVERLAY */}
           <div className="overlay-container">
             <div className="overlay">
               <div className="bg-image"></div>
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(135deg, rgba(231,111,81,0.9), rgba(38,70,83,0.8))",
-                }}
-              ></div>
-
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
               <div className="overlay-panel overlay-left">
-                <h1>Hello Again!</h1>
-                <p>Login to continue your sweet journey</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>
-                  Sign In
-                </button>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
+                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
               </div>
-
               <div className="overlay-panel overlay-right">
-                <h1>Welcome, Friend!</h1>
-                <p>Create your sweet account and begin the journey</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>
-                  Sign Up
-                </button>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
+                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
               </div>
             </div>
           </div>
+
         </div>
       </div>
-
       <Footer />
     </div>
   );
