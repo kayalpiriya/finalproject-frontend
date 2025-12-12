@@ -1477,180 +1477,154 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import cakeBg from "../assets/cakee1.jpg";
+
+const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLogin, setIsLogin] = useState(location.pathname === "/login");
+  const [loading, setLoading] = useState(false);
 
-  const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
+  // Login + Register state
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [regData, setRegData] = useState({ name: "", email: "", password: "" });
 
-  // existing login/register states
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  // forgot password states
+  // Forgot password modal states
+  const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
-  const [otpSection, setOtpSection] = useState(false); // false = email step, true = otp reset step
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [step, setStep] = useState(1); // 1 = enter email, 2 = enter otp + new password
 
   const colors = {
-    primary: "#ff6600",
-    secondary: "#cc5500",
+    primary: "#E76F51",
+    secondary: "#264653",
+    bg: "#FDFCF8",
+    white: "#FFFFFF",
+  };
+
+  // On page load redirect if logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) navigate("/allproduct", { replace: true });
+  }, [navigate]);
+
+  // Google Login
+  const handleGoogleLogin = () => {
+    window.open(`${BASE_URL}/google`, "_self");
   };
 
   useEffect(() => {
-    setIsLogin(location.pathname === "/login");
-  }, [location.pathname]);
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get("token");
 
-  // handle login/register input change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", "user");
 
-  // login
+      toast.success("✨ Google Login Successful!");
+      window.history.replaceState({}, document.title, "/");
+      navigate("/allproduct", { replace: true });
+    }
+  }, [location, navigate]);
+
+  // Handle change
+  const handleLoginChange = (e) =>
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+
+  const handleRegChange = (e) =>
+    setRegData({ ...regData, [e.target.name]: e.target.value });
+
+  // Login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/login`, formData);
-      toast.success("Login Successful!");
-      navigate("/");
+      const res = await axios.post(`${BASE_URL}/login`, loginData);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+
+      toast.success("✨ Welcome back!");
+      setTimeout(() => navigate("/allproduct", { replace: true }), 800);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Invalid credentials.");
+      setLoading(false);
     }
   };
 
-  // register
+  // Register
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await axios.post(`${BASE_URL}/register`, formData);
-      toast.success("Account created successfully!");
-      setIsLogin(true);
+      await axios.post(`${BASE_URL}/register`, regData);
+      toast.success("🎉 Account created! Please login.");
+      setIsSignUpMode(false);
+      setLoading(false);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed");
+      toast.error(err.response?.data?.message || "Registration failed.");
+      setLoading(false);
     }
   };
 
-  // forgot password send OTP
-  const handleForgotPassword = async () => {
-    if (!forgotEmail) return toast.error("Enter email");
+  // ------------------------------
+  // 🔥 FORGOT PASSWORD FUNCTIONS
+  // ------------------------------
 
+  const sendOtp = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
-      toast.success("OTP Sent to your email");
-      setOtpSection(true);
+      const res = await axios.post(`${BASE_URL}/forgot-password`, {
+        email: forgotEmail,
+      });
+
+      toast.success(res.data.message);
+      setStep(2); // Move to OTP step
     } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Error sending OTP");
     }
   };
 
-  // reset password
-  const handleResetPassword = async () => {
-    if (!otp || !newPassword) return toast.error("Fill all fields");
-
+  const resetPassword = async () => {
     try {
-      await axios.post(`${BASE_URL}/reset-password`, {
+      const res = await axios.post(`${BASE_URL}/reset-password`, {
         email: forgotEmail,
         otp,
-        password: newPassword,
+        newPassword,
       });
-      toast.success("Password updated successfully!");
-      setOtpSection(false);
+
+      toast.success(res.data.message);
+      setShowForgot(false);
+      setStep(1);
+      setForgotEmail("");
+      setOtp("");
+      setNewPassword("");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP");
+      toast.error(err.response?.data?.message || "Failed to reset password");
     }
   };
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: colors.bg,
+        minHeight: "100vh",
+        fontFamily: "'DM Sans', sans-serif",
+        overflowX: "hidden",
+      }}
+    >
       <Navbar />
 
-      <div className="auth-container">
-        <div className="auth-card">
-          <h2>{isLogin ? "Login" : "Register"}</h2>
-
-          <form onSubmit={isLogin ? handleLogin : handleRegister}>
-            {!isLogin && (
-              <div className="input-group">
-                <FiUser />
-                <input
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            )}
-
-            <div className="input-group">
-              <FiMail />
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <FiLock />
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {isLogin && (
-              <p
-                style={{ color: colors.primary, cursor: "pointer", marginTop: "10px" }}
-                onClick={() => setOtpSection("forgot")}
-              >
-                Forgot Password?
-              </p>
-            )}
-
-            <button type="submit" className="auth-btn">
-              {isLogin ? "Login" : "Register"}
-            </button>
-          </form>
-
-          <p className="toggle-auth">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-            <span onClick={() => setIsLogin(!isLogin)}>
-              {isLogin ? " Register" : " Login"}
-            </span>
-          </p>
-
-          <div className="social-login">
-            <FcGoogle size={28} />
-            <FiFacebook size={28} />
-            <FiGithub size={28} />
-          </div>
-        </div>
-      </div>
-
-      {/* ------------------- FORGOT PASSWORD POPUP ------------------- */}
-      {otpSection !== false && (
+      {/* ====== FORGOT PASSWORD POPUP ====== */}
+      {showForgot && (
         <div
           style={{
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             background: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",
@@ -1660,67 +1634,362 @@ function AuthPage() {
         >
           <div
             style={{
-              background: "#fff",
               width: "400px",
-              padding: "25px",
-              borderRadius: "15px",
+              background: "white",
+              padding: "30px",
+              borderRadius: "20px",
+              textAlign: "center",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
             }}
           >
-            <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
-              {otpSection === "forgot" ? "Forgot Password" : "Reset Password"}
+            <h2 style={{ marginBottom: "20px" }}>
+              {step === 1 ? "Forgot Password" : "Reset Password"}
             </h2>
 
-            {/* Step 1: email input */}
-            {otpSection === "forgot" && (
+            {step === 1 && (
               <>
                 <input
                   type="email"
-                  placeholder="Enter email"
+                  placeholder="Enter your email"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className="popup-input"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    marginBottom: "15px",
+                    borderRadius: "10px",
+                    border: "1px solid #ccc",
+                  }}
                 />
-                <button onClick={handleForgotPassword} className="popup-btn">
+                <button
+                  onClick={sendOtp}
+                  className="btn-primary"
+                  style={{ width: "100%" }}
+                >
                   Send OTP
                 </button>
               </>
             )}
 
-            {/* Step 2: OTP + new password */}
-            {otpSection === true && (
+            {step === 2 && (
               <>
                 <input
                   type="text"
                   placeholder="Enter OTP"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="popup-input"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    marginBottom: "15px",
+                    borderRadius: "10px",
+                    border: "1px solid #ccc",
+                  }}
                 />
                 <input
                   type="password"
-                  placeholder="New Password"
+                  placeholder="New password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="popup-input"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    marginBottom: "15px",
+                    borderRadius: "10px",
+                    border: "1px solid #ccc",
+                  }}
                 />
-                <button onClick={handleResetPassword} className="popup-btn">
+                <button
+                  onClick={resetPassword}
+                  className="btn-primary"
+                  style={{ width: "100%" }}
+                >
                   Reset Password
                 </button>
               </>
             )}
 
-            <p
-              style={{ textAlign: "center", marginTop: "15px", cursor: "pointer" }}
-              onClick={() => setOtpSection(false)}
+            <button
+              onClick={() => {
+                setShowForgot(false);
+                setStep(1);
+              }}
+              style={{
+                marginTop: "15px",
+                background: "transparent",
+                border: "none",
+                color: colors.primary,
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
             >
               Close
-            </p>
+            </button>
           </div>
         </div>
       )}
 
+      {/* ========== EXISTING AUTH UI (NO CHANGES MADE) ========== */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
+
+        .container {
+          position: relative;
+          overflow: hidden;
+          width: 1000px;
+          max-width: 100%;
+          min-height: 650px;
+          background-color: #fff;
+          border-radius: 30px;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+        }
+        .form-container {
+          position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out;
+        }
+        .sign-in-container { left: 0; width: 50%; z-index: 2; }
+        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+        .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
+
+        @keyframes show {
+          0%, 49.99% { opacity: 0; z-index: 1; }
+          50%, 100% { opacity: 1; z-index: 5; }
+        }
+
+        .overlay-container {
+          position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
+          overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
+          border-top-right-radius: 30px; border-bottom-right-radius: 30px;
+        }
+        .container.right-panel-active .overlay-container { transform: translateX(-100%); }
+
+        .overlay {
+          background: linear-gradient(to right, #E76F51, #264653);
+          position: relative; left: -100%; width: 200%; height: 100%;
+          transform: translateX(0); transition: transform 0.6s ease-in-out;
+        }
+        .container.right-panel-active .overlay { transform: translateX(50%); }
+
+        .overlay-panel {
+          position: absolute; display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          top: 0; height: 100%; width: 50%;
+          padding: 0 40px; text-align: center;
+        }
+
+        .modern-input {
+          background-color: #F5F5F5; border: 2px solid transparent;
+          padding: 15px 15px 15px 45px; width: 100%;
+          border-radius: 12px; margin-bottom: 15px;
+        }
+
+        .btn-primary {
+          border-radius: 25px; border: none; background-color: #E76F51;
+          color: #fff; font-weight: bold; padding: 15px 45px; letter-spacing: 1px;
+          box-shadow: 0 10px 20px rgba(231,111,81,0.3);
+        }
+      `}</style>
+
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "100px 20px",
+        }}
+      >
+        <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
+          {/* ---------------- SIGN UP ---------------- */}
+          <div className="form-container sign-up-container">
+            <form
+              onSubmit={handleRegister}
+              style={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 50px",
+                backgroundColor: "white",
+              }}
+            >
+              <h1 style={{ fontSize: "2.5rem", margin: 0, color: colors.secondary }}>
+                Create Account
+              </h1>
+
+              <div style={{ margin: "20px 0" }}>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn">
+                  <FcGoogle size={20} />
+                </button>
+                <button type="button" className="social-btn">
+                  <FiFacebook size={20} color="#1877F2" />
+                </button>
+                <button type="button" className="social-btn">
+                  <FiGithub size={20} />
+                </button>
+              </div>
+
+              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>
+                or use your email for registration
+              </span>
+
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  className="modern-input"
+                  value={regData.name}
+                  onChange={handleRegChange}
+                />
+              </div>
+
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  className="modern-input"
+                  value={regData.email}
+                  onChange={handleRegChange}
+                />
+              </div>
+
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  className="modern-input"
+                  value={regData.password}
+                  onChange={handleRegChange}
+                />
+              </div>
+
+              <button className="btn-primary" disabled={loading}>
+                {loading ? "Creating..." : "Sign Up"}
+              </button>
+            </form>
+          </div>
+
+          {/* ---------------- SIGN IN ---------------- */}
+          <div className="form-container sign-in-container">
+            <form
+              onSubmit={handleLogin}
+              style={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 50px",
+                backgroundColor: "white",
+              }}
+            >
+              <h1 style={{ fontSize: "2.5rem", margin: 0, color: colors.secondary }}>
+                Sign In
+              </h1>
+
+              <div style={{ margin: "20px 0" }}>
+                <button type="button" onClick={handleGoogleLogin} className="social-btn">
+                  <FcGoogle size={20} />
+                </button>
+                <button type="button" className="social-btn">
+                  <FiFacebook size={20} color="#1877F2" />
+                </button>
+                <button type="button" className="social-btn">
+                  <FiGithub size={20} />
+                </button>
+              </div>
+
+              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>
+                or use your account
+              </span>
+
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  className="modern-input"
+                  value={loginData.email}
+                  onChange={handleLoginChange}
+                />
+              </div>
+
+              <div style={{ width: "100%", position: "relative" }}>
+                <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  className="modern-input"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                />
+              </div>
+
+              {/* Forgot Password Trigger */}
+              <a
+                href="#"
+                onClick={() => setShowForgot(true)}
+                style={{
+                  color: "#333",
+                  fontSize: "14px",
+                  textDecoration: "none",
+                  margin: "15px 0",
+                  fontWeight: "500",
+                }}
+              >
+                Forgot your password?
+              </a>
+
+              <button className="btn-primary" disabled={loading}>
+                {loading ? "Signing In..." : "Sign In"}
+              </button>
+            </form>
+          </div>
+
+          {/* ---------------- OVERLAY ---------------- */}
+          <div className="overlay-container">
+            <div className="overlay">
+              <div className="bg-image"></div>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(135deg, rgba(231,111,81,0.9), rgba(38,70,83,0.8))",
+                }}
+              ></div>
+
+              <div className="overlay-panel overlay-left">
+                <h1>Hello Again!</h1>
+                <p>Login to continue your sweet journey</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>
+                  Sign In
+                </button>
+              </div>
+
+              <div className="overlay-panel overlay-right">
+                <h1>Welcome, Friend!</h1>
+                <p>Create your sweet account and begin the journey</p>
+                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>
+                  Sign Up
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Footer />
-    </>
+    </div>
   );
 }
 
