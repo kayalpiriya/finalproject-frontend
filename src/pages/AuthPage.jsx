@@ -1585,8 +1585,7 @@ function AuthPage() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
-        /* Your existing CSS from previous AuthPage here */
-        .bg-image { background-image: url(${cakeBg}); }
+        .bg-image { background-image: url(${cakeBg}); background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay; }
       `}</style>
 
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
@@ -1595,7 +1594,16 @@ function AuthPage() {
           {/* SIGN UP */}
           <div className="form-container sign-up-container">
             <form onSubmit={handleRegister}>
-              {/* same inputs/buttons as your design */}
+              <h1>Create Account</h1>
+              <div>
+                <button type="button" onClick={handleGoogleLogin}><FcGoogle size={20} /></button>
+                <button type="button"><FiFacebook size={20} color="#1877F2" /></button>
+                <button type="button"><FiGithub size={20} /></button>
+              </div>
+              <input type="text" name="name" placeholder="Name" value={regData.name} onChange={handleRegChange} />
+              <input type="email" name="email" placeholder="Email" value={regData.email} onChange={handleRegChange} />
+              <input type="password" name="password" placeholder="Password" value={regData.password} onChange={handleRegChange} />
+              <button>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
@@ -1603,27 +1611,48 @@ function AuthPage() {
           <div className="form-container sign-in-container">
             {!forgotPasswordMode ? (
               <form onSubmit={handleLogin}>
-                {/* same login inputs/buttons */}
+                <h1>Sign In</h1>
+                <div>
+                  <button type="button" onClick={handleGoogleLogin}><FcGoogle size={20} /></button>
+                  <button type="button"><FiFacebook size={20} color="#1877F2" /></button>
+                  <button type="button"><FiGithub size={20} /></button>
+                </div>
+                <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
+                <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
                 <p style={{ cursor: "pointer", color: colors.primary }} onClick={() => setForgotPasswordMode(true)}>Forgot your password?</p>
+                <button>{loading ? "Signing In..." : "Sign In"}</button>
               </form>
             ) : !otpSent ? (
               <form onSubmit={handleSendOTP}>
-                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} className="modern-input"/>
-                <button className="btn-primary">Send OTP</button>
+                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} />
+                <button>Send OTP</button>
                 <p style={{ cursor: "pointer", color: colors.primary }} onClick={() => setForgotPasswordMode(false)}>Back to Login</p>
               </form>
             ) : (
               <form onSubmit={handleResetPassword}>
-                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} className="modern-input"/>
-                <input type="password" placeholder="Enter New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="modern-input"/>
-                <button className="btn-primary">Reset Password</button>
+                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
+                <input type="password" placeholder="Enter New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                <button>Reset Password</button>
               </form>
             )}
           </div>
 
           {/* OVERLAY */}
           <div className="overlay-container">
-            {/* same overlay design */}
+            <div className="overlay">
+              <div className="bg-image"></div>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
+              <div className="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button onClick={() => setIsSignUpMode(false)}>Sign In</button>
+              </div>
+              <div className="overlay-panel overlay-right">
+                <h1>Hello, Friend!</h1>
+                <p>Enter your personal details and start your delicious journey with us</p>
+                <button onClick={() => setIsSignUpMode(true)}>Sign Up</button>
+              </div>
+            </div>
           </div>
 
         </div>
