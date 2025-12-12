@@ -1481,8 +1481,8 @@ import Footer from "../components/Footer";
 // --- IMPORT IMAGE ---
 import cakeBg from "../assets/cakee1.jpg"; 
 
-// --- BASE URL ---
-const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
+// --- BASE URL FIX (Correct URL format) ---
+const BASE_URL = "https://finalproject-backend-7rqa.onrender.com";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -1494,7 +1494,7 @@ function AuthPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
 
-  // --- FORGOT PASSWORD STATES (Added from old code) ---
+  // --- FORGOT PASSWORD STATES ---
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -1517,7 +1517,9 @@ function AuthPage() {
   }, [navigate]);
 
   const handleGoogleLogin = () => {
-    window.open(`${BASE_URL}/google`, "_self");
+    // Note: Verify if your google route is /auth/google or /authgoogle
+    // Assuming /auth/google based on standard practice, but check your backend
+    window.open(`${BASE_URL}/auth/google`, "_self");
   };
 
   useEffect(() => {
@@ -1541,7 +1543,8 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/login`, loginData);
+      // FIX: URL matches your original code -> /authlogin
+      const res = await axios.post(`${BASE_URL}/authlogin`, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
@@ -1556,7 +1559,8 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${BASE_URL}/register`, regData);
+      // FIX: URL matches your original code -> /authregister
+      await axios.post(`${BASE_URL}/authregister`, regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false); 
       setLoading(false);
@@ -1566,19 +1570,22 @@ function AuthPage() {
     }
   };
 
-  // --- FORGOT PASSWORD HANDLERS (Added) ---
+  // --- FORGOT PASSWORD HANDLERS ---
   const handleSendOTP = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoading(true); // Start loading
     try {
-      // Note: Adjust endpoint if backend is specifically /authforgot-password without slash
-      const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
-      toast.success(res.data.message);
+      console.log("Sending OTP to:", forgotEmail); // Debugging log
+      // FIX: URL matches your original code -> /authforgot-password
+      const res = await axios.post(`${BASE_URL}/authforgot-password`, { email: forgotEmail });
+      
+      toast.success(res.data.message || "OTP Sent Successfully!");
       setOtpSent(true);
-      setLoading(false);
+      setLoading(false); // Stop loading on success
     } catch (err) {
-      toast.error("❌ Failed to send OTP! Check your email.");
-      setLoading(false);
+      console.error("OTP Error:", err); // Debugging log
+      toast.error(err.response?.data?.message || "❌ Failed to send OTP! Check your email.");
+      setLoading(false); // Stop loading on error
     }
   };
 
@@ -1586,12 +1593,14 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/reset-password`, {
+      // FIX: URL matches your original code -> /authreset-password
+      const res = await axios.post(`${BASE_URL}/authreset-password`, {
         email: forgotEmail,
         otp,
         password: newPassword,
       });
-      toast.success(res.data.message);
+      toast.success(res.data.message || "Password Reset Successful!");
+      
       // Reset states after success
       setOtpSent(false);
       setForgotPasswordMode(false);
@@ -1683,6 +1692,7 @@ function AuthPage() {
           box-shadow: 0 10px 20px rgba(231,111,81,0.3);
         }
         .btn-primary:active { transform: scale(0.95); }
+        .btn-primary:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; }
         
         .btn-ghost {
           background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
@@ -1738,7 +1748,7 @@ function AuthPage() {
             </form>
           </div>
 
-          {/* SIGN IN CONTAINER (Contains Logic Switch for Forgot Password) */}
+          {/* SIGN IN CONTAINER (Contains Forgot Password Logic) */}
           <div className="form-container sign-in-container">
             {/* Logic: If NOT in forgot password mode, show Login Form */}
             {!forgotPasswordMode ? (
@@ -1813,7 +1823,7 @@ function AuthPage() {
             )}
           </div>
 
-          {/* OVERLAY (Unchanged) */}
+          {/* OVERLAY */}
           <div className="overlay-container">
             <div className="overlay">
               <div className="bg-image"></div>
