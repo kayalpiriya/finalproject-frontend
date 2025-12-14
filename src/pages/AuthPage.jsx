@@ -1602,14 +1602,14 @@ function AuthPage() {
       
       setLoading(true);
       // Show a specific toast for the "Cold Start" delay
-      const loadingToast = toast.loading("Connecting to server (this might take a minute)...");
+      const loadingToast = toast.loading("Waking up the server & sending email (this may take up to 2 mins)...");
   
       try {
         // Added 'timeout: 60000' (60 seconds) to wait for Render to wake up
         const res = await axios.post(
           `${BASE_URL}/forgot-password`, 
           { email: forgotEmail },
-          { timeout: 60000 } 
+          { timeout: 120000 } 
         );
         
         toast.dismiss(loadingToast); // Remove loading message
