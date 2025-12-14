@@ -1482,32 +1482,25 @@ import cakeBg from "../assets/cakee1.jpg";
 const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation(); 
   const [loading, setLoading] = useState(false);
 
   // LOGIN & REGISTER
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
 
-  // 🔐 FORGOT PASSWORD STATES
+  // 🔐 FORGOT PASSWORD (ADDED)
   const [showForgot, setShowForgot] = useState(false);
   const [showReset, setShowReset] = useState(false);
-
   const [forgotEmail, setForgotEmail] = useState("");
-  const [otpData, setOtpData] = useState({
-    email: "",
-    otp: "",
-    password: ""
-  });
+  const [otpData, setOtpData] = useState({ email: "", otp: "", password: "" });
 
-  // AUTO REDIRECT IF LOGGED IN
+  // AUTO LOGIN CHECK
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/allproduct", { replace: true });
-    }
+    const token = localStorage.getItem("token");
+    if (token) navigate("/allproduct", { replace: true });
   }, [navigate]);
 
   // GOOGLE CALLBACK
@@ -1516,12 +1509,11 @@ function AuthPage() {
     if (token) {
       localStorage.setItem("token", token);
       localStorage.setItem("role", "user");
-      toast.success("✨ Google Login Successful!");
+      toast.success("Google Login Successful");
       navigate("/allproduct", { replace: true });
     }
   }, [location, navigate]);
 
-  // HANDLERS
   const handleLoginChange = (e) =>
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
 
@@ -1536,7 +1528,7 @@ function AuthPage() {
       const res = await axios.post(`${BASE_URL}/login`, loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
-      toast.success("✨ Welcome back!");
+      toast.success("Welcome back!");
       navigate("/allproduct", { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
@@ -1550,7 +1542,7 @@ function AuthPage() {
     setLoading(true);
     try {
       await axios.post(`${BASE_URL}/register`, regData);
-      toast.success("🎉 Account created! Please login.");
+      toast.success("Account created! Please login.");
       setIsSignUpMode(false);
       setLoading(false);
     } catch (err) {
@@ -1559,26 +1551,26 @@ function AuthPage() {
     }
   };
 
-  // FORGOT PASSWORD → SEND OTP
+  // 📩 SEND OTP (ADDED)
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
       await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
-      toast.success("📩 OTP sent to your email");
+      toast.success("OTP sent to your email");
       setOtpData({ ...otpData, email: forgotEmail });
       setShowForgot(false);
       setShowReset(true);
     } catch (err) {
-      toast.error(err.response?.data?.message || "OTP send failed");
+      toast.error(err.response?.data?.message || "Failed to send OTP");
     }
   };
 
-  // RESET PASSWORD
+  // 🔑 RESET PASSWORD (ADDED)
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
       await axios.post(`${BASE_URL}/reset-password`, otpData);
-      toast.success("✅ Password reset successful");
+      toast.success("Password reset successful");
       setShowReset(false);
     } catch (err) {
       toast.error(err.response?.data?.message || "Reset failed");
@@ -1586,55 +1578,8 @@ function AuthPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FDFCF8" }}>
+    <div style={{ background: "#FDFCF8", minHeight: "100vh" }}>
       <Navbar />
-
-      <style>{`
-        .container {
-          position: relative;
-          width: 1000px;
-          max-width: 100%;
-          min-height: 650px;
-          background: #fff;
-          border-radius: 30px;
-          box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-          overflow: hidden;
-        }
-        .form-container {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          width: 50%;
-          transition: 0.6s;
-        }
-        .sign-in-container { left: 0; }
-        .sign-up-container { left: 0; opacity: 0; }
-        .container.right-panel-active .sign-in-container {
-          transform: translateX(100%);
-        }
-        .container.right-panel-active .sign-up-container {
-          transform: translateX(100%);
-          opacity: 1;
-          z-index: 5;
-        }
-        .modern-input {
-          width: 100%;
-          padding: 15px 15px 15px 45px;
-          border-radius: 12px;
-          background: #f5f5f5;
-          border: none;
-          margin-bottom: 12px;
-        }
-        .btn-primary {
-          border-radius: 25px;
-          border: none;
-          background: #E76F51;
-          color: white;
-          padding: 14px 40px;
-          font-weight: bold;
-          cursor: pointer;
-        }
-      `}</style>
 
       <div style={{ display: "flex", justifyContent: "center", padding: "100px 20px" }}>
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
@@ -1661,10 +1606,11 @@ function AuthPage() {
                 onChange={handleLoginChange}
               />
 
+              {/* FORGOT LINK (UNCHANGED STYLE) */}
               <a
                 href="#"
                 onClick={() => setShowForgot(true)}
-                style={{ fontSize: "14px" }}
+                style={{ fontSize: "14px", margin: "10px 0", display: "block" }}
               >
                 Forgot your password?
               </a>
@@ -1673,31 +1619,33 @@ function AuthPage() {
                 {loading ? "Signing In..." : "Sign In"}
               </button>
 
-              {/* FORGOT PASSWORD */}
+              {/* FORGOT PASSWORD FORM */}
               {showForgot && (
                 <form onSubmit={handleForgotPassword}>
                   <input
                     type="email"
-                    placeholder="Enter email"
+                    placeholder="Enter your email"
                     className="modern-input"
                     value={forgotEmail}
                     onChange={(e) => setForgotEmail(e.target.value)}
+                    required
                   />
                   <button className="btn-primary">Send OTP</button>
                 </form>
               )}
 
-              {/* RESET PASSWORD */}
+              {/* RESET PASSWORD FORM */}
               {showReset && (
                 <form onSubmit={handleResetPassword}>
                   <input
                     type="text"
-                    placeholder="OTP"
+                    placeholder="Enter OTP"
                     className="modern-input"
                     value={otpData.otp}
                     onChange={(e) =>
                       setOtpData({ ...otpData, otp: e.target.value })
                     }
+                    required
                   />
                   <input
                     type="password"
@@ -1707,6 +1655,7 @@ function AuthPage() {
                     onChange={(e) =>
                       setOtpData({ ...otpData, password: e.target.value })
                     }
+                    required
                   />
                   <button className="btn-primary">Reset Password</button>
                 </form>
@@ -1718,21 +1667,32 @@ function AuthPage() {
           <div className="form-container sign-up-container">
             <form onSubmit={handleRegister} style={{ padding: "60px" }}>
               <h1>Create Account</h1>
-              <input type="text" name="name" placeholder="Name"
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
                 className="modern-input"
                 value={regData.name}
                 onChange={handleRegChange}
               />
-              <input type="email" name="email" placeholder="Email"
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
                 className="modern-input"
                 value={regData.email}
                 onChange={handleRegChange}
               />
-              <input type="password" name="password" placeholder="Password"
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
                 className="modern-input"
                 value={regData.password}
                 onChange={handleRegChange}
               />
+
               <button className="btn-primary">Sign Up</button>
             </form>
           </div>
