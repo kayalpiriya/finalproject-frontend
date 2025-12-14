@@ -1575,24 +1575,60 @@ function AuthPage() {
     }
   };
 
-  // --- SUBMIT: SEND OTP (Forgot Password) ---
-  const handleSendOTP = async (e) => {
-    e.preventDefault();
-    if (!forgotEmail) return toast.warning("Please enter your email.");
-    setLoading(true);
-    try {
-      // Endpoint: /auth/forgot-password
-      const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
-      toast.success(res.data.message || "OTP sent to your email!");
-      setOtpSent(true);
-    } catch (err) {
-      console.error("Forgot Password Error:", err.response);
-      // This will show exactly why the 400 error happened (e.g., "User not found")
-      toast.error(err.response?.data?.message || "❌ Failed to send OTP. Check email.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // // --- SUBMIT: SEND OTP (Forgot Password) ---
+  // const handleSendOTP = async (e) => {
+  //   e.preventDefault();
+  //   if (!forgotEmail) return toast.warning("Please enter your email.");
+  //   setLoading(true);
+  //   try {
+  //     // Endpoint: /auth/forgot-password
+  //     const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
+  //     toast.success(res.data.message || "OTP sent to your email!");
+  //     setOtpSent(true);
+  //   } catch (err) {
+  //     console.error("Forgot Password Error:", err.response);
+  //     // This will show exactly why the 400 error happened (e.g., "User not found")
+  //     toast.error(err.response?.data?.message || "❌ Failed to send OTP. Check email.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+    // --- SUBMIT: SEND OTP (Forgot Password) ---
+    const handleSendOTP = async (e) => {
+      e.preventDefault();
+      if (!forgotEmail) return toast.warning("Please enter your email.");
+      
+      setLoading(true);
+      // Show a specific toast for the "Cold Start" delay
+      const loadingToast = toast.loading("Connecting to server (this might take a minute)...");
+  
+      try {
+        // Added 'timeout: 60000' (60 seconds) to wait for Render to wake up
+        const res = await axios.post(
+          `${BASE_URL}/forgot-password`, 
+          { email: forgotEmail },
+          { timeout: 60000 } 
+        );
+        
+        toast.dismiss(loadingToast); // Remove loading message
+        toast.success(res.data.message || "OTP sent to your email!");
+        setOtpSent(true);
+      } catch (err) {
+        toast.dismiss(loadingToast);
+        console.error("Forgot Password Error:", err);
+        
+        // Handle Timeout specifically
+        if (err.code === 'ECONNABORTED') {
+          toast.error("Server took too long to wake up. Please try again now!");
+        } else {
+          toast.error(err.response?.data?.message || "❌ Connection failed.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
   // --- SUBMIT: RESET PASSWORD ---
   const handleResetPassword = async (e) => {
