@@ -1472,21 +1472,24 @@
 import { useState, useEffect } from "react"; 
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
-// Added FiArrowLeft, FiArrowRight, FiKey for the forgot password UI
-import { FiUser, FiMail, FiLock, FiFacebook, FiGithub, FiArrowLeft, FiArrowRight, FiKey } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiFacebook, FiGithub, FiArrowLeft, FiKey } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// Make sure this path matches where your image is located
 import cakeBg from "../assets/cakee1.jpg"; 
 
+// --- CONFIGURATION ---
+// If your backend routes are like "/authlogin", remove the "/auth" here and add it manually in the axios calls.
+// Standard convention is usually "/auth" prefix.
 const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   
-  // --- FORGOT PASSWORD STATE ---
+  // --- FORGOT PASSWORD STATES ---
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -1497,10 +1500,11 @@ function AuthPage() {
   const location = useLocation(); 
   const [loading, setLoading] = useState(false);
 
-  // --- FORM STATES ---
+  // --- LOGIN / REGISTER FORM STATES ---
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
   
+  // --- THEME COLORS ---
   const colors = {
     primary: "#E76F51", 
     secondary: "#264653", 
@@ -1508,6 +1512,7 @@ function AuthPage() {
     white: "#FFFFFF"
   };
 
+  // --- CHECK LOGIN STATUS ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -1515,6 +1520,7 @@ function AuthPage() {
     }
   }, [navigate]);
 
+  // --- GOOGLE LOGIN ---
   const handleGoogleLogin = () => {
     window.open(`${BASE_URL}/google`, "_self");
   };
@@ -1532,9 +1538,11 @@ function AuthPage() {
     }
   }, [location, navigate]);
 
+  // --- INPUT HANDLERS ---
   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
+  // --- SUBMIT: LOGIN ---
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -1545,11 +1553,13 @@ function AuthPage() {
       toast.success("✨ Welcome back!");
       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
     } catch (err) {
+      console.error("Login Error:", err.response); // Check console for details
       toast.error(err.response?.data?.message || "Invalid credentials.");
       setLoading(false);
     }
   };
 
+  // --- SUBMIT: REGISTER ---
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -1559,47 +1569,52 @@ function AuthPage() {
       setIsSignUpMode(false); 
       setLoading(false);
     } catch (err) {
+      console.error("Register Error:", err.response);
       toast.error(err.response?.data?.message || "Registration failed.");
       setLoading(false);
     }
   };
 
-  // --- FORGOT PASSWORD HANDLERS ---
+  // --- SUBMIT: SEND OTP (Forgot Password) ---
   const handleSendOTP = async (e) => {
     e.preventDefault();
-    if (!forgotEmail) return toast.warning("Please enter your email first.");
+    if (!forgotEmail) return toast.warning("Please enter your email.");
     setLoading(true);
     try {
-      // Assuming endpoint is /forgot-password based on BASE_URL structure
+      // Endpoint: /auth/forgot-password
       const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
       toast.success(res.data.message || "OTP sent to your email!");
       setOtpSent(true);
     } catch (err) {
-      toast.error("❌ Could not send OTP. Check your email address.");
+      console.error("Forgot Password Error:", err.response);
+      // This will show exactly why the 400 error happened (e.g., "User not found")
+      toast.error(err.response?.data?.message || "❌ Failed to send OTP. Check email.");
     } finally {
       setLoading(false);
     }
   };
 
+  // --- SUBMIT: RESET PASSWORD ---
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!otp || !newPassword) return toast.warning("Please fill all fields.");
     setLoading(true);
     try {
-      // Assuming endpoint is /reset-password
+      // Endpoint: /auth/reset-password
       const res = await axios.post(`${BASE_URL}/reset-password`, {
         email: forgotEmail,
         otp,
         password: newPassword,
       });
       toast.success("🎉 Password reset successfully! Please login.");
-      // Reset everything back to login mode
+      // Reset state to login mode
       setOtpSent(false);
       setForgotPasswordMode(false);
       setForgotEmail("");
       setOtp("");
       setNewPassword("");
     } catch (err) {
+      console.error("Reset Error:", err.response);
       toast.error(err.response?.data?.message || "❌ Failed to reset password");
     } finally {
       setLoading(false);
@@ -1700,7 +1715,6 @@ function AuthPage() {
           background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
         }
 
-        /* Helper for forgot password transition */
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
@@ -1709,7 +1723,7 @@ function AuthPage() {
         
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
 
-          {/* SIGN UP */}
+          {/* SIGN UP FORM */}
           <div className="form-container sign-up-container">
             <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
@@ -1721,24 +1735,24 @@ function AuthPage() {
               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} />
+                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} required />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} />
+                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} required />
               </div>
               <div style={{ width: "100%", position: "relative" }}>
                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} />
+                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} required />
               </div>
               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
             </form>
           </div>
 
-          {/* SIGN IN CONTAINER (Now Handles Login OR Forgot Password) */}
+          {/* SIGN IN / FORGOT PASSWORD CONTAINER */}
           <div className="form-container sign-in-container">
             
-            {/* Logic: If NOT forgotPasswordMode, Show Login. Else, Show Forgot Password */}
+            {/* TOGGLE 1: NORMAL LOGIN */}
             {!forgotPasswordMode ? (
               <form onSubmit={handleLogin} className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
@@ -1750,14 +1764,14 @@ function AuthPage() {
                 <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
                 <div style={{ width: "100%", position: "relative" }}>
                   <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} />
+                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} required />
                 </div>
                 <div style={{ width: "100%", position: "relative" }}>
                   <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} />
+                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} required />
                 </div>
                 
-                {/* Link switches to Forgot Mode */}
+                {/* BUTTON TO SWITCH TO FORGOT PASSWORD MODE */}
                 <span 
                   onClick={() => setForgotPasswordMode(true)}
                   style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500", cursor: "pointer" }}
@@ -1768,10 +1782,10 @@ function AuthPage() {
                 <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
               </form>
             ) : (
-              /* --- FORGOT PASSWORD / RESET UI --- */
+              
+              /* TOGGLE 2: FORGOT PASSWORD / RESET */
               <div className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
                 
-                {/* Back Button */}
                 <button 
                   onClick={() => { setForgotPasswordMode(false); setOtpSent(false); }}
                   style={{ background: "none", border: "none", color: "#888", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", alignSelf: "flex-start", marginBottom: "20px" }}
@@ -1785,7 +1799,7 @@ function AuthPage() {
                 </p>
 
                 {!otpSent ? (
-                  /* Step 1: Send Email */
+                  /* STEP 1: SEND EMAIL */
                   <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <div style={{ width: "100%", position: "relative" }}>
                       <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
@@ -1796,7 +1810,7 @@ function AuthPage() {
                     </button>
                   </form>
                 ) : (
-                  /* Step 2: Verify OTP & New Password */
+                  /* STEP 2: VERIFY OTP & NEW PASSWORD */
                   <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <div style={{ width: "100%", position: "relative" }}>
                       <FiKey style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
@@ -1815,7 +1829,7 @@ function AuthPage() {
             )}
           </div>
 
-          {/* OVERLAY */}
+          {/* OVERLAY SECTION */}
           <div className="overlay-container">
             <div className="overlay">
               <div className="bg-image"></div>
