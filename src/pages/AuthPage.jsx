@@ -1609,7 +1609,7 @@ function AuthPage() {
         const res = await axios.post(
           `${BASE_URL}/forgot-password`, 
           { email: forgotEmail },
-          { timeout: 120000 } 
+          { timeout: 30000 } 
         );
         
         toast.dismiss(loadingToast); // Remove loading message
