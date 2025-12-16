@@ -1469,93 +1469,514 @@
 
 
 
-import { useState, useEffect } from "react"; 
-import { useNavigate, useLocation } from "react-router-dom"; 
+// import { useState, useEffect } from "react"; 
+// import { useNavigate, useLocation } from "react-router-dom"; 
+// import axios from "axios";
+// import { FiUser, FiMail, FiLock, FiFacebook, FiGithub, FiArrowLeft, FiKey } from "react-icons/fi";
+// import { FcGoogle } from "react-icons/fc";
+// import { toast } from "react-toastify";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+
+// // Make sure this path matches where your image is located
+// import cakeBg from "../assets/cakee1.jpg"; 
+
+// // --- CONFIGURATION ---
+// // If your backend routes are like "/authlogin", remove the "/auth" here and add it manually in the axios calls.
+// // Standard convention is usually "/auth" prefix.
+// const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
+
+// function AuthPage() {
+//   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  
+//   // --- FORGOT PASSWORD STATES ---
+//   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
+//   const [forgotEmail, setForgotEmail] = useState("");
+//   const [otpSent, setOtpSent] = useState(false);
+//   const [otp, setOtp] = useState("");
+//   const [newPassword, setNewPassword] = useState("");
+  
+//   const navigate = useNavigate();
+//   const location = useLocation(); 
+//   const [loading, setLoading] = useState(false);
+
+//   // --- LOGIN / REGISTER FORM STATES ---
+//   const [loginData, setLoginData] = useState({ email: "", password: "" });
+//   const [regData, setRegData] = useState({ name: "", email: "", password: "" });
+  
+//   // --- THEME COLORS ---
+//   const colors = {
+//     primary: "#E76F51", 
+//     secondary: "#264653", 
+//     bg: "#FDFCF8",
+//     white: "#FFFFFF"
+//   };
+
+//   // --- CHECK LOGIN STATUS ---
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       navigate("/allproduct", { replace: true });
+//     }
+//   }, [navigate]);
+
+//   // --- GOOGLE LOGIN ---
+//   const handleGoogleLogin = () => {
+//     window.open(`${BASE_URL}/google`, "_self");
+//   };
+
+//   useEffect(() => {
+//     const queryParams = new URLSearchParams(location.search);
+//     const token = queryParams.get("token");
+
+//     if (token) {
+//       localStorage.setItem("token", token);
+//       localStorage.setItem("role", "user"); 
+//       toast.success("✨ Google Login Successful!");
+//       window.history.replaceState({}, document.title, "/");
+//       navigate("/allproduct", { replace: true });
+//     }
+//   }, [location, navigate]);
+
+//   // --- INPUT HANDLERS ---
+//   const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
+//   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
+
+//   // --- SUBMIT: LOGIN ---
+
+  
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+
+//     setLoading(true);
+//     try {
+//       const res = await axios.post(`${BASE_URL}/login`, loginData);
+//       localStorage.setItem("token", res.data.token);
+//       localStorage.setItem("role", res.data.role);
+//       toast.success("✨ Welcome back!");
+//       setTimeout(() => navigate("/allproduct", { replace: true }), 800);
+//     } catch (err) {
+//       console.error("Login Error:", err.response); // Check console for details
+//       toast.error(err.response?.data?.message || "Invalid credentials.");
+//       setLoading(false);
+//     }
+//   };
+
+//   // --- SUBMIT: REGISTER ---
+//   const handleRegister = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     try {
+//       await axios.post(`${BASE_URL}/register`, regData);
+//       toast.success("🎉 Account created! Please login.");
+//       setIsSignUpMode(false); 
+//       setLoading(false);
+//     } catch (err) {
+//       console.error("Register Error:", err.response);
+//       toast.error(err.response?.data?.message || "Registration failed.");
+//       setLoading(false);
+//     }
+//   };
+
+//   // // --- SUBMIT: SEND OTP (Forgot Password) ---
+//   // const handleSendOTP = async (e) => {
+//   //   e.preventDefault();
+//   //   if (!forgotEmail) return toast.warning("Please enter your email.");
+//   //   setLoading(true);
+//   //   try {
+//   //     // Endpoint: /auth/forgot-password
+//   //     const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
+//   //     toast.success(res.data.message || "OTP sent to your email!");
+//   //     setOtpSent(true);
+//   //   } catch (err) {
+//   //     console.error("Forgot Password Error:", err.response);
+//   //     // This will show exactly why the 400 error happened (e.g., "User not found")
+//   //     toast.error(err.response?.data?.message || "❌ Failed to send OTP. Check email.");
+//   //   } finally {
+//   //     setLoading(false);
+//   //   }
+//   // };
+
+
+//     // --- SUBMIT: SEND OTP (Forgot Password) ---
+//     const handleSendOTP = async (e) => {
+//       e.preventDefault();
+//       if (!forgotEmail) return toast.warning("Please enter your email.");
+      
+//       setLoading(true);
+//       // Show a specific toast for the "Cold Start" delay
+//       const loadingToast = toast.loading("Waking up the server & sending email (this may take up to 2 mins)...");
+  
+//       try {
+//         // Added 'timeout: 60000' (60 seconds) to wait for Render to wake up
+//         const res = await axios.post(
+//           `${BASE_URL}/forgot-password`, 
+//           { email: forgotEmail },
+//           { timeout: 30000 } 
+//         );
+        
+//         toast.dismiss(loadingToast); // Remove loading message
+//         toast.success(res.data.message || "OTP sent to your email!");
+//         setOtpSent(true);
+//       } catch (err) {
+//         toast.dismiss(loadingToast);
+//         console.error("Forgot Password Error:", err);
+        
+//         // Handle Timeout specifically
+//         if (err.code === 'ECONNABORTED') {
+//           toast.error("Server took too long to wake up. Please try again now!");
+//         } else {
+//           toast.error(err.response?.data?.message || "❌ Connection failed.");
+//         }
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//   // --- SUBMIT: RESET PASSWORD ---
+//   const handleResetPassword = async (e) => {
+//     e.preventDefault();
+//     if (!otp || !newPassword) return toast.warning("Please fill all fields.");
+//     setLoading(true);
+//     try {
+//       // Endpoint: /auth/reset-password
+//       const res = await axios.post(`${BASE_URL}/reset-password`, {
+//         email: forgotEmail,
+//         otp,
+//         password: newPassword,
+//       });
+//       toast.success("🎉 Password reset successfully! Please login.");
+//       // Reset state to login mode
+//       setOtpSent(false);
+//       setForgotPasswordMode(false);
+//       setForgotEmail("");
+//       setOtp("");
+//       setNewPassword("");
+//     } catch (err) {
+//       console.error("Reset Error:", err.response);
+//       toast.error(err.response?.data?.message || "❌ Failed to reset password");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
+//       <Navbar />
+
+//       <style>{`
+//         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
+
+//         .container {
+//           position: relative;
+//           overflow: hidden;
+//           width: 1000px;
+//           max-width: 100%;
+//           min-height: 650px;
+//           background-color: #fff;
+//           border-radius: 30px;
+//           box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+//         }
+
+//         .form-container {
+//           position: absolute;
+//           top: 0;
+//           height: 100%;
+//           transition: all 0.6s ease-in-out;
+//         }
+
+//         .sign-in-container { left: 0; width: 50%; z-index: 2; }
+//         .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+
+//         .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+//         .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
+
+//         @keyframes show {
+//           0%, 49.99% { opacity: 0; z-index: 1; }
+//           50%, 100% { opacity: 1; z-index: 5; }
+//         }
+
+//         .overlay-container {
+//           position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
+//           overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
+//           border-top-right-radius: 30px; border-bottom-right-radius: 30px;
+//         }
+//         .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px; }
+
+//         .overlay {
+//           background: #E76F51;
+//           background: linear-gradient(to right, #E76F51, #264653);
+//           background-repeat: no-repeat; background-size: cover; background-position: 0 0;
+//           color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%;
+//           transform: translateX(0); transition: transform 0.6s ease-in-out;
+//         }
+//         .container.right-panel-active .overlay { transform: translateX(50%); }
+
+//         .overlay-panel {
+//           position: absolute; display: flex; align-items: center; justify-content: center;
+//           flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
+//           transform: translateX(0); transition: transform 0.6s ease-in-out;
+//         }
+//         .overlay-left { transform: translateX(-20%); }
+//         .container.right-panel-active .overlay-left { transform: translateX(0); }
+//         .overlay-right { right: 0; transform: translateX(0); }
+//         .container.right-panel-active .overlay-right { transform: translateX(20%); }
+
+//         .modern-input {
+//           background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
+//           width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
+//         }
+//         .modern-input:focus { background: white; border-color: ${colors.primary}; box-shadow: 0 5px 15px rgba(231,111,81,0.1); }
+        
+//         .btn-primary {
+//           border-radius: 25px; border: none; background-color: ${colors.primary}; color: #ffffff;
+//           font-size: 14px; font-weight: bold; padding: 15px 45px; letter-spacing: 1px; text-transform: uppercase;
+//           transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px;
+//           box-shadow: 0 10px 20px rgba(231,111,81,0.3);
+//         }
+//         .btn-primary:active { transform: scale(0.95); }
+        
+//         .btn-ghost {
+//           background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
+//           color: white; padding: 12px 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
+//         }
+//         .btn-ghost:hover { background: white; color: ${colors.primary}; }
+
+//         .social-btn {
+//           border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex; justify-content: center;
+//           align-items: center; margin: 0 5px; height: 45px; width: 45px; cursor: pointer; transition: 0.3s;
+//         }
+//         .social-btn:hover { border-color: ${colors.primary}; transform: translateY(-3px); }
+
+//         .bg-image {
+//           position: absolute; inset: 0; z-index: -1; 
+//           background-image: url(${cakeBg});
+//           background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
+//         }
+
+//         .fade-in { animation: fadeIn 0.5s ease-in; }
+//         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+//       `}</style>
+
+//       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
+        
+//         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
+
+//           {/* SIGN UP FORM */}
+//           <div className="form-container sign-up-container">
+//             <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+//               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
+//               <div style={{ margin: "20px 0" }}>
+//                 <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
+//                 <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
+//                 <button type="button" className="social-btn"><FiGithub size={20} /></button>
+//               </div>
+//               <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
+//               <div style={{ width: "100%", position: "relative" }}>
+//                 <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                 <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} required />
+//               </div>
+//               <div style={{ width: "100%", position: "relative" }}>
+//                 <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                 <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} required />
+//               </div>
+//               <div style={{ width: "100%", position: "relative" }}>
+//                 <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                 <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} required />
+//               </div>
+//               <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
+//             </form>
+//           </div>
+
+//           {/* SIGN IN / FORGOT PASSWORD CONTAINER */}
+//           <div className="form-container sign-in-container">
+            
+//             {/* TOGGLE 1: NORMAL LOGIN */}
+//             {!forgotPasswordMode ? (
+//               <form onSubmit={handleLogin} className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
+//                 <div style={{ margin: "20px 0" }}>
+//                   <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
+//                   <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
+//                   <button type="button" className="social-btn"><FiGithub size={20} /></button>
+//                 </div>
+//                 <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
+//                 <div style={{ width: "100%", position: "relative" }}>
+//                   <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                   <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} required />
+//                 </div>
+//                 <div style={{ width: "100%", position: "relative" }}>
+//                   <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                   <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} required />
+//                 </div>
+                
+//                 {/* BUTTON TO SWITCH TO FORGOT PASSWORD MODE */}
+//                 <span 
+//                   onClick={() => setForgotPasswordMode(true)}
+//                   style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500", cursor: "pointer" }}
+//                 >
+//                   Forgot your password?
+//                 </span>
+
+//                 <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
+//               </form>
+//             ) : (
+              
+//               /* TOGGLE 2: FORGOT PASSWORD / RESET */
+//               <div className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
+                
+//                 <button 
+//                   onClick={() => { setForgotPasswordMode(false); setOtpSent(false); }}
+//                   style={{ background: "none", border: "none", color: "#888", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", alignSelf: "flex-start", marginBottom: "20px" }}
+//                 >
+//                   <FiArrowLeft /> Back
+//                 </button>
+
+//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", margin: "0 0 10px 0", color: colors.secondary }}>Reset Password</h1>
+//                 <p style={{ fontSize: "14px", color: "#666", marginBottom: "20px", textAlign: "center" }}>
+//                    {!otpSent ? "Enter your email to receive a code." : "Check your email for the OTP."}
+//                 </p>
+
+//                 {!otpSent ? (
+//                   /* STEP 1: SEND EMAIL */
+//                   <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+//                     <div style={{ width: "100%", position: "relative" }}>
+//                       <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                       <input type="email" placeholder="Email Address" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} className="modern-input" required />
+//                     </div>
+//                     <button type="submit" className="btn-primary" disabled={loading}>
+//                       {loading ? "Sending..." : "Send Code"}
+//                     </button>
+//                   </form>
+//                 ) : (
+//                   /* STEP 2: VERIFY OTP & NEW PASSWORD */
+//                   <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+//                     <div style={{ width: "100%", position: "relative" }}>
+//                       <FiKey style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                       <input type="text" placeholder="OTP Code" value={otp} onChange={(e) => setOtp(e.target.value)} className="modern-input" required />
+//                     </div>
+//                     <div style={{ width: "100%", position: "relative" }}>
+//                       <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
+//                       <input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="modern-input" required />
+//                     </div>
+//                     <button type="submit" className="btn-primary" disabled={loading}>
+//                       {loading ? "Updating..." : "Update Password"}
+//                     </button>
+//                   </form>
+//                 )}
+//               </div>
+//             )}
+//           </div>
+
+//           {/* OVERLAY SECTION */}
+//           <div className="overlay-container">
+//             <div className="overlay">
+//               <div className="bg-image"></div>
+//               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
+//               <div className="overlay-panel overlay-left">
+//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
+//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
+//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
+//               </div>
+//               <div className="overlay-panel overlay-right">
+//                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
+//                 <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
+//                 <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
+//               </div>
+//             </div>
+//           </div>
+
+//         </div>
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// }
+
+// export default AuthPage;
+
+
+
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { FiUser, FiMail, FiLock, FiFacebook, FiGithub, FiArrowLeft, FiKey } from "react-icons/fi";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiFacebook,
+  FiGithub,
+  FiArrowLeft,
+  FiKey,
+} from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import cakeBg from "../assets/cakee1.jpg";
 
-// Make sure this path matches where your image is located
-import cakeBg from "../assets/cakee1.jpg"; 
-
-// --- CONFIGURATION ---
-// If your backend routes are like "/authlogin", remove the "/auth" here and add it manually in the axios calls.
-// Standard convention is usually "/auth" prefix.
 const BASE_URL = "https://finalproject-backend-7rqa.onrender.com/auth";
 
 function AuthPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [isSignUpMode, setIsSignUpMode] = useState(false);
-  
-  // --- FORGOT PASSWORD STATES ---
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
+
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [regData, setRegData] = useState({ name: "", email: "", password: "" });
+
   const [forgotEmail, setForgotEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  
-  const navigate = useNavigate();
-  const location = useLocation(); 
+
   const [loading, setLoading] = useState(false);
 
-  // --- LOGIN / REGISTER FORM STATES ---
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [regData, setRegData] = useState({ name: "", email: "", password: "" });
-  
-  // --- THEME COLORS ---
-  const colors = {
-    primary: "#E76F51", 
-    secondary: "#264653", 
-    bg: "#FDFCF8",
-    white: "#FFFFFF"
-  };
+  /* ---------------- VALIDATION HELPERS ---------------- */
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // --- CHECK LOGIN STATUS ---
+  const isStrongPassword = (password) => password.length >= 6;
+
+  /* ---------------- AUTO LOGIN CHECK ---------------- */
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/allproduct", { replace: true });
-    }
+    if (token) navigate("/allproduct", { replace: true });
   }, [navigate]);
 
-  // --- GOOGLE LOGIN ---
+  /* ---------------- GOOGLE LOGIN ---------------- */
   const handleGoogleLogin = () => {
     window.open(`${BASE_URL}/google`, "_self");
   };
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const token = queryParams.get("token");
+    const query = new URLSearchParams(location.search);
+    const token = query.get("token");
 
     if (token) {
       localStorage.setItem("token", token);
-      localStorage.setItem("role", "user"); 
+      localStorage.setItem("role", "user");
       toast.success("✨ Google Login Successful!");
-      window.history.replaceState({}, document.title, "/");
       navigate("/allproduct", { replace: true });
     }
   }, [location, navigate]);
 
-  // --- INPUT HANDLERS ---
-  const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
-
-  // --- SUBMIT: LOGIN ---
-
-  const validateLogin = () => {
-    let temp = {};
-    if (!email.trim()) temp.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
-    if (!password.trim()) temp.password = "Password is required";
-    setErrors(temp);
-    return Object.keys(temp).length === 0;
-  };
-
+  /* ---------------- LOGIN ---------------- */
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!validateLogin()) return;
+    const { email, password } = loginData;
+
+    if (!email || !password)
+      return toast.warning("⚠️ Please fill all fields");
+
+    if (!isValidEmail(email))
+      return toast.error("❌ Enter a valid email");
+
+    if (!isStrongPassword(password))
+      return toast.error("❌ Password must be at least 6 characters");
 
     setLoading(true);
     try {
@@ -1563,340 +1984,204 @@ function AuthPage() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       toast.success("✨ Welcome back!");
-      setTimeout(() => navigate("/allproduct", { replace: true }), 800);
+      navigate("/allproduct");
     } catch (err) {
-      console.error("Login Error:", err.response); // Check console for details
-      toast.error(err.response?.data?.message || "Invalid credentials.");
-      setLoading(false);
-    }
-  };
-
-  // --- SUBMIT: REGISTER ---
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await axios.post(`${BASE_URL}/register`, regData);
-      toast.success("🎉 Account created! Please login.");
-      setIsSignUpMode(false); 
-      setLoading(false);
-    } catch (err) {
-      console.error("Register Error:", err.response);
-      toast.error(err.response?.data?.message || "Registration failed.");
-      setLoading(false);
-    }
-  };
-
-  // // --- SUBMIT: SEND OTP (Forgot Password) ---
-  // const handleSendOTP = async (e) => {
-  //   e.preventDefault();
-  //   if (!forgotEmail) return toast.warning("Please enter your email.");
-  //   setLoading(true);
-  //   try {
-  //     // Endpoint: /auth/forgot-password
-  //     const res = await axios.post(`${BASE_URL}/forgot-password`, { email: forgotEmail });
-  //     toast.success(res.data.message || "OTP sent to your email!");
-  //     setOtpSent(true);
-  //   } catch (err) {
-  //     console.error("Forgot Password Error:", err.response);
-  //     // This will show exactly why the 400 error happened (e.g., "User not found")
-  //     toast.error(err.response?.data?.message || "❌ Failed to send OTP. Check email.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
-    // --- SUBMIT: SEND OTP (Forgot Password) ---
-    const handleSendOTP = async (e) => {
-      e.preventDefault();
-      if (!forgotEmail) return toast.warning("Please enter your email.");
-      
-      setLoading(true);
-      // Show a specific toast for the "Cold Start" delay
-      const loadingToast = toast.loading("Waking up the server & sending email (this may take up to 2 mins)...");
-  
-      try {
-        // Added 'timeout: 60000' (60 seconds) to wait for Render to wake up
-        const res = await axios.post(
-          `${BASE_URL}/forgot-password`, 
-          { email: forgotEmail },
-          { timeout: 30000 } 
-        );
-        
-        toast.dismiss(loadingToast); // Remove loading message
-        toast.success(res.data.message || "OTP sent to your email!");
-        setOtpSent(true);
-      } catch (err) {
-        toast.dismiss(loadingToast);
-        console.error("Forgot Password Error:", err);
-        
-        // Handle Timeout specifically
-        if (err.code === 'ECONNABORTED') {
-          toast.error("Server took too long to wake up. Please try again now!");
-        } else {
-          toast.error(err.response?.data?.message || "❌ Connection failed.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-  // --- SUBMIT: RESET PASSWORD ---
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (!otp || !newPassword) return toast.warning("Please fill all fields.");
-    setLoading(true);
-    try {
-      // Endpoint: /auth/reset-password
-      const res = await axios.post(`${BASE_URL}/reset-password`, {
-        email: forgotEmail,
-        otp,
-        password: newPassword,
-      });
-      toast.success("🎉 Password reset successfully! Please login.");
-      // Reset state to login mode
-      setOtpSent(false);
-      setForgotPasswordMode(false);
-      setForgotEmail("");
-      setOtp("");
-      setNewPassword("");
-    } catch (err) {
-      console.error("Reset Error:", err.response);
-      toast.error(err.response?.data?.message || "❌ Failed to reset password");
+      toast.error(err.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
   };
 
+  /* ---------------- REGISTER ---------------- */
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const { name, email, password } = regData;
+
+    if (!name || !email || !password)
+      return toast.warning("⚠️ Please fill all fields");
+
+    if (name.length < 3)
+      return toast.error("❌ Name must be at least 3 characters");
+
+    if (!isValidEmail(email))
+      return toast.error("❌ Enter a valid email");
+
+    if (!isStrongPassword(password))
+      return toast.error("❌ Password must be at least 6 characters");
+
+    setLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/register`, regData);
+      toast.success("🎉 Account created! Please login.");
+      setIsSignUpMode(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ---------------- FORGOT PASSWORD ---------------- */
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    if (!forgotEmail)
+      return toast.warning("⚠️ Enter your email");
+
+    if (!isValidEmail(forgotEmail))
+      return toast.error("❌ Enter a valid email");
+
+    setLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/forgot-password`, {
+        email: forgotEmail,
+      });
+      toast.success("📩 OTP sent to your email");
+      setOtpSent(true);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (!otp || !newPassword)
+      return toast.warning("⚠️ Fill all fields");
+
+    if (!isStrongPassword(newPassword))
+      return toast.error("❌ Password must be at least 6 characters");
+
+    setLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/reset-password`, {
+        email: forgotEmail,
+        otp,
+        password: newPassword,
+      });
+      toast.success("✅ Password reset successful");
+      setForgotPasswordMode(false);
+      setOtpSent(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Reset failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ---------------- UI ---------------- */
   return (
-    <div style={{ backgroundColor: colors.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
+    <div style={{ minHeight: "100vh" }}>
       <Navbar />
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;800&display=swap');
-
-        .container {
-          position: relative;
-          overflow: hidden;
-          width: 1000px;
-          max-width: 100%;
-          min-height: 650px;
-          background-color: #fff;
-          border-radius: 30px;
-          box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-        }
-
-        .form-container {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          transition: all 0.6s ease-in-out;
-        }
-
-        .sign-in-container { left: 0; width: 50%; z-index: 2; }
-        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
-
-        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
-        .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
-
-        @keyframes show {
-          0%, 49.99% { opacity: 0; z-index: 1; }
-          50%, 100% { opacity: 1; z-index: 5; }
-        }
-
-        .overlay-container {
-          position: absolute; top: 0; left: 50%; width: 50%; height: 100%;
-          overflow: hidden; transition: transform 0.6s ease-in-out; z-index: 100;
-          border-top-right-radius: 30px; border-bottom-right-radius: 30px;
-        }
-        .container.right-panel-active .overlay-container { transform: translateX(-100%); border-radius: 30px 0 0 30px; }
-
-        .overlay {
-          background: #E76F51;
-          background: linear-gradient(to right, #E76F51, #264653);
-          background-repeat: no-repeat; background-size: cover; background-position: 0 0;
-          color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%;
-          transform: translateX(0); transition: transform 0.6s ease-in-out;
-        }
-        .container.right-panel-active .overlay { transform: translateX(50%); }
-
-        .overlay-panel {
-          position: absolute; display: flex; align-items: center; justify-content: center;
-          flex-direction: column; padding: 0 40px; text-align: center; top: 0; height: 100%; width: 50%;
-          transform: translateX(0); transition: transform 0.6s ease-in-out;
-        }
-        .overlay-left { transform: translateX(-20%); }
-        .container.right-panel-active .overlay-left { transform: translateX(0); }
-        .overlay-right { right: 0; transform: translateX(0); }
-        .container.right-panel-active .overlay-right { transform: translateX(20%); }
-
-        .modern-input {
-          background-color: #F5F5F5; border: 2px solid transparent; padding: 15px 15px 15px 45px;
-          width: 100%; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; outline: none; transition: 0.3s;
-        }
-        .modern-input:focus { background: white; border-color: ${colors.primary}; box-shadow: 0 5px 15px rgba(231,111,81,0.1); }
-        
-        .btn-primary {
-          border-radius: 25px; border: none; background-color: ${colors.primary}; color: #ffffff;
-          font-size: 14px; font-weight: bold; padding: 15px 45px; letter-spacing: 1px; text-transform: uppercase;
-          transition: transform 80ms ease-in; cursor: pointer; margin-top: 10px;
-          box-shadow: 0 10px 20px rgba(231,111,81,0.3);
-        }
-        .btn-primary:active { transform: scale(0.95); }
-        
-        .btn-ghost {
-          background-color: transparent; border-color: #ffffff; border: 2px solid white; border-radius: 25px;
-          color: white; padding: 12px 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .btn-ghost:hover { background: white; color: ${colors.primary}; }
-
-        .social-btn {
-          border: 1px solid #DDDDDD; border-radius: 50%; display: inline-flex; justify-content: center;
-          align-items: center; margin: 0 5px; height: 45px; width: 45px; cursor: pointer; transition: 0.3s;
-        }
-        .social-btn:hover { border-color: ${colors.primary}; transform: translateY(-3px); }
-
-        .bg-image {
-          position: absolute; inset: 0; z-index: -1; 
-          background-image: url(${cakeBg});
-          background-size: cover; background-position: center; opacity: 0.4; mix-blend-mode: overlay;
-        }
-
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      `}</style>
-
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "100px 20px" }}>
-        
+      <div style={{ display: "flex", justifyContent: "center", padding: "100px 20px" }}>
         <div className={`container ${isSignUpMode ? "right-panel-active" : ""}`}>
 
-          {/* SIGN UP FORM */}
+          {/* REGISTER */}
           <div className="form-container sign-up-container">
-            <form onSubmit={handleRegister} style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Create Account</h1>
-              <div style={{ margin: "20px 0" }}>
-                <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-                <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-                <button type="button" className="social-btn"><FiGithub size={20} /></button>
-              </div>
-              <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your email for registration</span>
-              <div style={{ width: "100%", position: "relative" }}>
-                <FiUser style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="text" name="name" placeholder="Name" className="modern-input" value={regData.name} onChange={handleRegChange} required />
-              </div>
-              <div style={{ width: "100%", position: "relative" }}>
-                <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="email" name="email" placeholder="Email" className="modern-input" value={regData.email} onChange={handleRegChange} required />
-              </div>
-              <div style={{ width: "100%", position: "relative" }}>
-                <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                <input type="password" name="password" placeholder="Password" className="modern-input" value={regData.password} onChange={handleRegChange} required />
-              </div>
-              <button className="btn-primary" disabled={loading}>{loading ? "Creating..." : "Sign Up"}</button>
+            <form onSubmit={handleRegister}>
+              <h1>Create Account</h1>
+
+              <input
+                placeholder="Name"
+                value={regData.name}
+                onChange={(e) =>
+                  setRegData({ ...regData, name: e.target.value })
+                }
+              />
+
+              <input
+                placeholder="Email"
+                value={regData.email}
+                onChange={(e) =>
+                  setRegData({ ...regData, email: e.target.value })
+                }
+              />
+
+              <input
+                type="password"
+                placeholder="Password (min 6 chars)"
+                value={regData.password}
+                onChange={(e) =>
+                  setRegData({ ...regData, password: e.target.value })
+                }
+              />
+
+              <button disabled={loading}>
+                {loading ? "Creating..." : "Sign Up"}
+              </button>
             </form>
           </div>
 
-          {/* SIGN IN / FORGOT PASSWORD CONTAINER */}
+          {/* LOGIN */}
           <div className="form-container sign-in-container">
-            
-            {/* TOGGLE 1: NORMAL LOGIN */}
             {!forgotPasswordMode ? (
-              <form onSubmit={handleLogin} className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, color: colors.secondary }}>Sign In</h1>
-                <div style={{ margin: "20px 0" }}>
-                  <button type="button" onClick={handleGoogleLogin} className="social-btn"><FcGoogle size={20} /></button>
-                  <button type="button" className="social-btn"><FiFacebook size={20} color="#1877F2" /></button>
-                  <button type="button" className="social-btn"><FiGithub size={20} /></button>
-                </div>
-                <span style={{ fontSize: "12px", marginBottom: "15px", color: "#888" }}>or use your account</span>
-                <div style={{ width: "100%", position: "relative" }}>
-                  <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="email" name="email" placeholder="Email" className="modern-input" value={loginData.email} onChange={handleLoginChange} required />
-                </div>
-                <div style={{ width: "100%", position: "relative" }}>
-                  <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                  <input type="password" name="password" placeholder="Password" className="modern-input" value={loginData.password} onChange={handleLoginChange} required />
-                </div>
-                
-                {/* BUTTON TO SWITCH TO FORGOT PASSWORD MODE */}
-                <span 
-                  onClick={() => setForgotPasswordMode(true)}
-                  style={{ color: "#333", fontSize: "14px", textDecoration: "none", margin: "15px 0", fontWeight: "500", cursor: "pointer" }}
-                >
-                  Forgot your password?
+              <form onSubmit={handleLogin}>
+                <h1>Sign In</h1>
+
+                <input
+                  placeholder="Email"
+                  value={loginData.email}
+                  onChange={(e) =>
+                    setLoginData({ ...loginData, email: e.target.value })
+                  }
+                />
+
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={loginData.password}
+                  onChange={(e) =>
+                    setLoginData({ ...loginData, password: e.target.value })
+                  }
+                />
+
+                <span onClick={() => setForgotPasswordMode(true)}>
+                  Forgot Password?
                 </span>
 
-                <button className="btn-primary" disabled={loading}>{loading ? "Signing In..." : "Sign In"}</button>
+                <button disabled={loading}>
+                  {loading ? "Signing In..." : "Sign In"}
+                </button>
               </form>
             ) : (
-              
-              /* TOGGLE 2: FORGOT PASSWORD / RESET */
-              <div className="fade-in" style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 50px", backgroundColor: "white" }}>
-                
-                <button 
-                  onClick={() => { setForgotPasswordMode(false); setOtpSent(false); }}
-                  style={{ background: "none", border: "none", color: "#888", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", alignSelf: "flex-start", marginBottom: "20px" }}
-                >
-                  <FiArrowLeft /> Back
-                </button>
-
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", margin: "0 0 10px 0", color: colors.secondary }}>Reset Password</h1>
-                <p style={{ fontSize: "14px", color: "#666", marginBottom: "20px", textAlign: "center" }}>
-                   {!otpSent ? "Enter your email to receive a code." : "Check your email for the OTP."}
-                </p>
-
+              <form>
                 {!otpSent ? (
-                  /* STEP 1: SEND EMAIL */
-                  <form onSubmit={handleSendOTP} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <div style={{ width: "100%", position: "relative" }}>
-                      <FiMail style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                      <input type="email" placeholder="Email Address" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} className="modern-input" required />
-                    </div>
-                    <button type="submit" className="btn-primary" disabled={loading}>
-                      {loading ? "Sending..." : "Send Code"}
-                    </button>
-                  </form>
+                  <>
+                    <input
+                      placeholder="Email"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                    />
+                    <button onClick={handleSendOTP}>Send OTP</button>
+                  </>
                 ) : (
-                  /* STEP 2: VERIFY OTP & NEW PASSWORD */
-                  <form onSubmit={handleResetPassword} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <div style={{ width: "100%", position: "relative" }}>
-                      <FiKey style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                      <input type="text" placeholder="OTP Code" value={otp} onChange={(e) => setOtp(e.target.value)} className="modern-input" required />
-                    </div>
-                    <div style={{ width: "100%", position: "relative" }}>
-                      <FiLock style={{ position: "absolute", top: "18px", left: "15px", color: "#bbb" }} />
-                      <input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="modern-input" required />
-                    </div>
-                    <button type="submit" className="btn-primary" disabled={loading}>
-                      {loading ? "Updating..." : "Update Password"}
+                  <>
+                    <input
+                      placeholder="OTP"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                    />
+                    <input
+                      type="password"
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) =>
+                        setNewPassword(e.target.value)
+                      }
+                    />
+                    <button onClick={handleResetPassword}>
+                      Reset Password
                     </button>
-                  </form>
+                  </>
                 )}
-              </div>
+              </form>
             )}
           </div>
-
-          {/* OVERLAY SECTION */}
-          <div className="overlay-container">
-            <div className="overlay">
-              <div className="bg-image"></div>
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(231, 111, 81, 0.9), rgba(38, 70, 83, 0.8))" }}></div>
-              <div className="overlay-panel overlay-left">
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Welcome Back!</h1>
-                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>To keep connected with us please login with your personal info</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(false)}>Sign In</button>
-              </div>
-              <div className="overlay-panel overlay-right">
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", margin: 0, fontWeight: "bold" }}>Hello, Friend!</h1>
-                <p style={{ fontSize: "14px", fontWeight: 300, lineHeight: "20px", letterSpacing: "0.5px", margin: "20px 0 30px" }}>Enter your personal details and start your delicious journey with us</p>
-                <button className="btn-ghost" onClick={() => setIsSignUpMode(true)}>Sign Up</button>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
+
       <Footer />
     </div>
   );
