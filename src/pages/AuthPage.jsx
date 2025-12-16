@@ -1897,7 +1897,6 @@
 // export default AuthPage;
 
 
-
 import { useState, useEffect } from "react"; 
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
@@ -1928,8 +1927,9 @@ function AuthPage() {
   const location = useLocation(); 
 
   /* ---------------- VALIDATION HELPERS ---------------- */
+  // Improved Regex for better email validation
   const isValidEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
   const isStrongPassword = (password) => password.length >= 6;
 
@@ -1963,14 +1963,17 @@ function AuthPage() {
 
     const { email, password } = loginData;
 
-    if (!email || !password)
-      return toast.warning("⚠️ Please fill all fields");
-
-    if (!isValidEmail(email))
-      return toast.error("❌ Enter a valid email address");
-
-    if (!isStrongPassword(password))
-      return toast.error("❌ Password must be at least 6 characters");
+    // --- UPDATED VALIDATION ---
+    if (!email || !email.trim()) {
+      return toast.error("❌ Email is required");
+    }
+    if (!isValidEmail(email)) {
+      return toast.error("❌ Please enter a valid email address");
+    }
+    if (!password || !password.trim()) {
+      return toast.error("❌ Password is required");
+    }
+    // --------------------------
 
     setLoading(true);
     try {
@@ -1992,23 +1995,34 @@ function AuthPage() {
 
     const { name, email, password } = regData;
 
-    if (!name || !email || !password)
-      return toast.warning("⚠️ Please fill all fields");
-
-    if (name.length < 3)
-      return toast.error("❌ Name must be at least 3 characters");
-
-    if (!isValidEmail(email))
-      return toast.error("❌ Enter a valid email address");
-
-    if (!isStrongPassword(password))
+    // --- UPDATED VALIDATION ---
+    if (!name || !name.trim()) {
+      return toast.error("❌ Name is required");
+    }
+    if (name.trim().length < 3) {
+      return toast.error("❌ Name must be at least 3 characters long");
+    }
+    if (!email || !email.trim()) {
+      return toast.error("❌ Email is required");
+    }
+    if (!isValidEmail(email)) {
+      return toast.error("❌ Please enter a valid email address");
+    }
+    if (!password || !password.trim()) {
+      return toast.error("❌ Password is required");
+    }
+    if (!isStrongPassword(password)) {
       return toast.error("❌ Password must be at least 6 characters");
+    }
+    // --------------------------
 
     setLoading(true);
     try {
       await axios.post(`${BASE_URL}/register`, regData);
       toast.success("🎉 Account created! Please login.");
       setIsSignUpMode(false);
+      // Optional: Clear form after success
+      setRegData({ name: "", email: "", password: "" });
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
     } finally {
@@ -2020,11 +2034,14 @@ function AuthPage() {
   const handleSendOTP = async (e) => {
     e.preventDefault();
 
-    if (!forgotEmail)
-      return toast.warning("⚠️ Please enter email");
-
-    if (!isValidEmail(forgotEmail))
-      return toast.error("❌ Enter a valid email");
+    // --- UPDATED VALIDATION ---
+    if (!forgotEmail || !forgotEmail.trim()) {
+      return toast.error("❌ Email is required for password reset");
+    }
+    if (!isValidEmail(forgotEmail)) {
+      return toast.error("❌ Please enter a valid email");
+    }
+    // --------------------------
 
     setLoading(true);
     try {
@@ -2041,11 +2058,17 @@ function AuthPage() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
-    if (!otp || !newPassword)
-      return toast.warning("⚠️ Please fill all fields");
-
-    if (!isStrongPassword(newPassword))
-      return toast.error("❌ Password must be at least 6 characters");
+    // --- UPDATED VALIDATION ---
+    if (!otp || !otp.trim()) {
+      return toast.error("❌ OTP is required");
+    }
+    if (!newPassword || !newPassword.trim()) {
+      return toast.error("❌ New password is required");
+    }
+    if (!isStrongPassword(newPassword)) {
+      return toast.error("❌ New password must be at least 6 characters");
+    }
+    // --------------------------
 
     setLoading(true);
     try {
@@ -2072,8 +2095,9 @@ function AuthPage() {
     <div style={{ backgroundColor: "#FDFCF8", minHeight: "100vh" }}>
       <Navbar />
 
-      {/* 🔴 YOUR FULL EXISTING JSX & CSS EXACT SAME 🔴 */}
-      {/* (No design / style changes done) */}
+      {/* 🔴 PASTE YOUR EXISTING JSX DESIGN HERE 🔴 */}
+      {/* Since you wanted only validation changes, the HTML/CSS 
+          below should remain exactly as you have it in your file. */}
 
       <Footer />
     </div>
