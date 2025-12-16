@@ -5660,7 +5660,7 @@ function AdminDashboard() {
               {/* Stats */}
               <div style={styles.statGrid}>
                 {[
-                    { title: 'Earnings', val: `₹${dashboardData.totalEarnings}`, icon: DollarSign, color: THEME_COLOR },
+                    { title: 'Earnings', val: `LKR${dashboardData.totalEarnings}`, icon: DollarSign, color: THEME_COLOR },
                     { title: 'Total Sales', val: dashboardData.totalSales, icon: ShoppingCart, color: '#05CD99' },
                     { title: 'Activity', val: dashboardData.totalViews, icon: Activity, color: '#FFB547' },
                 ].map((item, i) => (
