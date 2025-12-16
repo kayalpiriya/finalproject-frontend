@@ -282,8 +282,125 @@
 // }
 
 
+// import React, { useState } from "react";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { loadStripe } from "@stripe/stripe-js";
+// import {
+//   Elements,
+//   CardNumberElement,
+//   CardExpiryElement,
+//   CardCvcElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+// import axios from "axios";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
+
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+// function CheckoutForm({ orderData }) {
+//   const stripe = useStripe();
+//   const elements = useElements();
+//   const navigate = useNavigate();
+
+//   const [cardName, setCardName] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setError("");
+
+//     try {
+//       const token = localStorage.getItem("token");
+
+//       // 🔥 Create Checkout session (LKR handled in backend)
+//       const res = await axios.post(
+//         "https://finalproject-backend-7rqa.onrender.com/payments",
+//         {
+//           orderId: orderData._id || orderData.orderId,
+//           amount: orderData.total,
+//         },
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       // Redirect to Stripe checkout
+//       window.location.href = res.data.url;
+
+//     } catch (err) {
+//       console.error(err);
+//       setError("Payment failed. Try again.");
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <form className="stripe-form" onSubmit={handleSubmit}>
+//       <h2>Pay with Card</h2>
+
+//       <label>Name on card</label>
+//       <input
+//         type="text"
+//         placeholder="John Doe"
+//         value={cardName}
+//         onChange={(e) => setCardName(e.target.value)}
+//         required
+//       />
+
+//       {/* UI Elements hidden because Stripe Checkout is used */}
+//       <div className="stripe-element-wrapper">
+//         <CardNumberElement options={{ showIcon: true }} />
+//       </div>
+
+//       <div className="row">
+//         <div className="half">
+//           <label>Expiry</label>
+//           <div className="stripe-element-wrapper">
+//             <CardExpiryElement />
+//           </div>
+//         </div>
+//         <div className="half">
+//           <label>CVV</label>
+//           <div className="stripe-element-wrapper">
+//             <CardCvcElement />
+//           </div>
+//         </div>
+//       </div>
+
+//       {error && <p className="error">{error}</p>}
+
+//       <button type="submit" disabled={!stripe || loading}>
+//         {loading ? "Processing..." : `Pay LKR ${orderData.total}`}
+//       </button>
+//     </form>
+//   );
+// }
+
+// export default function StripeCheckout() {
+//   const location = useLocation();
+//   const orderData = location.state?.orderData || location.state;
+
+//   if (!orderData) return <p>No order data found.</p>;
+
+//   return (
+//     <>
+//       <Navbar />
+//       <br /><br />
+//       <div className="checkout-container">
+//         <Elements stripe={stripePromise}>
+//           <CheckoutForm orderData={orderData} />
+//         </Elements>
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// }
+
+
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom"; // Added Link
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -297,6 +414,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// Use your actual key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function CheckoutForm({ orderData }) {
@@ -307,16 +425,31 @@ function CheckoutForm({ orderData }) {
   const [cardName, setCardName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showLoginBtn, setShowLoginBtn] = useState(false); // New state for login button
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setShowLoginBtn(false);
 
+    // =========================================================
+    // 1. AUTH CHECK (The logic you requested)
+    // =========================================================
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoading(false);
+      setError("You must be logged in to complete the payment.");
+      setShowLoginBtn(true); // Show the login button
+      return; // Stop execution here
+    }
+
+    // =========================================================
+    // 2. PAYMENT LOGIC
+    // =========================================================
     try {
-      const token = localStorage.getItem("token");
-
-      // 🔥 Create Checkout session (LKR handled in backend)
+      // Create Checkout session (LKR handled in backend)
       const res = await axios.post(
         "https://finalproject-backend-7rqa.onrender.com/payments",
         {
@@ -331,7 +464,13 @@ function CheckoutForm({ orderData }) {
 
     } catch (err) {
       console.error(err);
-      setError("Payment failed. Try again.");
+      // Handle session expiry or invalid token specifically
+      if (err.response && err.response.status === 401) {
+        setError("Your session has expired. Please login again.");
+        setShowLoginBtn(true);
+      } else {
+        setError("Payment failed. Please try again.");
+      }
       setLoading(false);
     }
   };
@@ -349,7 +488,6 @@ function CheckoutForm({ orderData }) {
         required
       />
 
-      {/* UI Elements hidden because Stripe Checkout is used */}
       <div className="stripe-element-wrapper">
         <CardNumberElement options={{ showIcon: true }} />
       </div>
@@ -369,9 +507,33 @@ function CheckoutForm({ orderData }) {
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {/* ERROR MESSAGE DISPLAY */}
+      {error && (
+        <div style={{ marginTop: "15px", textAlign: "center" }}>
+          <p className="error" style={{ color: "red", fontWeight: "bold" }}>{error}</p>
+          
+          {/* SHOW LOGIN BUTTON IF NOT LOGGED IN */}
+          {showLoginBtn && (
+            <button
+              type="button"
+              onClick={() => navigate("/login", { state: { from: location.pathname, orderData } })}
+              style={{
+                marginTop: "10px",
+                backgroundColor: "#333",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer"
+              }}
+            >
+              Go to Login Page
+            </button>
+          )}
+        </div>
+      )}
 
-      <button type="submit" disabled={!stripe || loading}>
+      <button type="submit" disabled={!stripe || loading} style={{ marginTop: "20px" }}>
         {loading ? "Processing..." : `Pay LKR ${orderData.total}`}
       </button>
     </form>
