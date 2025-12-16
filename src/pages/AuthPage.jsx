@@ -1543,8 +1543,20 @@ function AuthPage() {
   const handleRegChange = (e) => setRegData({ ...regData, [e.target.name]: e.target.value });
 
   // --- SUBMIT: LOGIN ---
+
+  const validateLogin = () => {
+    let temp = {};
+    if (!email.trim()) temp.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) temp.email = "Invalid email format";
+    if (!password.trim()) temp.password = "Password is required";
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!validateLogin()) return;
+
     setLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/login`, loginData);
