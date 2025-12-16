@@ -412,23 +412,17 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion"; // Added for animation
+import { motion, AnimatePresence } from "framer-motion";
 import { 
-  X, 
-  LogIn, 
-  Lock, 
-  UserPlus, 
-  ShieldCheck, 
-  ShoppingBag, 
-  Star 
-} from "lucide-react"; // Added icons
+  X, LogIn, Lock, UserPlus, ShieldCheck, ShoppingBag 
+} from "lucide-react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+// Make sure your key is correct
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-// --- COLOR THEME (Same as Home) ---
 const accentPink = "rgb(214, 143, 143)";
 const darkText = "#1C1917";
 
@@ -440,13 +434,22 @@ function CheckoutForm({ orderData, onAuthCheck }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePayClick = async (e) => {
+    e.preventDefault(); // Stop form submission immediately
 
-    // 🔥 Check if user is logged in before processing
-    if (!onAuthCheck()) {
-      return; // Stop here if not logged in, Modal will open
+    console.log("Pay button clicked..."); // Debugging
+
+    // 🔥 Step 1: Check Auth FIRST
+    const isLogged = onAuthCheck();
+    console.log("Is User Logged In?", isLogged);
+
+    if (!isLogged) {
+      console.log("User not logged in - Stopping payment to show modal");
+      return; // Stop here if not logged in
     }
+
+    // 🔥 Step 2: Proceed only if logged in
+    if (!stripe || !elements) return;
 
     setLoading(true);
     setError("");
@@ -454,7 +457,6 @@ function CheckoutForm({ orderData, onAuthCheck }) {
     try {
       const token = localStorage.getItem("token");
 
-      // 🔥 Create Checkout session
       const res = await axios.post(
         "https://finalproject-backend-7rqa.onrender.com/payments",
         {
@@ -464,7 +466,6 @@ function CheckoutForm({ orderData, onAuthCheck }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Redirect to Stripe checkout
       window.location.href = res.data.url;
 
     } catch (err) {
@@ -475,7 +476,7 @@ function CheckoutForm({ orderData, onAuthCheck }) {
   };
 
   return (
-    <form className="stripe-form" onSubmit={handleSubmit}>
+    <form className="stripe-form" onSubmit={handlePayClick}>
       <h2 style={{ fontFamily: "'Playfair Display', serif" }}>Pay with Card</h2>
 
       <label>Name on card</label>
@@ -513,17 +514,10 @@ function CheckoutForm({ orderData, onAuthCheck }) {
         type="submit" 
         disabled={!stripe || loading}
         style={{
-            marginTop: "20px",
-            width: "100%",
-            padding: "15px",
-            background: accentPink,
-            color: "white",
-            border: "none",
-            borderRadius: "50px",
-            fontSize: "16px",
-            fontWeight: "bold",
-            cursor: "pointer",
-            opacity: loading ? 0.7 : 1
+            marginTop: "20px", width: "100%", padding: "15px",
+            background: accentPink, color: "white", border: "none",
+            borderRadius: "50px", fontSize: "16px", fontWeight: "bold",
+            cursor: "pointer", opacity: loading ? 0.7 : 1
         }}
       >
         {loading ? "Processing..." : `Pay LKR ${orderData.total}`}
@@ -541,28 +535,33 @@ export default function StripeCheckout() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   // --- CHECK AUTH FUNCTION ---
-  const isAuthenticated = useCallback(() => {
+  const isAuthenticated = () => {
+    // Check both local and session storage
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    return !!(token || user);
-  }, []);
+    
+    // If token exists, return true (User is logged in)
+    if (token || user) return true;
+    
+    // Otherwise return false
+    return false;
+  };
 
   // --- HANDLER PASSED TO CHILD ---
   const handleAuthCheck = () => {
     if (isAuthenticated()) {
       return true;
     } else {
+      console.log("Opening Login Modal..."); // Debugging
       setShowLoginModal(true);
       return false;
     }
   };
 
-  // --- CLOSE MODAL ---
   const closeLoginModal = () => setShowLoginModal(false);
 
-  // --- REDIRECT HANDLERS ---
   const handleGoToLogin = () => {
-    localStorage.setItem('redirectAfterLogin', '/checkout'); // Redirect back here
+    localStorage.setItem('redirectAfterLogin', '/checkout');
     setShowLoginModal(false);
     setTimeout(() => navigate('/login'), 100);
   };
@@ -573,7 +572,7 @@ export default function StripeCheckout() {
     setTimeout(() => navigate('/register'), 100);
   };
 
-  // --- MODAL STYLES (Copied from Home) ---
+  // --- STYLES ---
   const modalStyles = `
     .modal-overlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -623,8 +622,7 @@ export default function StripeCheckout() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 90 }}
+              <button
                 onClick={closeLoginModal}
                 style={{
                   position: "absolute", top: "20px", right: "20px",
@@ -634,12 +632,10 @@ export default function StripeCheckout() {
                 }}
               >
                 <X size={20} color="#666" />
-              </motion.button>
+              </button>
 
-              {/* Lock Icon */}
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
+              {/* Icon */}
+              <div
                 style={{
                   width: "90px", height: "90px",
                   background: `linear-gradient(135deg, ${accentPink} 0%, #e8a4a4 100%)`,
@@ -648,64 +644,35 @@ export default function StripeCheckout() {
                 }}
               >
                 <Lock size={40} color="white" />
-              </motion.div>
-
-              {/* Title */}
-              <h2 style={{ fontSize: "2rem", marginBottom: "15px", color: darkText, fontFamily: "'Playfair Display', serif" }}>
-                Login Required
-              </h2>
-
-              {/* Message */}
-              <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: "1.7", marginBottom: "35px" }}>
-                Please login securely to complete your payment and track your order.
-              </p>
-
-              {/* Benefits Box */}
-              <div style={{ background: "#F9FAFB", borderRadius: "16px", padding: "20px", marginBottom: "30px", textAlign: "left" }}>
-                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <ShieldCheck size={16} color={accentPink} />
-                    <span style={{ fontSize: "0.9rem", color: "#555" }}>Secure Payment Processing</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <ShoppingBag size={16} color={accentPink} />
-                    <span style={{ fontSize: "0.9rem", color: "#555" }}>Instant Order Confirmation</span>
-                  </div>
-                </div>
               </div>
 
+              {/* Content */}
+              <h2 style={{ fontSize: "2rem", marginBottom: "15px", color: darkText }}>Login Required</h2>
+              <p style={{ color: "#666", marginBottom: "30px" }}>Please login to complete your payment securely.</p>
+
               {/* Buttons */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+              <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                <button
                   onClick={handleGoToLogin}
                   style={{
-                    background: `linear-gradient(135deg, ${accentPink} 0%, #c27878 100%)`,
-                    color: "white", border: "none", padding: "18px 30px",
-                    borderRadius: "50px", fontSize: "1.05rem", fontWeight: "bold",
-                    cursor: "pointer", display: "flex", alignItems: "center",
-                    justifyContent: "center", gap: "10px",
-                    boxShadow: `0 10px 30px ${accentPink}40`,
+                    background: accentPink, color: "white", padding: "15px",
+                    borderRadius: "50px", border: "none", fontSize: "1rem", fontWeight: "bold",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", cursor: "pointer"
                   }}
                 >
-                  <LogIn size={20} /> Login to Pay
-                </motion.button>
+                  <LogIn size={20} /> Login Now
+                </button>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                <button
                   onClick={handleGoToRegister}
                   style={{
-                    background: "white", color: darkText,
-                    border: "2px solid #E5E5E5", padding: "16px 30px",
-                    borderRadius: "50px", fontSize: "1rem", fontWeight: "600",
-                    cursor: "pointer", display: "flex", alignItems: "center",
-                    justifyContent: "center", gap: "10px",
+                    background: "white", color: darkText, padding: "15px",
+                    borderRadius: "50px", border: "2px solid #eee", fontSize: "1rem", fontWeight: "bold",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", cursor: "pointer"
                   }}
                 >
-                  <UserPlus size={18} /> Create Account
-                </motion.button>
+                  <UserPlus size={20} /> Create Account
+                </button>
               </div>
             </motion.div>
           </motion.div>
@@ -715,7 +682,6 @@ export default function StripeCheckout() {
 
       <div className="checkout-container">
         <Elements stripe={stripePromise}>
-          {/* Pass the checkAuth function to the form */}
           <CheckoutForm orderData={orderData} onAuthCheck={handleAuthCheck} />
         </Elements>
       </div>
