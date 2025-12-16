@@ -399,8 +399,9 @@
 // }
 
 
-import React, { useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom"; // Added Link
+
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -411,45 +412,49 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion"; // Added for animation
+import { 
+  X, 
+  LogIn, 
+  Lock, 
+  UserPlus, 
+  ShieldCheck, 
+  ShoppingBag, 
+  Star 
+} from "lucide-react"; // Added icons
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// Use your actual key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-function CheckoutForm({ orderData }) {
+// --- COLOR THEME (Same as Home) ---
+const accentPink = "rgb(214, 143, 143)";
+const darkText = "#1C1917";
+
+function CheckoutForm({ orderData, onAuthCheck }) {
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate();
-
+  
   const [cardName, setCardName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showLoginBtn, setShowLoginBtn] = useState(false); // New state for login button
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setShowLoginBtn(false);
 
-    // =========================================================
-    // 1. AUTH CHECK (The logic you requested)
-    // =========================================================
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setLoading(false);
-      setError("You must be logged in to complete the payment.");
-      setShowLoginBtn(true); // Show the login button
-      return; // Stop execution here
+    // 🔥 Check if user is logged in before processing
+    if (!onAuthCheck()) {
+      return; // Stop here if not logged in, Modal will open
     }
 
-    // =========================================================
-    // 2. PAYMENT LOGIC
-    // =========================================================
+    setLoading(true);
+    setError("");
+
     try {
-      // Create Checkout session (LKR handled in backend)
+      const token = localStorage.getItem("token");
+
+      // 🔥 Create Checkout session
       const res = await axios.post(
         "https://finalproject-backend-7rqa.onrender.com/payments",
         {
@@ -464,20 +469,14 @@ function CheckoutForm({ orderData }) {
 
     } catch (err) {
       console.error(err);
-      // Handle session expiry or invalid token specifically
-      if (err.response && err.response.status === 401) {
-        setError("Your session has expired. Please login again.");
-        setShowLoginBtn(true);
-      } else {
-        setError("Payment failed. Please try again.");
-      }
+      setError("Payment failed. Try again.");
       setLoading(false);
     }
   };
 
   return (
     <form className="stripe-form" onSubmit={handleSubmit}>
-      <h2>Pay with Card</h2>
+      <h2 style={{ fontFamily: "'Playfair Display', serif" }}>Pay with Card</h2>
 
       <label>Name on card</label>
       <input
@@ -486,54 +485,47 @@ function CheckoutForm({ orderData }) {
         value={cardName}
         onChange={(e) => setCardName(e.target.value)}
         required
+        style={{ padding: "12px", borderRadius: "8px", border: "1px solid #ccc", marginBottom: "15px", width: "100%" }}
       />
 
-      <div className="stripe-element-wrapper">
+      <div className="stripe-element-wrapper" style={{ padding: "12px", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "15px", background: "white" }}>
         <CardNumberElement options={{ showIcon: true }} />
       </div>
 
-      <div className="row">
-        <div className="half">
+      <div className="row" style={{ display: "flex", gap: "15px" }}>
+        <div className="half" style={{ flex: 1 }}>
           <label>Expiry</label>
-          <div className="stripe-element-wrapper">
+          <div className="stripe-element-wrapper" style={{ padding: "12px", border: "1px solid #ccc", borderRadius: "8px", background: "white" }}>
             <CardExpiryElement />
           </div>
         </div>
-        <div className="half">
+        <div className="half" style={{ flex: 1 }}>
           <label>CVV</label>
-          <div className="stripe-element-wrapper">
+          <div className="stripe-element-wrapper" style={{ padding: "12px", border: "1px solid #ccc", borderRadius: "8px", background: "white" }}>
             <CardCvcElement />
           </div>
         </div>
       </div>
 
-      {/* ERROR MESSAGE DISPLAY */}
-      {error && (
-        <div style={{ marginTop: "15px", textAlign: "center" }}>
-          <p className="error" style={{ color: "red", fontWeight: "bold" }}>{error}</p>
-          
-          {/* SHOW LOGIN BUTTON IF NOT LOGGED IN */}
-          {showLoginBtn && (
-            <button
-              type="button"
-              onClick={() => navigate("/login", { state: { from: location.pathname, orderData } })}
-              style={{
-                marginTop: "10px",
-                backgroundColor: "#333",
-                color: "white",
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              Go to Login Page
-            </button>
-          )}
-        </div>
-      )}
+      {error && <p className="error" style={{ color: "red", marginTop: "10px" }}>{error}</p>}
 
-      <button type="submit" disabled={!stripe || loading} style={{ marginTop: "20px" }}>
+      <button 
+        type="submit" 
+        disabled={!stripe || loading}
+        style={{
+            marginTop: "20px",
+            width: "100%",
+            padding: "15px",
+            background: accentPink,
+            color: "white",
+            border: "none",
+            borderRadius: "50px",
+            fontSize: "16px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            opacity: loading ? 0.7 : 1
+        }}
+      >
         {loading ? "Processing..." : `Pay LKR ${orderData.total}`}
       </button>
     </form>
@@ -542,17 +534,189 @@ function CheckoutForm({ orderData }) {
 
 export default function StripeCheckout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const orderData = location.state?.orderData || location.state;
 
-  if (!orderData) return <p>No order data found.</p>;
+  // --- LOGIN MODAL STATE ---
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // --- CHECK AUTH FUNCTION ---
+  const isAuthenticated = useCallback(() => {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    return !!(token || user);
+  }, []);
+
+  // --- HANDLER PASSED TO CHILD ---
+  const handleAuthCheck = () => {
+    if (isAuthenticated()) {
+      return true;
+    } else {
+      setShowLoginModal(true);
+      return false;
+    }
+  };
+
+  // --- CLOSE MODAL ---
+  const closeLoginModal = () => setShowLoginModal(false);
+
+  // --- REDIRECT HANDLERS ---
+  const handleGoToLogin = () => {
+    localStorage.setItem('redirectAfterLogin', '/checkout'); // Redirect back here
+    setShowLoginModal(false);
+    setTimeout(() => navigate('/login'), 100);
+  };
+
+  const handleGoToRegister = () => {
+    localStorage.setItem('redirectAfterLogin', '/checkout');
+    setShowLoginModal(false);
+    setTimeout(() => navigate('/register'), 100);
+  };
+
+  // --- MODAL STYLES (Copied from Home) ---
+  const modalStyles = `
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-content {
+      background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+      border-radius: 32px; padding: 50px 40px;
+      max-width: 480px; width: 100%; text-align: center;
+      position: relative; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .checkout-container {
+        max-width: 600px; margin: 40px auto; padding: 30px;
+        background: #f9f9f9; border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+  `;
+
+  if (!orderData) return <div style={{padding: "100px", textAlign:"center"}}>No order data found.</div>;
 
   return (
     <>
+      <style>{modalStyles}</style>
       <Navbar />
-      <br /><br />
+      <br /><br /><br />
+      
+      {/* --- LOGIN MODAL START --- */}
+      <AnimatePresence>
+        {showLoginModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="modal-overlay"
+            onClick={closeLoginModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                onClick={closeLoginModal}
+                style={{
+                  position: "absolute", top: "20px", right: "20px",
+                  background: "#F5F5F4", border: "none", borderRadius: "50%",
+                  width: "44px", height: "44px", display: "flex",
+                  alignItems: "center", justifyContent: "center", cursor: "pointer",
+                }}
+              >
+                <X size={20} color="#666" />
+              </motion.button>
+
+              {/* Lock Icon */}
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                style={{
+                  width: "90px", height: "90px",
+                  background: `linear-gradient(135deg, ${accentPink} 0%, #e8a4a4 100%)`,
+                  borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 30px", boxShadow: `0 15px 35px ${accentPink}50`,
+                }}
+              >
+                <Lock size={40} color="white" />
+              </motion.div>
+
+              {/* Title */}
+              <h2 style={{ fontSize: "2rem", marginBottom: "15px", color: darkText, fontFamily: "'Playfair Display', serif" }}>
+                Login Required
+              </h2>
+
+              {/* Message */}
+              <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: "1.7", marginBottom: "35px" }}>
+                Please login securely to complete your payment and track your order.
+              </p>
+
+              {/* Benefits Box */}
+              <div style={{ background: "#F9FAFB", borderRadius: "16px", padding: "20px", marginBottom: "30px", textAlign: "left" }}>
+                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <ShieldCheck size={16} color={accentPink} />
+                    <span style={{ fontSize: "0.9rem", color: "#555" }}>Secure Payment Processing</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <ShoppingBag size={16} color={accentPink} />
+                    <span style={{ fontSize: "0.9rem", color: "#555" }}>Instant Order Confirmation</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleGoToLogin}
+                  style={{
+                    background: `linear-gradient(135deg, ${accentPink} 0%, #c27878 100%)`,
+                    color: "white", border: "none", padding: "18px 30px",
+                    borderRadius: "50px", fontSize: "1.05rem", fontWeight: "bold",
+                    cursor: "pointer", display: "flex", alignItems: "center",
+                    justifyContent: "center", gap: "10px",
+                    boxShadow: `0 10px 30px ${accentPink}40`,
+                  }}
+                >
+                  <LogIn size={20} /> Login to Pay
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleGoToRegister}
+                  style={{
+                    background: "white", color: darkText,
+                    border: "2px solid #E5E5E5", padding: "16px 30px",
+                    borderRadius: "50px", fontSize: "1rem", fontWeight: "600",
+                    cursor: "pointer", display: "flex", alignItems: "center",
+                    justifyContent: "center", gap: "10px",
+                  }}
+                >
+                  <UserPlus size={18} /> Create Account
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* --- LOGIN MODAL END --- */}
+
       <div className="checkout-container">
         <Elements stripe={stripePromise}>
-          <CheckoutForm orderData={orderData} />
+          {/* Pass the checkAuth function to the form */}
+          <CheckoutForm orderData={orderData} onAuthCheck={handleAuthCheck} />
         </Elements>
       </div>
       <Footer />
