@@ -473,77 +473,57 @@ function AdminAddProduct() {
   const [stock, setStock] = useState("");
   const [image, setImage] = useState(null);
   
-  // State for validation errors
+  // பிழைகளை (Errors) சேமிக்க
   const [errors, setErrors] = useState({});
   
-  // Ref to clear file input visually after submit
+  // File input-ஐ clear செய்ய
   const fileInputRef = useRef(null);
 
-  // --- VALIDATION LOGIC ---
+  // --- VALIDATION LOGIC (சரிபார்க்கும் இடம்) ---
   const validateForm = () => {
     const newErrors = {};
 
-    // 1. Name Validation
+    // 1. பெயர் (Name) இல்லையென்றால் error வரும்
     if (!name.trim()) {
-      newErrors.name = "Product name is required.";
+      newErrors.name = "Product name is required (பெயர் அவசியம்).";
     }
 
-    // 2. Price Validation
+    // 2. விலை (Price) இல்லையென்றால் error வரும்
     if (!price) {
-      newErrors.price = "Price is required.";
-    } else if (isNaN(price) || parseFloat(price) <= 0) {
-      newErrors.price = "Price must be a positive number.";
+      newErrors.price = "Price is required (விலை அவசியம்).";
     }
 
-    // 3. Description Validation
+    // 3. விளக்கம் (Description) இல்லையென்றால் error வரும்
     if (!description.trim()) {
-      newErrors.description = "Description is required.";
-    } else if (description.length < 10) {
-      newErrors.description = "Description must be at least 10 characters.";
+      newErrors.description = "Description is required (விளக்கம் அவசியம்).";
     }
 
-    // 4. Stock Validation
+    // 4. ஸ்டாக் (Stock) இல்லையென்றால் error வரும்
     if (!stock) {
-      newErrors.stock = "Stock quantity is required.";
-    } else if (isNaN(stock) || parseInt(stock) < 0 || stock.includes(".")) {
-      newErrors.stock = "Stock must be a non-negative integer.";
+      newErrors.stock = "Stock is required (ஸ்டாக் அவசியம்).";
     }
 
-    // 5. Image Validation
+    // 5. படம் (Image) இல்லையென்றால் error வரும்
     if (!image) {
-      newErrors.image = "Product image is required.";
-    } else {
-      // Check file type
-      const validTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
-      if (!validTypes.includes(image.type)) {
-        newErrors.image = "Only JPG, PNG, and WEBP images are allowed.";
-      }
-      // Check file size (e.g., 5MB limit)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (image.size > maxSize) {
-        newErrors.image = "Image size must be less than 5MB.";
-      }
+      newErrors.image = "Product image is required (படம் அவசியம்).";
     }
 
     setErrors(newErrors);
-    // Return true if no errors exist
+    
+    // ஏதேனும் ஒரு error இருந்தால் false அனுப்பும், இல்லையென்றால் true அனுப்பும்
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      // Clear image error immediately if a file is selected
-      if (errors.image) setErrors({ ...errors, image: null });
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Run validation before sending request
-    if (!validateForm()) return;
+    // --- முக்கிய இடம் (Main Check) ---
+    // இங்கே validateForm() சரிபார்க்கும். 
+    // ஏதேனும் ஒன்று விடுபட்டிருந்தாலும் உள்ளே போகாது (Returns).
+    if (!validateForm()) {
+      alert("Please fill all the details! (எல்லா தகவல்களையும் நிரப்பவும்)"); 
+      return; 
+    }
 
     const token = localStorage.getItem("token");
     if (!token) return alert("Admin not logged in");
@@ -565,29 +545,37 @@ function AdminAddProduct() {
       
       alert("✅ Product added successfully!");
       
-      // Reset Form
+      // எல்லாம் முடிந்ததும் Form-ஐ காலி செய்தல்
       setName("");
       setPrice("");
       setDescription("");
       setStock("");
       setImage(null);
       setErrors({});
-      if (fileInputRef.current) fileInputRef.current.value = ""; // Clear file input UI
+      if (fileInputRef.current) fileInputRef.current.value = ""; 
 
     } catch (err) {
       console.error(err);
-      alert("❌ Product add failed: " + (err.response?.data?.message || err.message));
+      alert("❌ Failed to add product.");
     }
   };
 
-  // Helper helper to handle input changes and clear errors dynamically
+  // Input மாற்றும் போது Error-ஐ நீக்க
   const handleChange = (setter, field) => (e) => {
     setter(e.target.value);
     if (errors[field]) setErrors({ ...errors, [field]: null });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      if (errors.image) setErrors({ ...errors, image: null });
+    }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
       <h2 className="text-2xl font-bold text-yellow-700 mb-4">Add New Product</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -595,53 +583,52 @@ function AdminAddProduct() {
         {/* Name Input */}
         <div>
           <input
-            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 transition-colors 
-              ${errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-yellow-400"}`}
+            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 
+              ${errors.name ? "border-red-500 ring-red-200" : "border-gray-300 focus:ring-yellow-400"}`}
             placeholder="Product Name"
             value={name}
             onChange={handleChange(setName, "name")}
           />
-          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+          {/* Error செய்தி இருந்தால் சிவப்பு நிறத்தில் காட்டும் */}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
         {/* Price Input */}
         <div>
           <input
-            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 transition-colors 
-              ${errors.price ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-yellow-400"}`}
+            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 
+              ${errors.price ? "border-red-500 ring-red-200" : "border-gray-300 focus:ring-yellow-400"}`}
             placeholder="Price"
             type="number"
-            step="0.01"
             value={price}
             onChange={handleChange(setPrice, "price")}
           />
-          {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
+          {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
         </div>
 
         {/* Description Input */}
         <div>
           <textarea
-            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 transition-colors 
-              ${errors.description ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-yellow-400"}`}
+            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 
+              ${errors.description ? "border-red-500 ring-red-200" : "border-gray-300 focus:ring-yellow-400"}`}
             placeholder="Description"
-            rows="3"
             value={description}
             onChange={handleChange(setDescription, "description")}
           />
-          {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+          {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
         </div>
 
         {/* Stock Input */}
         <div>
           <input
-            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 transition-colors 
-              ${errors.stock ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-yellow-400"}`}
+            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 
+              ${errors.stock ? "border-red-500 ring-red-200" : "border-gray-300 focus:ring-yellow-400"}`}
             placeholder="Stock Quantity"
             type="number"
             value={stock}
             onChange={handleChange(setStock, "stock")}
           />
-          {errors.stock && <p className="text-red-500 text-xs mt-1">{errors.stock}</p>}
+          {errors.stock && <p className="text-red-500 text-sm mt-1">{errors.stock}</p>}
         </div>
 
         {/* Image Input */}
@@ -650,17 +637,17 @@ function AdminAddProduct() {
           <input
             type="file"
             ref={fileInputRef}
-            className={`w-full p-2 border rounded-lg text-gray-700 
+            className={`w-full p-2 border rounded-lg 
               ${errors.image ? "border-red-500 bg-red-50" : "border-gray-300"}`}
             onChange={handleImageChange}
-            accept="image/png, image/jpeg, image/webp"
+            accept="image/*"
           />
-          {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image}</p>}
+          {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
         </div>
 
         <button
           type="submit"
-          className="w-full bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition font-bold shadow-md active:scale-95"
+          className="w-full bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition font-bold"
         >
           Add Product
         </button>
