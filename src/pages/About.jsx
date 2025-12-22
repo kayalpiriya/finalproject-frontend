@@ -1674,7 +1674,7 @@ const About = () => {
           <div className="responsive-flex" style={{ display: "flex", justifyContent: "center", gap: "50px", flexWrap: "wrap" }}>
             {/* Note: These images are from Unsplash. If you have local images for team members, import them like the others above. */}
             {[
-              { name: "Sarah Jenkins", role: "Head Baker", img: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
+              { name: "kayalpiriya", role: "Head Baker", img: "src/assets/Untitled design.png" },
               { name: "David Rossi", role: "Pastry Chef", img: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
               { name: "Elena Miles", role: "Cake Artist", img: "https://images.unsplash.com/photo-1605493666469-34b76d0f18f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
             ].map((member, index) => (
