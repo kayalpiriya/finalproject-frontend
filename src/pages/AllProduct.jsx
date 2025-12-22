@@ -2792,7 +2792,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiSearch, FiShoppingBag, FiEye, FiX, FiArrowRight, FiStar, FiHeart,
-  FiChevronLeft, FiChevronRight, FiMicrophone // <--- Added FiMicrophone
+  FiChevronLeft, FiChevronRight, FiMic // <--- FIXED: Changed from FiMicrophone to FiMic
 } from "react-icons/fi";
 
 import Navbar from "../components/Navbar";
@@ -3127,7 +3127,8 @@ function AllProduct() {
                 }}
                 title="Search by Voice"
               >
-                <FiMicrophone size={20} />
+                {/* FIXED ICON USAGE HERE */}
+                <FiMic size={20} />
               </motion.button>
             </div>
           </div>
