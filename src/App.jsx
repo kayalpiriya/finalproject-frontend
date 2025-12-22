@@ -22,6 +22,8 @@ import BlogDetail from "./pages/BlogDetail.jsx";
 import BlogWrite from "./pages/BlogWrite";
 import About from "./pages/About.jsx"
 import AuthPage from "./pages/AuthPage.jsx";
+import MyOrders from "./pages/MyOrders";
+
 
 
 function App() {
@@ -53,6 +55,8 @@ function App() {
   <Route path="/admin/blogwrite" element={<BlogWrite />} />
   <Route path="/blogs/edit/:id" element={<BlogWrite />} /> {/* reuse write page for edit */}
   <Route path="/authpage" element={<AuthPage/>} />
+  <Route path="/myorders" element={<MyOrders />} />
+
 
 
       </Routes>

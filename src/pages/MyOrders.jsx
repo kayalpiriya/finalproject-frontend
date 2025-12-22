@@ -75,8 +75,6 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-// --- Import Navbar and Footer ---
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -108,11 +106,10 @@ const MyOrders = () => {
 
   return (
     <>
-      {/* Navbar */}
       <Navbar />
 
       <div style={{ padding: "20px", minHeight: "80vh" }}>
-        <h2 className="text-2xl font-semibold mb-4">My Orders</h2>
+        <h2>My Orders</h2>
 
         {orders.length === 0 && <p>No orders found</p>}
 
@@ -137,7 +134,7 @@ const MyOrders = () => {
               {order.status === "delivered" && "✅ Delivered"}
             </p>
 
-            <hr className="my-2" />
+            <hr />
 
             <b>Items:</b>
             {order.products.map((item, index) => (
@@ -149,7 +146,6 @@ const MyOrders = () => {
         ))}
       </div>
 
-      {/* Footer */}
       <Footer />
     </>
   );
