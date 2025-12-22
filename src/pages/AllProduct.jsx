@@ -2547,7 +2547,7 @@ function AllProduct() {
             style={{ textAlign: "center", marginBottom: "60px" }}
           >
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "4rem", margin: 0, color: theme.textMain }}>
-              Artisan <span style={{ color: theme.accent, fontStyle: "italic" }}>Bakery</span>
+              Mufflix<span style={{ color: theme.accent, fontStyle: "italic" }}>Bakery</span>
             </h2>
             <p style={{ color: theme.textSec, fontSize: "1.1rem", marginTop: "10px" }}>
               Freshly baked with passion, served with love.

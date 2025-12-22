@@ -4689,7 +4689,7 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: "Artisan Breads", img: breadImg, count: "12 Varieties" },
+    { name: " Breads", img: breadImg, count: "12 Varieties" },
     { name: "Celebration Cakes", img: cakeImg, count: "Custom Orders" },
     { name: "Morning Pastry", img: bakerImg, count: "Fresh Daily" },
   ];
