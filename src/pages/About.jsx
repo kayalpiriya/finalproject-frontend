@@ -1464,6 +1464,11 @@ import { Heart, Leaf, Award, Users, ArrowRight, Star, Coffee } from "lucide-reac
 import heroBakerImg from "../assets/instagram-bakers-1.jpg";
 import storyBreadImg from "../assets/breadd.jpg";
 
+// ✅ TEAM IMAGES (UPDATED)
+import teamKayal from "src/assets/Untitled design.png";
+import teamDavid from "../assets/team-david.jpg";
+import teamElena from "../assets/team-elena.jpg";
+
 const About = () => {
   const navigate = useNavigate();
 
@@ -1532,7 +1537,7 @@ const About = () => {
             style={{ textAlign: "center" }}
           >
             <motion.span variants={fadeInUp} style={{ display: "inline-block", padding: "8px 16px", borderRadius: "50px", backgroundColor: "rgba(214, 143, 143, 0.1)", color: colors.accent, fontWeight: "bold", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "2px", marginBottom: "20px" }}>
-              Est. 2025 • Artisanal Bakery
+              Est. 2025 • Mufflix Bakery
             </motion.span>
             
             <motion.h1 
@@ -1544,7 +1549,7 @@ const About = () => {
             </motion.h1>
             
             <motion.p variants={fadeInUp} style={{ fontSize: "1.25rem", color: colors.textLight, maxWidth: "600px", margin: "0 auto 60px auto", lineHeight: "1.6" }}>
-              More than just flour and sugar. We craft moments of joy, one hand-rolled croissant and artisan loaf at a time.
+              More than just flour and sugar. We craft moments of joy, one hand-rolled croissant and mufflix loaf at a time.
             </motion.p>
           </motion.div>
 
@@ -1674,9 +1679,12 @@ const About = () => {
           <div className="responsive-flex" style={{ display: "flex", justifyContent: "center", gap: "50px", flexWrap: "wrap" }}>
             {/* Note: These images are from Unsplash. If you have local images for team members, import them like the others above. */}
             {[
-              { name: "kayalpiriya", role: "Head Baker", img: "src/assets/Untitled design.png" },
-              { name: "David Rossi", role: "Pastry Chef", img: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
-              { name: "Elena Miles", role: "Cake Artist", img: "https://images.unsplash.com/photo-1605493666469-34b76d0f18f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
+              // { name: "kayalpiriya", role: "Head Baker", img: "src/assets/Untitled design.png" },
+              // { name: "David Rossi", role: "Pastry Chef", img: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
+              // { name: "Elena Miles", role: "Cake Artist", img: "https://images.unsplash.com/photo-1605493666469-34b76d0f18f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" },
+              { name: "Kayalpiriya", role: "Head Baker", img: teamKayal },
+              { name: "David Rossi", role: "Pastry Chef", img: teamDavid },
+              { name: "Elena Miles", role: "Cake Artist", img: teamElena },
             ].map((member, index) => (
               <motion.div 
                 key={index}
