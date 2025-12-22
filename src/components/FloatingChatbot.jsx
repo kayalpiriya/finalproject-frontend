@@ -3408,34 +3408,37 @@ export default function FloatingChatbot() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // ✨ NEW: Mute State
+  const [isMuted, setIsMuted] = useState(false);
 
   const chatEndRef = useRef(null);
 
-  // ✨ NEW: Quick Suggestions List
+  // Suggestions for the user
   const suggestions = [
     "🎂 Best Sellers",
     "🥐 Today's Special",
     "🚚 Track Order",
     "📞 Contact Info",
-    "🍰 Custom Cake Price"
+    "💰 Custom Cake Price"
   ];
 
+  // API Config
   const API = axios.create({
     baseURL: "https://finalproject-backend-7rqa.onrender.com/chats",
     headers: { "Content-Type": "application/json" },
   });
 
+  // 1. Load History from Backend
   const loadHistory = async () => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) return; // Don't fetch if not logged in
+
       const res = await API.get("/history", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setHistory(res.data);
     } catch (err) {
       console.error("History Load Error:", err);
-      setHistory([]);
     }
   };
 
@@ -3447,12 +3450,9 @@ export default function FloatingChatbot() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history, loading]);
 
-  // --- VOICE LOGIC ---
-
+  // 2. Voice Output (Text-to-Speech)
   const speak = (text) => {
-    // ✨ NEW: Check if muted before speaking
     if (isMuted || !window.speechSynthesis) return;
-
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.pitch = 1;
@@ -3460,6 +3460,7 @@ export default function FloatingChatbot() {
     window.speechSynthesis.speak(utterance);
   };
 
+  // 3. Voice Input (Speech-to-Text)
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -3478,14 +3479,20 @@ export default function FloatingChatbot() {
     recognition.start();
   };
 
-  // --- HANDLERS ---
-
+  // 4. Send Message to Backend
   const handleSend = async (messageText) => {
     if (!messageText || !messageText.trim()) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Please login to use the Chatbot!");
+        return;
+    }
+
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
+      // Send to backend
       const res = await API.post(
         "/send",
         { message: messageText },
@@ -3493,8 +3500,9 @@ export default function FloatingChatbot() {
       );
 
       setMsg("");
-      await loadHistory();
+      await loadHistory(); // Refresh chat
 
+      // Speak response
       if (res.data && res.data.response) {
          speak(res.data.response);
       }
@@ -3510,10 +3518,21 @@ export default function FloatingChatbot() {
     handleSend(msg);
   };
 
-  // ✨ NEW: Clear Chat Handler (Visual only)
-  const handleClearChat = () => {
-    setHistory([]);
-    // Optional: Call backend to delete history if your API supports it
+  // 5. Clear Chat History
+  const handleClearChat = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    
+    if(!window.confirm("Are you sure you want to delete your chat history?")) return;
+
+    try {
+        await API.delete("/clear", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setHistory([]); // Clear UI immediately
+    } catch (err) {
+        console.error("Clear Error:", err);
+    }
   };
 
   return (
@@ -3528,7 +3547,7 @@ export default function FloatingChatbot() {
         </button>
       </div>
 
-      {/* Chatbox Window */}
+      {/* Chat Window */}
       <div
         style={{
           position: "fixed",
@@ -3536,7 +3555,7 @@ export default function FloatingChatbot() {
           right: "20px",
           width: "350px",
           maxWidth: "90vw",
-          height: "500px", // Fixed height for consistency
+          height: "500px",
           background: "white",
           borderRadius: "16px",
           boxShadow: "0px 10px 40px rgba(0,0,0,0.2)",
@@ -3547,7 +3566,7 @@ export default function FloatingChatbot() {
           border: "1px solid #f3f4f6"
         }}
       >
-        {/* ✨ UPDATED HEADER: Mute & Trash Icons */}
+        {/* Header */}
         <div className="bg-yellow-500 text-white px-4 py-3 flex justify-between items-center shadow-md">
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-lg">Bakery AI 🥖</h3>
@@ -3556,31 +3575,30 @@ export default function FloatingChatbot() {
             <button onClick={() => setIsMuted(!isMuted)} title={isMuted ? "Unmute" : "Mute"}>
               {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
             </button>
-            <button onClick={handleClearChat} title="Clear Chat">
+            <button onClick={handleClearChat} title="Clear Chat History">
               <FaTrash size={14} />
             </button>
             <button onClick={() => setOpen(false)} className="text-xl font-bold">✕</button>
           </div>
         </div>
 
-        {/* Messages Area */}
+        {/* Chat Area */}
         <div className="flex-1 p-3 overflow-y-auto bg-amber-50 space-y-4">
           {history.length === 0 && (
              <div className="text-center text-gray-400 mt-10 text-sm">
-               Start a conversation about our cakes! 🍰
+               Ask about our cakes, prices, or track your order! 🍰
              </div>
           )}
           
           {history.map((h, index) => (
             <div key={index || h._id}>
-              {/* User Message */}
+              {/* User Msg */}
               <div className="flex justify-end mb-1">
                 <div className="bg-yellow-500 text-white px-4 py-2 rounded-l-xl rounded-tr-xl max-w-[80%] shadow-sm text-sm">
                   {h.message}
                 </div>
               </div>
-
-              {/* Bot Response */}
+              {/* Bot Msg */}
               <div className="flex justify-start">
                 <div className="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-r-xl rounded-tl-xl max-w-[80%] shadow-sm text-sm">
                   {h.response}
@@ -3598,11 +3616,10 @@ export default function FloatingChatbot() {
                </div>
             </div>
           )}
-
           <div ref={chatEndRef} />
         </div>
 
-        {/* ✨ NEW: Suggestion Chips (Horizontal Scroll) */}
+        {/* Suggestion Chips */}
         <div className="bg-white px-2 py-2 flex gap-2 overflow-x-auto border-t border-gray-100" style={{ scrollbarWidth: 'none' }}>
           {suggestions.map((chip, index) => (
             <button
@@ -3628,7 +3645,7 @@ export default function FloatingChatbot() {
           </button>
 
           <input
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all"
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-yellow-500 transition-all"
             placeholder={isListening ? "Listening..." : "Type here..."}
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
@@ -3638,7 +3655,7 @@ export default function FloatingChatbot() {
           <button 
             type="submit"
             disabled={loading || !msg.trim()}
-            className="bg-yellow-500 text-white p-2.5 rounded-full hover:bg-yellow-600 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-yellow-500 text-white p-2.5 rounded-full hover:bg-yellow-600 transition-colors shadow-md disabled:opacity-50"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
