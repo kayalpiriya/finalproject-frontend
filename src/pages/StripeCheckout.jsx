@@ -408,7 +408,6 @@ import Footer from "../components/Footer";
 export default function StripeCheckout() {
   const location = useLocation();
   const navigate = useNavigate();
-  // Handle case where state might be nested or direct
   const orderData = location.state?.orderData || location.state;
 
   const [loading, setLoading] = useState(false);
@@ -434,12 +433,10 @@ export default function StripeCheckout() {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("You are not logged in.");
+        setError("User not authenticated. Please login.");
         setLoading(false);
         return;
       }
-
-      console.log("Sending Payment Request for Order:", orderData._id || orderData.orderId);
 
       const res = await axios.post(
         "https://finalproject-backend-7rqa.onrender.com/payments",
@@ -450,19 +447,18 @@ export default function StripeCheckout() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Redirect to Stripe
       if (res.data.url) {
         window.location.href = res.data.url;
       } else {
-        setError("Received success response but no Stripe URL found.");
+        setError("Failed to generate payment link.");
         setLoading(false);
       }
 
     } catch (err) {
-      console.error("Payment Error:", err);
-      // Extract the specific error message sent from the backend
-      const serverMessage = err.response?.data?.message || err.message;
-      setError(`Payment Failed: ${serverMessage}`);
+      console.error(err);
+      // Show the specific error message from Backend (e.g., "Amount too low")
+      const msg = err.response?.data?.message || "Payment processing failed";
+      setError(msg);
       setLoading(false);
     }
   };
@@ -472,36 +468,25 @@ export default function StripeCheckout() {
       <Navbar />
       <br /><br />
       <div className="checkout-container" style={{ 
-          maxWidth: "600px", 
-          margin: "0 auto", 
-          padding: "40px", 
-          textAlign: "center",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+          maxWidth: "500px", margin: "0 auto", padding: "30px", 
+          textAlign: "center", border: "1px solid #ddd", borderRadius: "8px" 
       }}>
-        <h2>Complete Payment</h2>
-        <p style={{ color: "#555", marginBottom: "20px" }}>
-            Secure payment via Stripe for Order #{orderData._id || orderData.orderId}
-        </p>
+        <h2>Order Summary</h2>
+        <p>Order ID: {orderData._id || orderData.orderId}</p>
+        
+        {/* Fixed Placeholder Image Error */}
+        <img 
+            src="https://placehold.co/150" 
+            alt="Secure Payment" 
+            style={{ margin: "20px 0", borderRadius: "8px" }}
+        />
 
-        <div style={{ 
-            backgroundColor: "#f9f9f9", 
-            padding: "20px", 
-            borderRadius: "5px", 
-            marginBottom: "20px" 
-        }}>
-            <h3>Total: LKR {orderData.total}</h3>
-        </div>
+        <h1 style={{ color: "#2ecc71" }}>LKR {orderData.total}</h1>
 
         {error && (
             <div style={{ 
-                color: "#721c24", 
-                backgroundColor: "#f8d7da", 
-                padding: "10px", 
-                borderRadius: "5px", 
-                marginBottom: "20px",
-                border: "1px solid #f5c6cb"
+                color: "red", backgroundColor: "#ffe6e6", 
+                padding: "10px", margin: "15px 0", borderRadius: "5px" 
             }}>
                 {error}
             </div>
@@ -511,18 +496,11 @@ export default function StripeCheckout() {
             onClick={handlePayment} 
             disabled={loading}
             style={{
-                backgroundColor: "#635bff",
-                color: "white",
-                padding: "15px 30px",
-                fontSize: "18px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: loading ? "not-allowed" : "pointer",
-                width: "100%",
-                fontWeight: "bold"
+                backgroundColor: "#635bff", color: "white", padding: "12px 24px",
+                fontSize: "16px", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%"
             }}
         >
-          {loading ? "Redirecting to Stripe..." : `Pay LKR ${orderData.total}`}
+          {loading ? "Redirecting to Stripe..." : "Pay Now"}
         </button>
       </div>
       <br /><br />
