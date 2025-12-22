@@ -1465,7 +1465,7 @@ import heroBakerImg from "../assets/instagram-bakers-1.jpg";
 import storyBreadImg from "../assets/breadd.jpg";
 
 // ✅ TEAM IMAGES (UPDATED)
-import teamKayal from "src/assets/teamKayal.jpg";
+import teamKayal from "../assets/teamKayal.jpg";
 import teamDavid from "../assets/team-david.jpg";
 import teamElena from "../assets/team-elena.jpg";
 
