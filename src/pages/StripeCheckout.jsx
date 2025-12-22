@@ -400,13 +400,15 @@
 
 
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function StripeCheckout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  // Handle case where state might be nested or direct
   const orderData = location.state?.orderData || location.state;
 
   const [loading, setLoading] = useState(false);
@@ -416,8 +418,9 @@ export default function StripeCheckout() {
     return (
         <>
             <Navbar />
-            <div className="container" style={{padding: "50px", textAlign: "center"}}>
-                <p>No order data found.</p>
+            <div style={{ padding: "50px", textAlign: "center" }}>
+                <h2>No order data found</h2>
+                <button onClick={() => navigate("/cart")}>Go to Cart</button>
             </div>
             <Footer />
         </>
@@ -430,8 +433,14 @@ export default function StripeCheckout() {
 
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        setError("You are not logged in.");
+        setLoading(false);
+        return;
+      }
 
-      // Request the Payment URL from Backend
+      console.log("Sending Payment Request for Order:", orderData._id || orderData.orderId);
+
       const res = await axios.post(
         "https://finalproject-backend-7rqa.onrender.com/payments",
         {
@@ -441,17 +450,19 @@ export default function StripeCheckout() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Redirect user to Stripe Hosted Page
-      if(res.data.url) {
-          window.location.href = res.data.url;
+      // Redirect to Stripe
+      if (res.data.url) {
+        window.location.href = res.data.url;
       } else {
-          setError("Failed to generate payment link. Please try again.");
-          setLoading(false);
+        setError("Received success response but no Stripe URL found.");
+        setLoading(false);
       }
 
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Payment initiation failed.");
+      console.error("Payment Error:", err);
+      // Extract the specific error message sent from the backend
+      const serverMessage = err.response?.data?.message || err.message;
+      setError(`Payment Failed: ${serverMessage}`);
       setLoading(false);
     }
   };
@@ -461,39 +472,57 @@ export default function StripeCheckout() {
       <Navbar />
       <br /><br />
       <div className="checkout-container" style={{ 
-          maxWidth: "500px", 
+          maxWidth: "600px", 
           margin: "0 auto", 
-          padding: "30px", 
-          boxShadow: "0 0 10px rgba(0,0,0,0.1)", 
+          padding: "40px", 
           textAlign: "center",
-          borderRadius: "8px"
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
       }}>
-        <h2>Order Summary</h2>
-        <p style={{marginBottom: "20px", color: "#666"}}>
-            You are about to pay for Order #{orderData._id || orderData.orderId}
+        <h2>Complete Payment</h2>
+        <p style={{ color: "#555", marginBottom: "20px" }}>
+            Secure payment via Stripe for Order #{orderData._id || orderData.orderId}
         </p>
 
-        <h1 style={{color: "#27ae60", marginBottom: "30px"}}>
-            LKR {orderData.total}
-        </h1>
+        <div style={{ 
+            backgroundColor: "#f9f9f9", 
+            padding: "20px", 
+            borderRadius: "5px", 
+            marginBottom: "20px" 
+        }}>
+            <h3>Total: LKR {orderData.total}</h3>
+        </div>
 
-        {error && <p className="error" style={{color: "red", marginBottom: "15px"}}>{error}</p>}
+        {error && (
+            <div style={{ 
+                color: "#721c24", 
+                backgroundColor: "#f8d7da", 
+                padding: "10px", 
+                borderRadius: "5px", 
+                marginBottom: "20px",
+                border: "1px solid #f5c6cb"
+            }}>
+                {error}
+            </div>
+        )}
 
         <button 
             onClick={handlePayment} 
             disabled={loading}
             style={{
-                backgroundColor: "#6772e5",
+                backgroundColor: "#635bff",
                 color: "white",
-                padding: "12px 24px",
+                padding: "15px 30px",
+                fontSize: "18px",
                 border: "none",
-                borderRadius: "4px",
-                fontSize: "16px",
+                borderRadius: "5px",
                 cursor: loading ? "not-allowed" : "pointer",
-                width: "100%"
+                width: "100%",
+                fontWeight: "bold"
             }}
         >
-          {loading ? "Redirecting to Stripe..." : "Pay Now (Secure)"}
+          {loading ? "Redirecting to Stripe..." : `Pay LKR ${orderData.total}`}
         </button>
       </div>
       <br /><br />
