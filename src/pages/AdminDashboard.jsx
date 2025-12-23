@@ -5621,7 +5621,7 @@ function AdminDashboard() {
             <NavItem page="list" icon={List} label="Products" count={productsCount} />
             <NavItem page="orders" icon={ShoppingCart} label="Orders" count={ordersCount} />
             <NavItem page="users" icon={Users} label="Customers" />
-            <NavItem page="chats" icon={MessageSquare} label="Chats" />
+            {/* <NavItem page="chats" icon={MessageSquare} label="Chats" /> */}
             <NavItem page="blogs" icon={Edit} label="Blogs" />
             <NavItem page="settings" icon={Settings} label="Settings" />
           </ul>
