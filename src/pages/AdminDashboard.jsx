@@ -5719,7 +5719,7 @@ function AdminDashboard() {
           
           {/* PASS SEARCH TERM TO SUB COMPONENTS */}
           {activePage === "users" && <UsersList searchTerm={searchTerm} />}
-          {activePage === "chats" && <ChatsList searchTerm={searchTerm} />}
+          {/* {activePage === "chats" && <ChatsList searchTerm={searchTerm} />} */}
           {activePage === "blogs" && <BlogsList searchTerm={searchTerm} />}
 
           {activePage === "settings" && (
