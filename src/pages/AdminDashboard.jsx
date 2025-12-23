@@ -5233,113 +5233,113 @@ function UsersList({ searchTerm }) {
   );
 }
 
-/* ===========================================================================
-   CHATS COMPONENT (WITH PAGINATION)
-   =========================================================================== */
-function ChatsList({ searchTerm }) {
-  const [chats, setChats] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedChat, setSelectedChat] = useState(null);
+// /* ===========================================================================
+//    CHATS COMPONENT (WITH PAGINATION)
+//    =========================================================================== */
+// function ChatsList({ searchTerm }) {
+//   const [chats, setChats] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [selectedChat, setSelectedChat] = useState(null);
   
-  // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); 
+//   // Pagination State
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [itemsPerPage] = useState(10); 
 
-  const token = localStorage.getItem("token");
+//   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/chats", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
-        setChats(res.data || []);
-        setLoading(false);
-      } catch (err) { setLoading(false); }
-    };
-    fetchChats();
-  }, [token]);
+//   useEffect(() => {
+//     const fetchChats = async () => {
+//       try {
+//         const res = await axios.get("https://finalproject-backend-7rqa.onrender.com/chats", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+//         setChats(res.data || []);
+//         setLoading(false);
+//       } catch (err) { setLoading(false); }
+//     };
+//     fetchChats();
+//   }, [token]);
 
-  // Reset pagination on search
-  useEffect(() => { setCurrentPage(1); }, [searchTerm]);
+//   // Reset pagination on search
+//   useEffect(() => { setCurrentPage(1); }, [searchTerm]);
 
-  const deleteChat = async (id) => {
-    if(!window.confirm("Delete?")) return;
-    try {
-      await axios.delete(`https://finalproject-backend-7rqa.onrender.com/chats/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
-      setChats(prev => prev.filter(c => c._id !== id));
-      if(selectedChat && selectedChat._id === id) setSelectedChat(null);
-    } catch (err) { alert("Error"); }
-  };
+//   const deleteChat = async (id) => {
+//     if(!window.confirm("Delete?")) return;
+//     try {
+//       await axios.delete(`https://finalproject-backend-7rqa.onrender.com/chats/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+//       setChats(prev => prev.filter(c => c._id !== id));
+//       if(selectedChat && selectedChat._id === id) setSelectedChat(null);
+//     } catch (err) { alert("Error"); }
+//   };
 
-  const filteredChats = chats.filter(chat => {
-     const user = chat.user || "";
-     const msg = chat.message || "";
-     const term = searchTerm.toLowerCase();
-     return user.toLowerCase().includes(term) || msg.toLowerCase().includes(term);
-  });
+//   const filteredChats = chats.filter(chat => {
+//      const user = chat.user || "";
+//      const msg = chat.message || "";
+//      const term = searchTerm.toLowerCase();
+//      return user.toLowerCase().includes(term) || msg.toLowerCase().includes(term);
+//   });
 
-  // Get current items
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentChats = filteredChats.slice(indexOfFirstItem, indexOfLastItem);
+//   // Get current items
+//   const indexOfLastItem = currentPage * itemsPerPage;
+//   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+//   const currentChats = filteredChats.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (loading) return <div>Loading...</div>;
+//   if (loading) return <div>Loading...</div>;
 
-  return (
-    <div style={{...styles.card, animation: "slideUp 0.6s ease-out"}}>
-      <h3 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 20px 0' }}>Support Inbox ({filteredChats.length})</h3>
-      <table style={styles.table}>
-        <thead>
-          <tr>{['User', 'Role', 'Message', 'Date', 'Actions'].map((h,i) => <th key={i} style={styles.th}>{h}</th>)}</tr>
-        </thead>
-        <tbody>
-          {currentChats.map(chat => (
-            <tr key={chat._id} style={styles.row} className="table-row">
-              <td style={{...styles.td, ...styles.firstTd}}>{chat.user}</td>
-              <td style={styles.td}><span style={{fontSize:'12px', color: '#A3AED0', background: '#FDF2F2', padding: '4px 8px', borderRadius:'4px'}}>{chat.role}</span></td>
-              <td style={{...styles.td, maxWidth: '300px', overflow:'hidden', whiteSpace:'nowrap', textOverflow:'ellipsis', color:'#A3AED0'}}>{chat.message}</td>
-              <td style={styles.td}>{new Date(chat.createdAt).toLocaleDateString()}</td>
-              <td style={{...styles.td, ...styles.lastTd, display: 'flex', gap: '10px'}}>
-                <button onClick={() => setSelectedChat(chat)} style={{...styles.actionBtn, background: '#FDF2F2', color: THEME_COLOR}}>
-                  <Eye size={16} />
-                </button>
-                <button onClick={() => deleteChat(chat._id)} style={{...styles.actionBtn, background: '#FFF5F5', color: '#EE5D50'}}>
-                  <Trash2 size={16} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+//   return (
+//     <div style={{...styles.card, animation: "slideUp 0.6s ease-out"}}>
+//       <h3 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 20px 0' }}>Support Inbox ({filteredChats.length})</h3>
+//       <table style={styles.table}>
+//         <thead>
+//           <tr>{['User', 'Role', 'Message', 'Date', 'Actions'].map((h,i) => <th key={i} style={styles.th}>{h}</th>)}</tr>
+//         </thead>
+//         <tbody>
+//           {currentChats.map(chat => (
+//             <tr key={chat._id} style={styles.row} className="table-row">
+//               <td style={{...styles.td, ...styles.firstTd}}>{chat.user}</td>
+//               <td style={styles.td}><span style={{fontSize:'12px', color: '#A3AED0', background: '#FDF2F2', padding: '4px 8px', borderRadius:'4px'}}>{chat.role}</span></td>
+//               <td style={{...styles.td, maxWidth: '300px', overflow:'hidden', whiteSpace:'nowrap', textOverflow:'ellipsis', color:'#A3AED0'}}>{chat.message}</td>
+//               <td style={styles.td}>{new Date(chat.createdAt).toLocaleDateString()}</td>
+//               <td style={{...styles.td, ...styles.lastTd, display: 'flex', gap: '10px'}}>
+//                 <button onClick={() => setSelectedChat(chat)} style={{...styles.actionBtn, background: '#FDF2F2', color: THEME_COLOR}}>
+//                   <Eye size={16} />
+//                 </button>
+//                 <button onClick={() => deleteChat(chat._id)} style={{...styles.actionBtn, background: '#FFF5F5', color: '#EE5D50'}}>
+//                   <Trash2 size={16} />
+//                 </button>
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
 
-      {/* PAGINATION */}
-      <Pagination 
-        itemsPerPage={itemsPerPage} 
-        totalItems={filteredChats.length} 
-        paginate={paginate} 
-        currentPage={currentPage} 
-      />
+//       {/* PAGINATION */}
+//       <Pagination 
+//         itemsPerPage={itemsPerPage} 
+//         totalItems={filteredChats.length} 
+//         paginate={paginate} 
+//         currentPage={currentPage} 
+//       />
 
-      {selectedChat && (
-        <div style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100}}>
-            <div style={{backgroundColor: 'white', width: '500px', borderRadius: '20px', padding: '24px', animation: 'fadeIn 0.3s'}}>
-                <div style={{display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '15px'}}>
-                    <h3 style={{margin: 0, color: THEME_TEXT}}>Message from {selectedChat.user}</h3>
-                    <button onClick={() => setSelectedChat(null)} style={{background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '20px'}}>&times;</button>
-                </div>
-                <div style={{background: '#FDF2F2', padding: '15px', borderRadius: '12px', marginBottom: '20px'}}>
-                    <p style={{margin: 0, color: '#555', lineHeight: '1.6'}}>{selectedChat.message}</p>
-                </div>
-                <div style={{textAlign: 'right', color: '#A3AED0', fontSize: '12px'}}>
-                    Sent: {new Date(selectedChat.createdAt).toLocaleString()}
-                </div>
-            </div>
-        </div>
-      )}
-    </div>
-  );
-}
+//       {selectedChat && (
+//         <div style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100}}>
+//             <div style={{backgroundColor: 'white', width: '500px', borderRadius: '20px', padding: '24px', animation: 'fadeIn 0.3s'}}>
+//                 <div style={{display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '15px', marginBottom: '15px'}}>
+//                     <h3 style={{margin: 0, color: THEME_TEXT}}>Message from {selectedChat.user}</h3>
+//                     <button onClick={() => setSelectedChat(null)} style={{background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '20px'}}>&times;</button>
+//                 </div>
+//                 <div style={{background: '#FDF2F2', padding: '15px', borderRadius: '12px', marginBottom: '20px'}}>
+//                     <p style={{margin: 0, color: '#555', lineHeight: '1.6'}}>{selectedChat.message}</p>
+//                 </div>
+//                 <div style={{textAlign: 'right', color: '#A3AED0', fontSize: '12px'}}>
+//                     Sent: {new Date(selectedChat.createdAt).toLocaleString()}
+//                 </div>
+//             </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 
 /* ===========================================================================
    BLOGS COMPONENT (WITH PAGINATION)
