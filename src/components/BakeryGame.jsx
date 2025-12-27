@@ -1,180 +1,179 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
-const BakeryGame = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [result, setResult] = useState("");
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [rotation, setRotation] = useState(0);
+const BakeryMemoryGame = () => {
+  // Game State
+  const [cards, setCards] = useState([]);
+  const [turns, setTurns] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(null);
+  const [choiceTwo, setChoiceTwo] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
 
-  // Prizes Configuration
-  const prizes = [
-    "Free Cookie (Code: COOKIE)",    // 0-60 deg
-    "10% Off (Code: YUMMY10)",       // 60-120 deg
-    "Free Muffin (Code: MUFFIN)",    // 120-180 deg
-    "5% Off (Code: CAKE5)",          // 180-240 deg
-    "Buy 1 Get 1 (Code: BOGO)",      // 240-300 deg
-    "No Luck! Try again."            // 300-360 deg
+  // Ungaloda Bakery Items (Emojis allathu Image URL inga podalam)
+  const cardImages = [
+    { src: "🍩", matched: false },
+    { src: "🍰", matched: false },
+    { src: "🥐", matched: false },
+    { src: "🍪", matched: false },
+    { src: "🧁", matched: false },
+    { src: "🥯", matched: false },
   ];
 
-  // Check LocalStorage on mount to see if user already played
+  // Game Start Logic
+  const shuffleCards = () => {
+    // Ovvoru image-yum 2 thadava edukkirom (Jodi serkka)
+    const shuffledCards = [...cardImages, ...cardImages]
+      .sort(() => Math.random() - 0.5)
+      .map((card) => ({ ...card, id: Math.random() }));
+
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setCards(shuffledCards);
+    setTurns(0);
+    setGameWon(false);
+  };
+
+  // Handle a Choice
+  const handleChoice = (card) => {
+    if(choiceOne && choiceOne.id === card.id) return; // Same card click thadukka
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  };
+
+  // Compare 2 selected cards
   useEffect(() => {
-    const hasPlayed = localStorage.getItem("bakeryGamePlayed");
-    if (!hasPlayed) {
-      const timer = setTimeout(() => setIsOpen(true), 2000); // Open after 2 seconds
-      return () => clearTimeout(timer);
+    if (choiceOne && choiceTwo) {
+      setDisabled(true);
+      if (choiceOne.src === choiceTwo.src) {
+        setCards((prevCards) => {
+          return prevCards.map((card) => {
+            if (card.src === choiceOne.src) {
+              return { ...card, matched: true };
+            }
+            return card;
+          });
+        });
+        resetTurn();
+      } else {
+        setTimeout(() => resetTurn(), 1000);
+      }
     }
+  }, [choiceOne, choiceTwo]);
+
+  // Check if Game Won
+  useEffect(() => {
+    if (cards.length > 0 && cards.every((card) => card.matched)) {
+      setGameWon(true);
+    }
+  }, [cards]);
+
+  // Reset choices & increase turn
+  const resetTurn = () => {
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setTurns((prevTurns) => prevTurns + 1);
+    setDisabled(false);
+  };
+
+  // Start game automatically on load
+  useEffect(() => {
+    shuffleCards();
   }, []);
 
-  const spinWheel = () => {
-    if (isSpinning) return;
-    setIsSpinning(true);
-    setResult("");
-
-    // Math: Spin at least 5 times (1800deg) + random segment
-    const randomDeg = Math.floor(Math.random() * 360);
-    const newRotation = rotation + 1800 + randomDeg;
-    
-    setRotation(newRotation);
-
-    // Wait 4 seconds for animation
-    setTimeout(() => {
-      calculateResult(newRotation);
-      setIsSpinning(false);
-      localStorage.setItem("bakeryGamePlayed", "true"); // Save that they played
-    }, 4000);
-  };
-
-  const calculateResult = (actualDeg) => {
-    const finalDeg = actualDeg % 360;
-    const sliceIndex = Math.floor(finalDeg / 60);
-    setResult(prizes[sliceIndex]);
-  };
-
-  if (!isOpen) return null;
-
-  // --- INLINE STYLES OBJECT ---
+  // --- INLINE STYLES ---
   const styles = {
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
+    container: {
+      maxWidth: "600px",
+      margin: "40px auto",
+      textAlign: "center",
+      fontFamily: "Arial, sans-serif",
+      padding: "20px",
+      backgroundColor: "#fff0f5", // Light Pink Background
+      borderRadius: "15px",
+      border: "3px solid #d8bfd8",
+    },
+    title: {
+      color: "#d65a82",
+      marginBottom: "10px",
+    },
+    grid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)", // 4 Columns
+      gap: "10px",
+      marginTop: "20px",
+    },
+    card: {
+      position: "relative",
+      height: "80px", // Card Height
+      cursor: "pointer",
+    },
+    cardContent: {
       width: "100%",
       height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
-      zIndex: 9999,
+      borderRadius: "10px",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontFamily: "Arial, sans-serif",
-    },
-    modal: {
-      backgroundColor: "#fff0f5", // Lavender Blush
-      padding: "30px",
-      borderRadius: "20px",
-      border: "4px solid #d8bfd8",
-      textAlign: "center",
-      position: "relative",
-      width: "90%",
-      maxWidth: "400px",
-      boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
-    },
-    closeBtn: {
-      position: "absolute",
-      top: "10px",
-      right: "15px",
-      background: "none",
-      border: "none",
-      fontSize: "28px",
-      cursor: "pointer",
-      color: "#888",
-    },
-    title: {
-      color: "#d65a82", // Deep Pink
-      marginTop: 0,
-      marginBottom: "5px",
-    },
-    wheelContainer: {
-      position: "relative",
-      width: "250px",
-      height: "250px",
-      margin: "20px auto",
-    },
-    wheel: {
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      border: "6px solid #8b4513", // Chocolate
-      boxSizing: "border-box",
-      // CSS Gradient to create the slices
-      background: `conic-gradient(
-        #ffb7b2 0deg 60deg,
-        #ffe4e1 60deg 120deg,
-        #ffb7b2 120deg 180deg,
-        #ffe4e1 180deg 240deg,
-        #ffb7b2 240deg 300deg,
-        #ffe4e1 300deg 360deg
-      )`,
-      transform: `rotate(-${rotation}deg)`,
-      transition: "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)",
-    },
-    pointer: {
-      position: "absolute",
-      top: "-10px",
-      left: "50%",
-      transform: "translateX(-50%)",
-      width: 0,
-      height: 0,
-      borderLeft: "15px solid transparent",
-      borderRight: "15px solid transparent",
-      borderTop: "25px solid #8b4513", // Chocolate Pointer
-      zIndex: 10,
-    },
-    resultText: {
-      minHeight: "30px",
-      marginTop: "15px",
-      fontWeight: "bold",
-      color: "#8b4513",
-      fontSize: "18px",
+      fontSize: "40px", // Emoji size
+      transition: "all 0.3s ease",
+      userSelect: "none",
+      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
     },
     button: {
-      backgroundColor: isSpinning ? "#ccc" : "#d65a82",
-      color: "white",
-      border: "none",
-      padding: "12px 30px",
-      fontSize: "18px",
-      borderRadius: "25px",
-      cursor: isSpinning ? "not-allowed" : "pointer",
+      background: "#d65a82",
+      color: "#fff",
+      border: "0",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "16px",
       marginTop: "10px",
     },
+    winner: {
+      color: "green",
+      fontWeight: "bold",
+      fontSize: "20px",
+      marginTop: "15px",
+    }
   };
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.modal}>
-        <button style={styles.closeBtn} onClick={() => setIsOpen(false)}>×</button>
+    <div style={styles.container}>
+      <h2 style={styles.title}>🧩 Bakery Memory Match</h2>
+      <p>Turns: {turns}</p>
+      <button style={styles.button} onClick={shuffleCards}>New Game</button>
 
-        <h2 style={styles.title}>🍰 Spin & Win!</h2>
-        <p style={{ color: "#555", margin: 0 }}>Win a discount for your order</p>
-
-        <div style={styles.wheelContainer}>
-          <div style={styles.pointer}></div>
-          <div style={styles.wheel}></div>
-        </div>
-
-        <div style={styles.resultText}>
-          {result ? `🎉 ${result}` : "Good Luck!"}
-        </div>
-
-        <button 
-          style={styles.button} 
-          onClick={spinWheel} 
-          disabled={isSpinning || (result !== "" && result.includes("No Luck"))}
-        >
-          {isSpinning ? "Spinning..." : (result ? "Claim Prize" : "SPIN NOW")}
-        </button>
+      <div style={styles.grid}>
+        {cards.map((card) => {
+          const isFlipped = card === choiceOne || card === choiceTwo || card.matched;
+          
+          return (
+            <div 
+              key={card.id} 
+              style={styles.card}
+              onClick={() => !disabled && !isFlipped && handleChoice(card)}
+            >
+              <div style={{
+                ...styles.cardContent,
+                backgroundColor: isFlipped ? "#fff" : "#8b4513", // White if flipped, Brown if hidden
+                transform: isFlipped ? "rotateY(0deg)" : "rotateY(0deg)", // Simple flip logic
+              }}>
+                {/* Flipped aanal Emoji theriyum, illaina "?" theriyum */}
+                {isFlipped ? card.src : "🍩"} 
+              </div>
+            </div>
+          );
+        })}
       </div>
+
+      {gameWon && (
+        <div style={styles.winner}>
+          🎉 Congratulations! You won in {turns} turns!
+          <br/>
+          <small>Use code <b>MASTERBAKER</b> for 10% off!</small>
+        </div>
+      )}
     </div>
   );
 };
 
-export default BakeryGame;
+export default BakeryMemoryGame;

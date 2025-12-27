@@ -23,7 +23,7 @@ import BlogWrite from "./pages/BlogWrite";
 import About from "./pages/About.jsx"
 import AuthPage from "./pages/AuthPage.jsx";
 import MyOrders from "./pages/MyOrders";
-import BakeryGame from "./components/BakeryGame"; 
+import BakeryMemoryGame from "./components/BakeryMemoryGame";
 
 
 
@@ -57,11 +57,11 @@ function App() {
   <Route path="/blogs/edit/:id" element={<BlogWrite />} /> {/* reuse write page for edit */}
   <Route path="/authpage" element={<AuthPage/>} />
   <Route path="/myorders" element={<MyOrders />} />
+  <Route path="/game" element={<BakeryMemoryGame />} />
 
 
 
       </Routes>
-      <BakeryGame />
 
       <FloatingChatbot />
     </Router>
