@@ -23,6 +23,7 @@ import BlogWrite from "./pages/BlogWrite";
 import About from "./pages/About.jsx"
 import AuthPage from "./pages/AuthPage.jsx";
 import MyOrders from "./pages/MyOrders";
+import BakeryGame from "./components/BakeryGame"; 
 
 
 
@@ -60,6 +61,8 @@ function App() {
 
 
       </Routes>
+      <BakeryGame />
+
       <FloatingChatbot />
     </Router>
   );
